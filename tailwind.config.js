@@ -15,6 +15,12 @@ module.exports = {
       },
       colors: {
         primary: '#FAF9F6',
+        DarkBlue: '#394c69',
+        LightBlue: '#31acd8',
+        CustomGray: '#404E65',
+        CustomRed: '#FF5B4B',
+        BaseLight: '#f8f8f8',
+        BaseDark: '#212121',
       },
     },
   },
