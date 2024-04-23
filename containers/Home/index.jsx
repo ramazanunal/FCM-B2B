@@ -1,8 +1,9 @@
-import React from 'react';
-import TestComponent from '@/components/test';
+import React from "react";
+import TestComponent from "@/components/test";
+import OrderList from "@/components/OrderList/OrderList";
 
 const HomeContainer = () => {
-  return <TestComponent />;
+  return <OrderList />;
 };
 
 export default HomeContainer;
