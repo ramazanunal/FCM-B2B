@@ -1,5 +1,3 @@
-import React from "react";
-
 const OrderListTable = ({ orders }) => {
   return (
     <div className="overflow-x-auto border">
