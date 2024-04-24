@@ -1,8 +1,8 @@
 import React from "react";
-import TestComponent from "@/components/test";
+import Homepage from "@/components/Homepage";
 
 const HomeContainer = () => {
-  return <TestComponent />;
+  return <Homepage />;
 };
 
 export default HomeContainer;
