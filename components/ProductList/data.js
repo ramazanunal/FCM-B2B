@@ -1,10 +1,17 @@
+export const category=[
+    "1.Sınıf",
+    "2.Sınıf",
+    "3.Sınıf",
+    "4.Sınıf",
+]
+
 export const products = [
     {
         id: 1,
         checkbox: <input type="checkbox" />,
         imgPath:"/assets/images/akildefterim.png",
         category:{
-            mainCategory:"1.Sınıf",
+            mainCategory:category[0],
             subCategory:"Genel"
 
         },
@@ -22,7 +29,7 @@ export const products = [
         checkbox: <input type="checkbox" />,
         imgPath:"/assets/images/evOdev.jpeg",
         category:{
-            mainCategory:"1.Sınıf",
+            mainCategory:category[0],
             subCategory:"Genel"
 
         },
@@ -40,7 +47,7 @@ export const products = [
         checkbox: <input type="checkbox" />,
         imgPath:"/assets/images/fen3.png",
         category:{
-            mainCategory:"3.Sınıf",
+            mainCategory:category[2],
             subCategory:"Fen Bilgisi"
 
         },
@@ -58,7 +65,7 @@ export const products = [
         checkbox: <input type="checkbox" />,
         imgPath:"/assets/images/fen4.png",
         category:{
-            mainCategory:"4.Sınıf",
+            mainCategory:category[3],
             subCategory:"Fen Bilgisi"
 
         },
@@ -76,7 +83,7 @@ export const products = [
         checkbox: <input type="checkbox" />,
         imgPath:"/assets/images/hayat1.png",
         category:{
-            mainCategory:"1.Sınıf",
+            mainCategory:category[0],
             subCategory:"Hayat Bilgisi"
 
         },
@@ -94,7 +101,7 @@ export const products = [
         checkbox: <input type="checkbox" />,
         imgPath:"/assets/images/mat1.png",
         category:{
-            mainCategory:"1.Sınıf",
+            mainCategory:category[0],
             subCategory:"Matematik"
 
         },
@@ -112,7 +119,7 @@ export const products = [
         checkbox: <input type="checkbox" />,
         imgPath:"/assets/images/mat2.png",
         category:{
-            mainCategory:"2.Sınıf",
+            mainCategory:category[1],
             subCategory:"Matematik"
 
         },
@@ -130,7 +137,7 @@ export const products = [
         checkbox: <input type="checkbox" />,
         imgPath:"/assets/images/mat3.png",
         category:{
-            mainCategory:"3.Sınıf",
+            mainCategory:category[2],
             subCategory:"Matematik"
 
         },
@@ -148,7 +155,7 @@ export const products = [
         checkbox: <input type="checkbox" />,
         imgPath:"/assets/images/mat4.png",
         category:{
-            mainCategory:"4.Sınıf",
+            mainCategory:category[3],
             subCategory:"Matematik"
 
         },
@@ -166,7 +173,7 @@ export const products = [
         checkbox: <input type="checkbox" />,
         imgPath:"/assets/images/sosyal4.png",
         category:{
-            mainCategory:"4.Sınıf",
+            mainCategory:category[3],
             subCategory:"Sosyal Bilgisi"
 
         },
@@ -184,7 +191,7 @@ export const products = [
         checkbox: <input type="checkbox" />,
         imgPath:"/assets/images/telafi1.png",
         category:{
-            mainCategory:"1.Sınıf",
+            mainCategory:category[0],
             subCategory:"Genel"
 
         },
@@ -202,7 +209,7 @@ export const products = [
         checkbox: <input type="checkbox" />,
         imgPath:"/assets/images/tumders.png",
         category:{
-            mainCategory:"1.Sınıf",
+            mainCategory:category[0],
             subCategory:"Genel"
 
         },
@@ -220,7 +227,7 @@ export const products = [
         checkbox: <input type="checkbox" />,
         imgPath:"/assets/images/turkce1.png",
         category:{
-            mainCategory:"1.Sınıf",
+            mainCategory:category[0],
             subCategory:"Turkce"
 
         },
@@ -238,7 +245,7 @@ export const products = [
         checkbox: <input type="checkbox" />,
         imgPath:"/assets/images/turkce3.png",
         category:{
-            mainCategory:"3.Sınıf",
+            mainCategory:category[2],
             subCategory:"Turkce"
 
         },
@@ -256,7 +263,7 @@ export const products = [
         checkbox: <input type="checkbox" />,
         imgPath:"/assets/images/turkce4.png",
         category:{
-            mainCategory:"4.Sınıf",
+            mainCategory:category[3],
             subCategory:"Turkce"
 
         },

@@ -3,8 +3,9 @@ import { MdKeyboardDoubleArrowLeft } from "react-icons/md";
 import { MdKeyboardArrowLeft } from "react-icons/md";
 import { MdKeyboardArrowRight } from "react-icons/md";
 import { MdKeyboardDoubleArrowRight } from "react-icons/md";
-import { products } from "./data";
+import {  category } from "./data";
 function ProductsFilter({filteredProducts,paginate,currentPage,productsPerPage}) {
+ 
   return (
     <>
       <div className="flex justify-between items-center py-3">
@@ -34,8 +35,13 @@ function ProductsFilter({filteredProducts,paginate,currentPage,productsPerPage})
               id=""
             >
               <option hidden>Kategori Seçin</option>
-              <option>islemler</option>
-              <option>islemler</option>
+              {category.map((product,index)=>(
+                <option key={index}>
+                  {product}
+                </option>
+              ))}
+              
+            
             </select>
             <select
               className="p-1 border rounded-md text-CustomGray w-44"
