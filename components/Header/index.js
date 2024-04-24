@@ -1,59 +1,55 @@
-"use client"
-import React from 'react';
-import useStore from '@/utils/store';
+"use client";
+import React, { useState } from "react";
+import headerStore from "@/utils/headerStore";
 import Link from "next/link";
 
 const Header = () => {
-    const { header, addMenuItem, removeMenuItem, setMenuItemText, setMenuItemHref } = useStore();
+  const { header } = headerStore();
 
-    // // Yeni bir menü öğesi eklemek
-    // const handleAddMenuItem = () => {
-    //     const newItem = { id: Math.random(), text: "Yeni Öğe", href: "#" }; // Yeni öğe örnek değerlerle
-    //     addMenuItem(newItem);
-    // };
+  // Menü üzerine gelindiğinde alt menüyü göstermek için state
+  const [hoveredMenu, setHoveredMenu] = useState(null);
 
-    // // Bir menü öğesi silmek
-    // const handleRemoveMenuItem = (index) => {
-    //     removeMenuItem(index);
-    // };
-
-    // // Menü öğesi metnini güncelleme
-    // const handleMenuItemTextChange = (index, newText) => {
-    //     setMenuItemText(index, newText);
-    // };
-
-    // // Menü öğesi href'ini güncelleme
-    // const handleMenuItemHrefChange = (index, newHref) => {
-    //     setMenuItemHref(index, newHref);
-    // };
-
-    return (
-        <div className="h-[45px] bg-DarkBlue">
-            <div className="px-[15px] mx-[35px]  text-white">
-                <ul className="flex flex-row text-[14px] font-semibold">
-                    {header.menuItems.map((menuItem, index) => (
-                        <li key={menuItem.id} className="mr-[25px] leading-[45px]">
-                            <Link href={menuItem.href}>{menuItem.text}</Link>
-                            {/* <button onClick={() => handleRemoveMenuItem(index)}>
-                                Sil
-                            </button>
-                            <button onClick={() => handleMenuItemTextChange(index, "Yeni Metin")}>
-                                Metni Güncelle
-                            </button>
-                            <button onClick={() => handleMenuItemHrefChange(index, "yeni-link")}>
-                                Linki Güncelle
-                            </button> */}
-                        </li>
-                    ))}
-                    {/* <li>
-                        <button onClick={handleAddMenuItem}>
-                            Yeni Öğe Ekle
-                        </button>
-                    </li> */}
-                </ul>
-            </div>
+  return (
+    <div className="h-[45px] bg-DarkBlue max-w-[1200px] container">
+      <div className="px-[15px] mx-[35px] text-white">
+        <div className="ml-[206px]">
+          <ul className="flex flex-row text-[14px] font-semibold ">
+            {header.menus.map((menu, index) => (
+              <li
+                key={menu.id}
+                className="relative mr-[25px] leading-[45px]"
+                onMouseEnter={() => setHoveredMenu(index)}
+                onMouseLeave={() => setHoveredMenu(null)}
+              >
+                <Link
+                  className="hover:text-gray-400 transition duration-300 ease-in-out transform"
+                  href={menu.href}
+                >
+                  {menu.text}
+                </Link>
+                {/* Alt menüler */}
+                {hoveredMenu === index && ( // Eğer mouse menünün üzerindeyse alt menüyü göster
+                  <ul>
+                    {menu.subMenus.length > 0 && (
+                      <div className="absolute top-11 -left-4 z-10 w-[250px] bg-DarkBlue shadow-md py-[15px] rounded-b-md">
+                        {menu.subMenus.map((subMenu) => (
+                          <ul key={subMenu.id}>
+                            <li className="px-[15px] py-[10px] text-[14px] font-semibold leading-[14px] cursor-pointer hover:text-LightBlue transition duration-300 ease-in-out transform">
+                              <Link href={subMenu.href}>{subMenu.text}</Link>
+                            </li>
+                          </ul>
+                        ))}
+                      </div>
+                    )}
+                  </ul>
+                )}
+              </li>
+            ))}
+          </ul>
         </div>
-    );
+      </div>
+    </div>
+  );
 };
 
 export default Header;
