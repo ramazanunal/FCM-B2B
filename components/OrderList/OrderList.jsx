@@ -60,7 +60,7 @@ const OrderList = () => {
 
   const [filteredOrders, setFilteredOrders] = useState(orders);
   const [searchValue, setSearchValue] = useState("");
-
+  const [orderDate, setOrderDate] = useState("");
   const [selectedStatus, setSelectedStatus] = useState("Tümü");
 
   const statuses = [
@@ -79,12 +79,12 @@ const OrderList = () => {
 
   const handleSearchChange = (event) => {
     setSearchValue(event.target.value);
-    filterOrders(event.target.value, selectedStatus);
+    filterOrders(event.target.value, selectedStatus, orderDate);
   };
 
-  const filterStatus = (status) => {
+  const filterStatus = (status, date) => {
     setSelectedStatus(status);
-    filterOrders(searchValue, status);
+    filterOrders(searchValue, status, date);
   };
 
   const filterOrders = (searchValue, status) => {
@@ -170,6 +170,8 @@ const OrderList = () => {
             <select
               className="p-1 border rounded-md text-BaseDark w-54 font-medium"
               name="filterDates"
+              onChange={(e) => setOrderDate(e.target.value)}
+              value={orderDate}
             >
               <option>Tüm Tarihler</option>
               {orders.map((order) => (
