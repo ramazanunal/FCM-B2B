@@ -3,7 +3,8 @@ import { MdKeyboardDoubleArrowLeft } from "react-icons/md";
 import { MdKeyboardArrowLeft } from "react-icons/md";
 import { MdKeyboardArrowRight } from "react-icons/md";
 import { MdKeyboardDoubleArrowRight } from "react-icons/md";
-function ProductsFilter() {
+import { products } from "./data";
+function ProductsFilter({filteredProducts,paginate,currentPage,productsPerPage}) {
   return (
     <>
       <div className="flex justify-between items-center py-3">
@@ -61,14 +62,14 @@ function ProductsFilter() {
           </div>
         </div>
         <div className="flex items-center gap-2 text-DarkBlue ">
-          <p className="text-CustomGray">1.999 oge</p>
-          <MdKeyboardDoubleArrowLeft className="border  rounded-sm text-[24px] p-1" />
-          <MdKeyboardArrowLeft className="border  rounded-sm text-[24px] p-1" />
-          <span className="border  px-4 rounded bg-white">1</span>
-          <span>/90</span>
-          <MdKeyboardArrowRight className="border  rounded-sm text-[24px] p-1" />
-          <MdKeyboardDoubleArrowRight className="border  rounded-sm text-[24px] p-1" />
-        </div>
+        <span className="text-CustomGray">{filteredProducts.length} kitap</span>
+        <MdKeyboardDoubleArrowLeft className="border  rounded-sm text-[24px] p-1" onClick={() => paginate(1)} />
+        <MdKeyboardArrowLeft className="border  rounded-sm text-[24px] p-1" onClick={() => paginate(currentPage - 1)} />
+        <span className="border  px-4 rounded bg-white">{currentPage}</span>
+        <span>/ {Math.ceil(filteredProducts.length / productsPerPage)}</span>
+        <MdKeyboardArrowRight className="border  rounded-sm text-[24px] p-1" onClick={() => paginate(currentPage + 1)} />
+        <MdKeyboardDoubleArrowRight className="border  rounded-sm text-[24px] p-1" onClick={() => paginate(Math.ceil(filteredProducts.length / productsPerPage))} />
+      </div>
       </div>
     </>
   );

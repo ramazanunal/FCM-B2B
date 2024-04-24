@@ -3,11 +3,20 @@ import React,{ useState } from 'react';
 import { products, status } from './data';
 import ProductsFilter from './ProductsFilter';
 import ProdcutsTable from './ProdcutsTable';
+import { MdKeyboardDoubleArrowLeft } from "react-icons/md";
+import { MdKeyboardArrowLeft } from "react-icons/md";
+import { MdKeyboardArrowRight } from "react-icons/md";
+import { MdKeyboardDoubleArrowRight } from "react-icons/md";
 
 function ProductList() {
 
   const [filteredProducts, setFilteredProducts] = useState(products);
   const [selectedStatus, setSelectedStatus] = useState("Tümü");
+  const [currentPage, setCurrentPage] = useState(1);
+  const [productsPerPage] = useState(10);
+
+
+
   const filterStatus = (status) => {
     setSelectedStatus(status);
     if (status === "Tümü") {
@@ -16,7 +25,17 @@ function ProductList() {
       const filterProducts = products.filter((item) => item.published === true);
       setFilteredProducts(filterProducts);
     }
+    setCurrentPage(1)
   }
+
+  const paginate = (pageNumber) => setCurrentPage(pageNumber);
+
+  const indexOfLastProduct = currentPage * productsPerPage;
+  const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
+  const currentProducts = filteredProducts.slice(indexOfFirstProduct, indexOfLastProduct);
+
+  
+
   return (
     <>
     <div className=" justify-between flex  ">
@@ -52,8 +71,9 @@ function ProductList() {
         </form>
       </div>
     </div>
-    <ProductsFilter/>
-    <ProdcutsTable filteredProducts={filteredProducts}/>
+    <ProductsFilter filteredProducts={filteredProducts} paginate={paginate} currentPage={currentPage} productsPerPage={productsPerPage} />
+    <ProdcutsTable currentProducts={currentProducts}/>
+    
   </>
   )
 }

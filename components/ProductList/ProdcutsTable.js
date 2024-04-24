@@ -1,9 +1,8 @@
 import React from 'react'
-import { products } from './data'
 import { FaImage } from "react-icons/fa6";
 
 
-function ProdcutsTable({filteredProducts}) {
+function ProdcutsTable({currentProducts}) {
   return (
     <div className="overflow-x-auto border">
     <table className="min-w-full divide-y divide-gray-200">
@@ -60,7 +59,7 @@ function ProdcutsTable({filteredProducts}) {
         </tr>
       </thead>
       <tbody className="bg-white divide-y divide-gray-200">
-        {filteredProducts.map((product) => (
+        {currentProducts.map((product) => (
           <tr key={product.id} >
             <td className="px-6 py-4 whitespace-nowrap">{product.checkbox}</td>
             <td className="px-6 py-4 whitespace-nowrap">
