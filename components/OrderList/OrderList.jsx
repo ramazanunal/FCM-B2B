@@ -1,14 +1,19 @@
 "use client";
 import React, { useState } from "react";
 import OrderListTable from "./OrderListTable";
-import OrderFilters from "./OrderFilters";
+import {
+  MdKeyboardDoubleArrowLeft,
+  MdKeyboardArrowLeft,
+  MdKeyboardArrowRight,
+  MdKeyboardDoubleArrowRight,
+} from "react-icons/md";
 
 const OrderList = () => {
+  // Fake Data
   const orders = [
     {
       id: 1,
-      checkbox: <input type="checkbox" />,
-      orderNumber: "ORD123",
+      orderNumber: "Bilgisayar",
       invoiceNumber: "INV456",
       date: "22 Nisan 2024",
       status: "Tamamlanan",
@@ -17,8 +22,34 @@ const OrderList = () => {
     },
     {
       id: 2,
-      checkbox: <input type="checkbox" />,
-      orderNumber: "ORD124",
+      orderNumber: "Telefon",
+      invoiceNumber: "INV457",
+      date: "23 Nisan 2024",
+      status: "Beklemede",
+      total: "80₺",
+      actions: <button>Edit</button>,
+    },
+    {
+      id: 2,
+      orderNumber: "Telefon",
+      invoiceNumber: "INV457",
+      date: "23 Nisan 2024",
+      status: "Beklemede",
+      total: "80₺",
+      actions: <button>Edit</button>,
+    },
+    {
+      id: 2,
+      orderNumber: "Telefon",
+      invoiceNumber: "INV457",
+      date: "23 Nisan 2024",
+      status: "Beklemede",
+      total: "80₺",
+      actions: <button>Edit</button>,
+    },
+    {
+      id: 2,
+      orderNumber: "Telefon",
       invoiceNumber: "INV457",
       date: "23 Nisan 2024",
       status: "Beklemede",
@@ -28,36 +59,55 @@ const OrderList = () => {
   ];
 
   const [filteredOrders, setFilteredOrders] = useState(orders);
-  const statusCounts = orders.reduce((acc, order) => {
-    acc[order.status] = (acc[order.status] || 0) + 1;
-    return acc;
-  }, {});
+  const [searchValue, setSearchValue] = useState("");
 
   const [selectedStatus, setSelectedStatus] = useState("Tümü");
 
-  function filterStatus(status) {
-    setSelectedStatus(status);
-    if (status === "Tümü") {
-      setFilteredOrders(orders);
-    } else {
-      const filteredOrders = orders.filter((item) => item.status === status);
-      setFilteredOrders(filteredOrders);
-    }
-  }
-
   const statuses = [
     { name: "Tümü", count: orders.length },
-    { name: "Beklemede", count: statusCounts["Beklemede"] || 0 },
-    { name: "Hazırlanıyor", count: statusCounts["Hazırlanıyor"] || 0 },
-    { name: "Ödeme Bekleniyor", count: statusCounts["Ödeme Bekleniyor"] || 0 },
-    { name: "Tamamlanan", count: statusCounts["Tamamlanan"] || 0 },
-    { name: "İptal Edilen", count: statusCounts["İptal Edilen"] || 0 },
-    { name: "Başarısız Olan", count: statusCounts["Başarısız Olan"] || 0 },
+    { name: "Beklemede", count: countStatus("Beklemede") },
+    { name: "Hazırlanıyor", count: countStatus("Hazırlanıyor") },
+    { name: "Ödeme Bekleniyor", count: countStatus("Ödeme Bekleniyor") },
+    { name: "Tamamlanan", count: countStatus("Tamamlanan") },
+    { name: "İptal Edilen", count: countStatus("İptal Edilen") },
+    { name: "Başarısız Olan", count: countStatus("Başarısız Olan") },
   ];
+
+  function countStatus(status) {
+    return orders.filter((order) => order.status === status).length;
+  }
+
+  const handleSearchChange = (event) => {
+    setSearchValue(event.target.value);
+    filterOrders(event.target.value, selectedStatus);
+  };
+
+  const filterStatus = (status) => {
+    setSelectedStatus(status);
+    filterOrders(searchValue, status);
+  };
+
+  const filterOrders = (searchValue, status) => {
+    let filteredOrders = orders;
+
+    if (searchValue) {
+      filteredOrders = filteredOrders.filter((order) =>
+        order.orderNumber.toLowerCase().includes(searchValue.toLowerCase())
+      );
+    }
+
+    if (status !== "Tümü") {
+      filteredOrders = filteredOrders.filter(
+        (order) => order.status === status
+      );
+    }
+
+    setFilteredOrders(filteredOrders);
+  };
 
   return (
     <>
-      <div className=" justify-between flex  ">
+      <div className="justify-between flex">
         <div className="flex gap-2">
           {statuses.map((status, index) => (
             <React.Fragment key={index}>
@@ -80,7 +130,12 @@ const OrderList = () => {
         </div>
         <div className="flex">
           <form action="" className="flex gap-2">
-            <input type="text" className="p-2 border rounded-md" />
+            <input
+              value={searchValue}
+              onChange={handleSearchChange}
+              type="text"
+              className="p-2 border rounded-md"
+            />
             <button
               className="p-2 border border-LightBlue rounded-md"
               type="submit"
@@ -90,7 +145,68 @@ const OrderList = () => {
           </form>
         </div>
       </div>
-      <OrderFilters />
+
+      <div className="flex justify-between items-center py-3">
+        <div className="flex gap-4">
+          {/* Filtreleme Seçenekleri */}
+          <div className="flex gap-2">
+            {/* İşlemler Select */}
+            <select
+              className="p-1 border rounded-md text-CustomGray w-64"
+              name="filterActions"
+            >
+              <option hidden>Tüm İşlemler</option>
+              <option>İşlemler</option>
+              <option>İşlemler</option>
+            </select>
+            {/* Uygula Butonu */}
+            <button className="p-1 border border-LightBlue rounded-md">
+              Uygula
+            </button>
+          </div>
+
+          <div className="flex gap-2">
+            {/* Tarihler Select */}
+            <select
+              className="p-1 border rounded-md text-BaseDark w-54 font-medium"
+              name="filterDates"
+            >
+              <option>Tüm Tarihler</option>
+              {orders.map((order) => (
+                <option key={order.id} value={order.date}>
+                  {order.date}
+                </option>
+              ))}
+            </select>
+            {/* Kayıtlı Kullanıcılara Göre Filtreleme Select */}
+            <select
+              className="p-1 border rounded-md text-CustomGray w-80"
+              name="filterUsers"
+            >
+              <option hidden>Kayıtlı Kullanıcılara göre Filtrele</option>
+              <option>İşlemler</option>
+              <option>İşlemler</option>
+            </select>
+            {/* Filtrele Butonu */}
+            <button className="p-1 border border-LightBlue rounded-md">
+              Filtrele
+            </button>
+          </div>
+        </div>
+
+        {/* Sıralama ve Sayfalama */}
+        <div className="flex items-center gap-2 text-DarkBlue">
+          {/* Toplam Öğe Sayısı */}
+          <p className="text-CustomGray">{orders.length} öge</p>
+          {/* Sayfa İleri ve Geri Butonları */}
+          <MdKeyboardDoubleArrowLeft className="border rounded-sm text-[24px] p-1" />
+          <MdKeyboardArrowLeft className="border rounded-sm text-[24px] p-1" />
+          <span className="border px-4 rounded bg-white">1</span>
+          <span>/90</span>
+          <MdKeyboardArrowRight className="border rounded-sm text-[24px] p-1" />
+          <MdKeyboardDoubleArrowRight className="border rounded-sm text-[24px] p-1" />
+        </div>
+      </div>
       <OrderListTable orders={filteredOrders} />
     </>
   );

@@ -51,7 +51,9 @@ const OrderListTable = ({ orders }) => {
         <tbody className="bg-white divide-y divide-gray-200">
           {orders.map((order) => (
             <tr key={order.id}>
-              <td className="px-6 py-4 whitespace-nowrap">{order.checkbox}</td>
+              <td className="px-6 py-4 whitespace-nowrap">
+                <input type="checkbox" />
+              </td>
               <td className="px-6 py-4 whitespace-nowrap">
                 {order.orderNumber}
               </td>
