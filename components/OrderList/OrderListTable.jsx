@@ -1,4 +1,13 @@
+import { useState } from "react";
+
 const OrderListTable = ({ orders }) => {
+  const [selectAllChecked, setSelectAllChecked] = useState(false);
+
+  const handleSelectAllCheckboxChange = (event) => {
+    const { checked } = event.target;
+    setSelectAllChecked(checked);
+  };
+
   return (
     <div className="overflow-x-auto border">
       <table className="min-w-full divide-y divide-gray-200">
@@ -8,7 +17,11 @@ const OrderListTable = ({ orders }) => {
               scope="col"
               className="px-6 py-3 text-left text-xs font-medium "
             >
-              <input type="checkbox" />
+              <input
+                type="checkbox"
+                checked={selectAllChecked}
+                onChange={handleSelectAllCheckboxChange}
+              />
             </th>
             <th
               scope="col"
@@ -52,7 +65,11 @@ const OrderListTable = ({ orders }) => {
           {orders.map((order) => (
             <tr key={order.id}>
               <td className="px-6 py-4 whitespace-nowrap">
-                <input type="checkbox" />
+                <input
+                  type="checkbox"
+                  checked={selectAllChecked}
+                  onChange={handleSelectAllCheckboxChange}
+                />
               </td>
               <td className="px-6 py-4 whitespace-nowrap">
                 {order.orderNumber}

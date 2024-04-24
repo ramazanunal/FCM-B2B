@@ -2,9 +2,9 @@
 import React, { useState } from "react";
 import OrderListTable from "./OrderListTable";
 import {
-  MdKeyboardDoubleArrowLeft,
   MdKeyboardArrowLeft,
   MdKeyboardArrowRight,
+  MdKeyboardDoubleArrowLeft,
   MdKeyboardDoubleArrowRight,
 } from "react-icons/md";
 
@@ -29,39 +29,12 @@ const OrderList = () => {
       total: "80₺",
       actions: <button>Edit</button>,
     },
-    {
-      id: 2,
-      orderNumber: "Telefon",
-      invoiceNumber: "INV457",
-      date: "23 Nisan 2024",
-      status: "Beklemede",
-      total: "80₺",
-      actions: <button>Edit</button>,
-    },
-    {
-      id: 2,
-      orderNumber: "Telefon",
-      invoiceNumber: "INV457",
-      date: "23 Nisan 2024",
-      status: "Beklemede",
-      total: "80₺",
-      actions: <button>Edit</button>,
-    },
-    {
-      id: 2,
-      orderNumber: "Telefon",
-      invoiceNumber: "INV457",
-      date: "23 Nisan 2024",
-      status: "Beklemede",
-      total: "80₺",
-      actions: <button>Edit</button>,
-    },
   ];
 
   const [filteredOrders, setFilteredOrders] = useState(orders);
   const [searchValue, setSearchValue] = useState("");
-  const [orderDate, setOrderDate] = useState("");
   const [selectedStatus, setSelectedStatus] = useState("Tümü");
+  const [orderDate, setOrderDate] = useState("");
 
   const statuses = [
     { name: "Tümü", count: orders.length },
@@ -77,17 +50,21 @@ const OrderList = () => {
     return orders.filter((order) => order.status === status).length;
   }
 
+  // Handle search input change
   const handleSearchChange = (event) => {
-    setSearchValue(event.target.value);
-    filterOrders(event.target.value, selectedStatus, orderDate);
+    const { value } = event.target;
+    setSearchValue(value);
+    filterOrders(value, selectedStatus, orderDate);
   };
 
-  const filterStatus = (status, date) => {
+  // Handle status filter change
+  const filterStatus = (status) => {
     setSelectedStatus(status);
-    filterOrders(searchValue, status, date);
+    filterOrders(searchValue, status, orderDate);
   };
 
-  const filterOrders = (searchValue, status) => {
+  // Filter orders based on search input, status, and date
+  const filterOrders = (searchValue, status, date) => {
     let filteredOrders = orders;
 
     if (searchValue) {
@@ -102,9 +79,15 @@ const OrderList = () => {
       );
     }
 
+    if (date === "Tüm Tarihler") {
+      // Tüm Tarihler seçildiğinde, tüm siparişleri getir
+      // Burada herhangi bir filtreleme yapmaya gerek yok
+    } else if (date) {
+      // Tarih seçildiğinde, tarihe göre filtreleme yap
+      filteredOrders = filteredOrders.filter((order) => order.date === date);
+    }
     setFilteredOrders(filteredOrders);
   };
-
   return (
     <>
       <div className="justify-between flex">
@@ -170,7 +153,10 @@ const OrderList = () => {
             <select
               className="p-1 border rounded-md text-BaseDark w-54 font-medium"
               name="filterDates"
-              onChange={(e) => setOrderDate(e.target.value)}
+              onChange={(e) => {
+                setOrderDate(e.target.value);
+                filterOrders(searchValue, selectedStatus, e.target.value); // Filtreleme işlemi burada çağrılıyor
+              }}
               value={orderDate}
             >
               <option>Tüm Tarihler</option>
@@ -180,6 +166,7 @@ const OrderList = () => {
                 </option>
               ))}
             </select>
+
             {/* Kayıtlı Kullanıcılara Göre Filtreleme Select */}
             <select
               className="p-1 border rounded-md text-CustomGray w-80"
