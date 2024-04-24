@@ -3,10 +3,7 @@ import React,{ useState } from 'react';
 import { products, status } from './data';
 import ProductsFilter from './ProductsFilter';
 import ProdcutsTable from './ProdcutsTable';
-import { MdKeyboardDoubleArrowLeft } from "react-icons/md";
-import { MdKeyboardArrowLeft } from "react-icons/md";
-import { MdKeyboardArrowRight } from "react-icons/md";
-import { MdKeyboardDoubleArrowRight } from "react-icons/md";
+
 
 function ProductList() {
 
@@ -25,13 +22,17 @@ function ProductList() {
       const filterProducts = products.filter((item) => item.published === true);
       setFilteredProducts(filterProducts);
     }
+    //filtreleme yapılırsa ilk sayfaya dön
     setCurrentPage(1)
   }
-
+  // sayfa değiştirme işlevi
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
+  //sayfada gösterilcek ürün sayısı
   const indexOfLastProduct = currentPage * productsPerPage;
+  //gösterilen üründen gösterilcek ürünü çıkarıp kaç ürün kalcağını belirleme
   const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
+  //başlangıç ve son sayfa indexi belirleme
   const currentProducts = filteredProducts.slice(indexOfFirstProduct, indexOfLastProduct);
 
   
