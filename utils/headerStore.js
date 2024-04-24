@@ -299,7 +299,25 @@ const headerStore = create((set) => ({
         mainMenuLogo: [{ logosrc: newLogoSrc }],
       },
     })),
+// Update addMenu function to accept dynamic link value
+addMenu: (newMenu, link) =>
+  set((state) => ({
+    header: {
+      ...state.header,
+      menus: [...state.header.menus, { ...newMenu, href: link }],
+    },
+  })),
 
+// Update setMenuHref function to accept dynamic link value
+setMenuHref: (index, newHref) =>
+  set((state) => ({
+    header: {
+      ...state.header,
+      menus: state.header.menus.map((menu, i) =>
+        i === index ? { ...menu, href: newHref } : menu
+      ),
+    },
+  })),
  
 }));
 
