@@ -1,12 +1,25 @@
-import React from "react";
+import React, { useState } from "react";
 import { MdKeyboardDoubleArrowLeft } from "react-icons/md";
 import { MdKeyboardArrowLeft } from "react-icons/md";
 import { MdKeyboardArrowRight } from "react-icons/md";
 import { MdKeyboardDoubleArrowRight } from "react-icons/md";
-import {  category } from "./data";
-function ProductsFilter({filteredProducts,paginate,currentPage,productsPerPage}) {
- 
+import {  mainCategory } from "./data";
+function ProductsFilter({filteredProducts,paginate,currentPage,productsPerPage, setSelectedCategory,filterStatus}) {
+  
+
+  const handleCategory = (e) => {
+   const selectedCategory = e.target.value;
+    setSelectedCategory(selectedCategory);
+    filterStatus(selectedCategory);
+    
+  } 
+
+
   return (
+
+
+  
+
     <>
       <div className="flex justify-between items-center py-3">
         <div className="flex gap-4 ">
@@ -15,6 +28,7 @@ function ProductsFilter({filteredProducts,paginate,currentPage,productsPerPage})
               className="p-1 border rounded-md text-CustomGray w-64"
               name=""
               id=""
+             
             >
               <option className="" hidden>
                 Toplu Islemler
@@ -33,10 +47,13 @@ function ProductsFilter({filteredProducts,paginate,currentPage,productsPerPage})
               className="p-1 border rounded-md text-CustomGray w-36"
               name=""
               id=""
+              onChange={handleCategory}
             >
+            <option>Kategori Seçin</option>
+
               <option hidden>Kategori Seçin</option>
-              {category.map((product,index)=>(
-                <option key={index}>
+              {mainCategory.map((product,index)=>(
+                <option key={index} value={product}>
                   {product}
                 </option>
               ))}
@@ -62,7 +79,7 @@ function ProductsFilter({filteredProducts,paginate,currentPage,productsPerPage})
               <option>islemler</option>
             </select>
 
-            <button className="p-1 border border-LightBlue rounded-md ">
+            <button className="p-1 border border-LightBlue rounded-md " >
               Filtre
             </button>
           </div>
