@@ -21,6 +21,7 @@ module.exports = {
         CustomRed: '#FF5B4B',
         BaseLight: '#f8f8f8',
         BaseDark: '#212121',
+        HoverGray: "#d1d5db"
       },
     },
   },
