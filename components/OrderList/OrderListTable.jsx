@@ -14,6 +14,14 @@ const OrderListTable = ({ orders }) => {
     setSelectedOrderCheckboxes(updatedSelectedOrderCheckboxes);
   };
 
+  // checkbox ile seci olan siparisleri goster
+  const logSelectedOrders = () => {
+    const selectedOrders = orders.filter(
+      (order) => selectedOrderCheckboxes[order.id]
+    );
+    // console.log("Seçilen Siparişler:", selectedOrders);
+  };
+  logSelectedOrders();
   const handleSingleCheckboxChange = (orderId) => {
     setSelectedOrderCheckboxes((prevSelectedOrderCheckboxes) => ({
       ...prevSelectedOrderCheckboxes,

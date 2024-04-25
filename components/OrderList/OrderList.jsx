@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import OrderListTable from "./OrderListTable";
 import {
   MdKeyboardArrowLeft,
@@ -13,6 +13,7 @@ const OrderList = () => {
   const orders = [
     {
       id: 1,
+      userId: 1,
       orderNumber: "Bilgisayar",
       invoiceNumber: "INV456",
       date: "22 Nisan 2024",
@@ -22,6 +23,7 @@ const OrderList = () => {
     },
     {
       id: 2,
+      userId: 2,
       orderNumber: "Telefon",
       invoiceNumber: "INV457",
       date: "23 Nisan 2024",
@@ -31,6 +33,7 @@ const OrderList = () => {
     },
     {
       id: 3,
+      userId: 3,
       orderNumber: "Telefon",
       invoiceNumber: "INV457",
       date: "23 Nisan 2024",
@@ -40,6 +43,7 @@ const OrderList = () => {
     },
     {
       id: 4,
+      userId: 4,
       orderNumber: "Telefon",
       invoiceNumber: "INV457",
       date: "23 Nisan 2024",
@@ -49,6 +53,7 @@ const OrderList = () => {
     },
     {
       id: 5,
+      userId: 5,
       orderNumber: "Telefon",
       invoiceNumber: "INV457",
       date: "23 Nisan 2024",
@@ -58,6 +63,7 @@ const OrderList = () => {
     },
     {
       id: 6,
+      userId: 6,
       orderNumber: "Telefon",
       invoiceNumber: "INV457",
       date: "23 Nisan 2024",
@@ -67,6 +73,7 @@ const OrderList = () => {
     },
     {
       id: 7,
+      userId: 7,
       orderNumber: "Telefon",
       invoiceNumber: "INV457",
       date: "23 Nisan 2024",
@@ -76,10 +83,11 @@ const OrderList = () => {
     },
     {
       id: 8,
+      userId: 8,
       orderNumber: "Telefon",
       invoiceNumber: "INV457",
       date: "23 Nisan 2024",
-      status: "Beklemede",
+      status: "Hazırlanıyor",
       total: "80₺",
       actions: <button>Edit</button>,
     },
@@ -89,6 +97,7 @@ const OrderList = () => {
   const [searchValue, setSearchValue] = useState("");
   const [selectedStatus, setSelectedStatus] = useState("Tümü");
   const [orderDate, setOrderDate] = useState("");
+  const [uniqueDates, setUniqueDates] = useState([]);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
 
@@ -108,20 +117,20 @@ const OrderList = () => {
     return orders.filter((order) => order.status === status).length;
   }
 
-  // Handle search input change
+  // Arama
   const handleSearchChange = (event) => {
     const { value } = event.target;
     setSearchValue(value);
     filterOrders(value, selectedStatus, orderDate);
   };
 
-  // Handle status filter change
+  // status fiiltresi  degisikligini yonetiyor
   const filterStatus = (status) => {
     setSelectedStatus(status);
     filterOrders(searchValue, status, orderDate);
   };
 
-  // Filter orders based on search input, status, and date
+  // Siparişleri arama girişine, duruma ve tarihe göre filtreler
   const filterOrders = (searchValue, status, date) => {
     let filteredOrders = orders;
 
@@ -147,6 +156,16 @@ const OrderList = () => {
     setFilteredOrders(filteredOrders);
   };
 
+  useEffect(() => {
+    const dates = [];
+    filteredOrders.forEach((order) => {
+      if (!dates.includes(order.date)) {
+        dates.push(order.date);
+      }
+    });
+    setUniqueDates(dates);
+  }, [filteredOrders]);
+
   const handleChangePage = (direction) => {
     if (direction === "prev" && page > 0) {
       setPage(page - 1);
@@ -156,10 +175,6 @@ const OrderList = () => {
     ) {
       setPage(page + 1);
     }
-  };
-  const handleChangeRowsPerPage = (event) => {
-    setRowsPerPage(parseInt(event.target.value, 10));
-    setPage(0);
   };
 
   const paginatedOrders = filteredOrders.slice(
@@ -217,9 +232,15 @@ const OrderList = () => {
               className="p-1 border rounded-md text-CustomGray w-64"
               name="filterActions"
             >
-              <option hidden>Tüm İşlemler</option>
-              <option>İşlemler</option>
-              <option>İşlemler</option>
+              <option hidden>Toplu İşlemler</option>
+              <option>Toplu İşlemler</option>
+              <option>Çöp kutusuna taşı</option>
+              <option>Durumu hazılanıyor olarak değiştir</option>
+              <option>Durumu ödeme bekleniyor olarak değiştir</option>
+              <option>Durumu tamalandı olarak değiştir</option>
+              <option>Durumu iptal edildi olarak değiştir</option>
+              <option>PDF Fatura</option>
+              <option>PDF Paketleme Fişi</option>
             </select>
             {/* Uygula Butonu */}
             <button className="p-1 border border-LightBlue rounded-md">
@@ -239,9 +260,9 @@ const OrderList = () => {
               value={orderDate}
             >
               <option>Tüm Tarihler</option>
-              {orders.map((order) => (
-                <option key={order.id} value={order.date}>
-                  {order.date}
+              {uniqueDates.map((date, index) => (
+                <option key={index} value={date}>
+                  {date}
                 </option>
               ))}
             </select>
