@@ -29,13 +29,70 @@ const OrderList = () => {
       total: "80₺",
       actions: <button>Edit</button>,
     },
+    {
+      id: 3,
+      orderNumber: "Telefon",
+      invoiceNumber: "INV457",
+      date: "23 Nisan 2024",
+      status: "Beklemede",
+      total: "80₺",
+      actions: <button>Edit</button>,
+    },
+    {
+      id: 4,
+      orderNumber: "Telefon",
+      invoiceNumber: "INV457",
+      date: "23 Nisan 2024",
+      status: "Beklemede",
+      total: "80₺",
+      actions: <button>Edit</button>,
+    },
+    {
+      id: 5,
+      orderNumber: "Telefon",
+      invoiceNumber: "INV457",
+      date: "23 Nisan 2024",
+      status: "Beklemede",
+      total: "80₺",
+      actions: <button>Edit</button>,
+    },
+    {
+      id: 6,
+      orderNumber: "Telefon",
+      invoiceNumber: "INV457",
+      date: "23 Nisan 2024",
+      status: "Beklemede",
+      total: "80₺",
+      actions: <button>Edit</button>,
+    },
+    {
+      id: 7,
+      orderNumber: "Telefon",
+      invoiceNumber: "INV457",
+      date: "23 Nisan 2024",
+      status: "Beklemede",
+      total: "80₺",
+      actions: <button>Edit</button>,
+    },
+    {
+      id: 8,
+      orderNumber: "Telefon",
+      invoiceNumber: "INV457",
+      date: "23 Nisan 2024",
+      status: "Beklemede",
+      total: "80₺",
+      actions: <button>Edit</button>,
+    },
   ];
 
   const [filteredOrders, setFilteredOrders] = useState(orders);
   const [searchValue, setSearchValue] = useState("");
   const [selectedStatus, setSelectedStatus] = useState("Tümü");
   const [orderDate, setOrderDate] = useState("");
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(5);
 
+  // Statü listesi
   const statuses = [
     { name: "Tümü", count: orders.length },
     { name: "Beklemede", count: countStatus("Beklemede") },
@@ -46,6 +103,7 @@ const OrderList = () => {
     { name: "Başarısız Olan", count: countStatus("Başarısız Olan") },
   ];
 
+  // Statü sayılarını hesapla
   function countStatus(status) {
     return orders.filter((order) => order.status === status).length;
   }
@@ -81,13 +139,34 @@ const OrderList = () => {
 
     if (date === "Tüm Tarihler") {
       // Tüm Tarihler seçildiğinde, tüm siparişleri getir
-      // Burada herhangi bir filtreleme yapmaya gerek yok
     } else if (date) {
       // Tarih seçildiğinde, tarihe göre filtreleme yap
       filteredOrders = filteredOrders.filter((order) => order.date === date);
     }
+
     setFilteredOrders(filteredOrders);
   };
+
+  const handleChangePage = (direction) => {
+    if (direction === "prev" && page > 0) {
+      setPage(page - 1);
+    } else if (
+      direction === "next" &&
+      (page + 1) * rowsPerPage < filteredOrders.length
+    ) {
+      setPage(page + 1);
+    }
+  };
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(0);
+  };
+
+  const paginatedOrders = filteredOrders.slice(
+    page * rowsPerPage,
+    page * rowsPerPage + rowsPerPage
+  );
+
   return (
     <>
       <div className="justify-between flex">
@@ -185,18 +264,39 @@ const OrderList = () => {
 
         {/* Sıralama ve Sayfalama */}
         <div className="flex items-center gap-2 text-DarkBlue">
-          {/* Toplam Öğe Sayısı */}
-          <p className="text-CustomGray">{orders.length} öge</p>
-          {/* Sayfa İleri ve Geri Butonları */}
-          <MdKeyboardDoubleArrowLeft className="border rounded-sm text-[24px] p-1" />
-          <MdKeyboardArrowLeft className="border rounded-sm text-[24px] p-1" />
-          <span className="border px-4 rounded bg-white">1</span>
-          <span>/90</span>
-          <MdKeyboardArrowRight className="border rounded-sm text-[24px] p-1" />
-          <MdKeyboardDoubleArrowRight className="border rounded-sm text-[24px] p-1" />
+          <p className="text-CustomGray">{filteredOrders.length} öge</p>
+
+          <MdKeyboardDoubleArrowLeft
+            className="border rounded-sm text-[24px] p-1 cursor-pointer"
+            onClick={() => handleChangePage("prev")}
+          />
+
+          <MdKeyboardArrowLeft
+            className={`border rounded-sm text-[24px] p-1 ${
+              page === 0 ? "text-gray-300 cursor-not-allowed" : "cursor-pointer"
+            }`}
+            onClick={() => handleChangePage("prev")}
+          />
+
+          <span className="border px-4 rounded bg-white">{page + 1}</span>
+          <span>/ {Math.ceil(filteredOrders.length / rowsPerPage)}</span>
+
+          <MdKeyboardArrowRight
+            className={`border rounded-sm text-[24px] p-1 ${
+              (page + 1) * rowsPerPage >= filteredOrders.length
+                ? "text-gray-300 cursor-not-allowed"
+                : "cursor-pointer"
+            }`}
+            onClick={() => handleChangePage("next")}
+          />
+
+          <MdKeyboardDoubleArrowRight
+            className="border rounded-sm text-[24px] p-1 cursor-pointer"
+            onClick={() => handleChangePage("next")}
+          />
         </div>
       </div>
-      <OrderListTable orders={filteredOrders} />
+      <OrderListTable orders={paginatedOrders} />
     </>
   );
 };
