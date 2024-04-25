@@ -4,6 +4,7 @@ import { RiBook3Line } from "react-icons/ri";
 import { LuBaby } from "react-icons/lu";
 import { FaSearch } from "react-icons/fa";
 import { RiShoppingBasketFill } from "react-icons/ri";
+
 const headerStore = create((set) => ({
   header: {
     menus: [
@@ -78,7 +79,7 @@ const headerStore = create((set) => ({
         id: 1,
         text: "ÇALIŞKAN ARI (1-4. SINIFLAR)",
         href: "https://caliskanari.com/urun-kategori/caliskan-ari/",
-        icon: <GrEdit style={{ width: "45px", height: "45px" }} />,
+        icon: <GrEdit style={{ width: "30px", height: "30px" }} />,
         subMenus: [
           {
             id: 1,
@@ -106,7 +107,7 @@ const headerStore = create((set) => ({
         id: 2,
         text: "HEYDAY ENGLİSH (İNGİLİZCE)",
         href: "https://caliskanari.com/urun-kategori/heyday/",
-        icon: <RiBook3Line style={{ width: "45px", height: "45px" }} />,
+        icon: <RiBook3Line style={{ width: "35px", height: "35px" }} />,
         subMenus: [
           {
             id: 2,
@@ -149,7 +150,7 @@ const headerStore = create((set) => ({
         id: 3,
         text: "KÜÇÜK ARILAR (OKUL ÖNCESİ)",
         href: "https://caliskanari.com/urun-kategori/heyday/",
-        icon: <LuBaby style={{ width: "45px", height: "45px" }} />,
+        icon: <LuBaby style={{ width: "40px", height: "40px" }} />,
         subMenus: [],
       },
     ],
@@ -162,7 +163,11 @@ const headerStore = create((set) => ({
       {
         id: 2,
         href: "https://caliskanari.com/cart/",
-        icon: <RiShoppingBasketFill style={{ width: "25px", height: "25px" }} />,
+        icon: (
+          <RiShoppingBasketFill
+            style={{ width: "25px", height: "25px", marginLeft: "36px" }}
+          />
+        ),
       },
     ],
   },
@@ -290,35 +295,15 @@ const headerStore = create((set) => ({
       };
     }),
 
-      // Admin logo fotoğrafını değiştirmek için
-
-    setAdminLogo: (newLogoSrc) =>
+  // Admin logo fotoğrafını değiştirmek için
+  setAdminLogo: (newLogoSrc) =>
     set((state) => ({
       header: {
         ...state.header,
         mainMenuLogo: [{ logosrc: newLogoSrc }],
       },
     })),
-// Update addMenu function to accept dynamic link value
-addMenu: (newMenu, link) =>
-  set((state) => ({
-    header: {
-      ...state.header,
-      menus: [...state.header.menus, { ...newMenu, href: link }],
-    },
-  })),
 
-// Update setMenuHref function to accept dynamic link value
-setMenuHref: (index, newHref) =>
-  set((state) => ({
-    header: {
-      ...state.header,
-      menus: state.header.menus.map((menu, i) =>
-        i === index ? { ...menu, href: newHref } : menu
-      ),
-    },
-  })),
- 
 }));
 
 export default headerStore;
