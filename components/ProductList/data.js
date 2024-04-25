@@ -17,6 +17,7 @@ export const products = [
         },
         name:"Akıl Defterim ",
         stok:"AD-001",
+        stokCount:20,
         price:35.00,
         date:{
             productAdditionDate:"20 Nisan 2024",
@@ -35,6 +36,7 @@ export const products = [
         },
         name:"Ev Ödevi",
         stok:"ED-001",
+        stokCount:20,
         price:45.00,
         date:{
             productAdditionDate:"20 Nisan 2024",
@@ -53,6 +55,7 @@ export const products = [
         },
         name:"Fen Bilgisi",
         stok:"FB-003",
+        stokCount:20,
         price:75.00,
         date:{
             productAdditionDate:"20 Nisan 2024",
@@ -71,6 +74,7 @@ export const products = [
         },
         name:"Fen Bilgisi",
         stok:"FB-004",
+        stokCount:20,
         price:75.00,
         date:{
             productAdditionDate:"20 Nisan 2024",
@@ -89,6 +93,7 @@ export const products = [
         },
         name:"Hayat Bilgisi",
         stok:"HB-001",
+        stokCount:20,
         price:75.00,
         date:{
             productAdditionDate:"20 Nisan 2024",
@@ -107,6 +112,7 @@ export const products = [
         },
         name:"Matematik",
         stok:"MT-001",
+        stokCount:20,
         price:75.00,
         date:{
             productAdditionDate:"20 Nisan 2024",
@@ -125,6 +131,7 @@ export const products = [
         },
         name:"Matematik",
         stok:"MT-002",
+        stokCount:20,
         price:85.00,
         date:{
             productAdditionDate:"20 Nisan 2024",
@@ -143,6 +150,7 @@ export const products = [
         },
         name:"Matematik",
         stok:"MT-003",
+        stokCount:20,
         price:95.00,
         date:{
             productAdditionDate:"20 Nisan 2024",
@@ -161,6 +169,7 @@ export const products = [
         },
         name:"Matematik",
         stok:"MT-004",
+        stokCount:0,
         price:105.00,
         date:{
             productAdditionDate:"20 Nisan 2024",
@@ -179,6 +188,7 @@ export const products = [
         },
         name:"Sosyal Bilgisi",
         stok:"SB-004",
+        stokCount:0,
         price:85.00,
         date:{
             productAdditionDate:"20 Nisan 2024",
@@ -197,6 +207,7 @@ export const products = [
         },
         name:"Telafi",
         stok:"TL-001",
+        stokCount:0,
         price:55.00,
         date:{
             productAdditionDate:"20 Nisan 2024",
@@ -215,6 +226,7 @@ export const products = [
         },
         name:"Tüm Dersler",
         stok:"TD-001",
+        stokCount:0,
         price:85.00,
         date:{
             productAdditionDate:"20 Nisan 2024",
@@ -233,6 +245,7 @@ export const products = [
         },
         name:"Türkçe",
         stok:"TC-001",
+        stokCount:0,
         price:85.00,
         date:{
             productAdditionDate:"20 Nisan 2024",
@@ -251,6 +264,7 @@ export const products = [
         },
         name:"Türkçe",
         stok:"TC-003",
+        stokCount:0,
         price:75.00,
         date:{
             productAdditionDate:"20 Nisan 2024",
@@ -269,6 +283,7 @@ export const products = [
         },
         name:"Türkçe",
         stok:"TC-004",
+        stokCount:0,
         price:95.00,
         date:{
             productAdditionDate:"20 Nisan 2024",

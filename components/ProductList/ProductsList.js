@@ -10,6 +10,9 @@ function ProductList() {
   const [currentPage, setCurrentPage] = useState(1);
   const [productsPerPage] = useState(10);
   const [selectedCategory, setSelectedCategory] = useState("");
+  const [selectStock, setSelectStock] = useState("");
+
+
 
   const filterStatus = (status) => {
     setSelectedStatus(status);
@@ -18,13 +21,22 @@ function ProductList() {
     }else if (status === "Yayımlanmış") {
       const filterProducts = products.filter((item) => item.published === true);
       setFilteredProducts(filterProducts);
-    }else{
+    }else if (status !== selectedCategory){
       let filteredByCategory = products.filter((item) => item.category.mainCategory === status)
       setFilteredProducts(filteredByCategory)
-      
     }
-    
-    console.log(status);
+
+    if (status === "Stok durumuna göre filtreleme") {
+      setFilteredProducts(products);
+    }
+    if (status === "Stokta Olanlar") {
+      const filteredByStock = products.filter((item) => item.stokCount > 0)
+      setFilteredProducts(filteredByStock)
+    }else if (status === "Stokta Olmayanlar"){
+      const filteredOffStock = products.filter((item) => item.stokCount === 0)
+      setFilteredProducts(filteredOffStock)
+    }
+
     //filtreleme yapılırsa ilk sayfaya dön
     setCurrentPage(1)
   }
@@ -84,6 +96,8 @@ function ProductList() {
         paginate={paginate}
         currentPage={currentPage}
         productsPerPage={productsPerPage}
+        selectStock={selectStock}
+        setSelectStock={setSelectStock}
       />
       <ProdcutsTable currentProducts={currentProducts} />
     </>

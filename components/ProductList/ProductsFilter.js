@@ -4,7 +4,7 @@ import { MdKeyboardArrowLeft } from "react-icons/md";
 import { MdKeyboardArrowRight } from "react-icons/md";
 import { MdKeyboardDoubleArrowRight } from "react-icons/md";
 import {  mainCategory } from "./data";
-function ProductsFilter({filteredProducts,paginate,currentPage,productsPerPage, setSelectedCategory,filterStatus,}) {
+function ProductsFilter({filteredProducts,paginate,currentPage,productsPerPage, setSelectedCategory,filterStatus,setSelectStock}) {
   
 
   const handleCategory = (e) => {
@@ -13,6 +13,11 @@ function ProductsFilter({filteredProducts,paginate,currentPage,productsPerPage, 
     filterStatus(selectCategory);
     
   } 
+  const handleStock = (e) => {
+    const selectStock = e.target.value;
+    setSelectStock(selectStock);
+    filterStatus(selectStock)
+  }
 
 
   return (
@@ -73,10 +78,12 @@ function ProductsFilter({filteredProducts,paginate,currentPage,productsPerPage, 
               className="p-1 border rounded-md text-CustomGray w-52"
               name=""
               id=""
+              onChange={handleStock}
             >
               <option hidden>Stok durumuna göre filtreleme</option>
-              <option>islemler</option>
-              <option>islemler</option>
+              <option >Stok durumuna göre filtreleme</option>
+              <option >Stokta Olanlar</option>
+              <option >Stokta Olmayanlar</option>
             </select>
 
             <button className="p-1 border border-LightBlue rounded-md " >
@@ -87,11 +94,24 @@ function ProductsFilter({filteredProducts,paginate,currentPage,productsPerPage, 
         <div className="flex items-center gap-2 text-DarkBlue ">
         <span className="text-CustomGray">{filteredProducts.length} kitap</span>
         <MdKeyboardDoubleArrowLeft className="border  rounded-sm text-[24px] p-1" onClick={() => paginate(1)} />
-        <MdKeyboardArrowLeft className="border  rounded-sm text-[24px] p-1" onClick={() => paginate(currentPage - 1)} />
+        <MdKeyboardArrowLeft className={`border  rounded-sm text-[24px] p-1 ${currentPage === 1 ? "cursor-not-allowed text-gray-300 ":"cursor-pointer"}`}onClick={() => {
+          if (currentPage !== 1) {
+            paginate(currentPage - 1);
+          }
+        }} />
         <span className="border  px-4 rounded bg-white">{currentPage}</span>
         <span>/ {Math.ceil(filteredProducts.length / productsPerPage)}</span>
-        <MdKeyboardArrowRight className="border  rounded-sm text-[24px] p-1" onClick={() => paginate(currentPage + 1)} />
-        <MdKeyboardDoubleArrowRight className="border  rounded-sm text-[24px] p-1" onClick={() => paginate(Math.ceil(filteredProducts.length / productsPerPage))} />
+        <MdKeyboardArrowRight 
+        className={`border rounded-sm text-[24px] p-1 ${
+          currentPage * productsPerPage >= filteredProducts.length ? "cursor-not-allowed text-gray-300" : "cursor-pointer text-gray-900"
+        }`}
+        onClick={() => {
+          if (currentPage  * productsPerPage < filteredProducts.length) {
+            paginate(currentPage + 1);
+          }
+        }}
+      />
+       <MdKeyboardDoubleArrowRight className="border  rounded-sm text-[24px] p-1" onClick={() => paginate(Math.ceil(filteredProducts.length / productsPerPage))} />
       </div>
       </div>
     </>
