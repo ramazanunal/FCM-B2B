@@ -3,6 +3,18 @@ export const mainCategory=[
     "2.Sınıf",
     "3.Sınıf",
     "4.Sınıf",
+    "Hikaye",
+    "Set",
+    "Soru Bankası"
+]
+
+export const subCategory=[
+    "Genel",
+    "Fen Bilgisi",
+    "Sosyal Bilgisi",
+    "Hayat Bilgisi",
+    "Matematik",
+    "Türkçe"
 ]
 
 export const products = [
@@ -12,7 +24,7 @@ export const products = [
         imgPath:"/assets/images/akildefterim.png",
         category:{
             mainCategory:mainCategory[0],
-            subCategory:"Genel"
+            subCategory:subCategory[0]
 
         },
         name:"Akıl Defterim ",
@@ -20,8 +32,8 @@ export const products = [
         stokCount:20,
         price:35.00,
         date:{
-            productAdditionDate:"20 Nisan 2024",
-            lastUpdateDate:"24 Nisan 2024"
+            productAdditionDate:"22 Nisan 2024",
+            lastUpdateDate:"21 Nisan 2024"
         },
         published:true,
       },
@@ -31,7 +43,7 @@ export const products = [
         imgPath:"/assets/images/evOdev.jpeg",
         category:{
             mainCategory:mainCategory[0],
-            subCategory:"Genel"
+            subCategory:subCategory[0]
 
         },
         name:"Ev Ödevi",
@@ -50,7 +62,7 @@ export const products = [
         imgPath:"/assets/images/fen3.png",
         category:{
             mainCategory:mainCategory[2],
-            subCategory:"Fen Bilgisi"
+            subCategory:subCategory[1]
 
         },
         name:"Fen Bilgisi",
@@ -69,7 +81,7 @@ export const products = [
         imgPath:"/assets/images/fen4.png",
         category:{
             mainCategory:mainCategory[3],
-            subCategory:"Fen Bilgisi"
+            subCategory:subCategory[1]
 
         },
         name:"Fen Bilgisi",
@@ -88,7 +100,7 @@ export const products = [
         imgPath:"/assets/images/hayat1.png",
         category:{
             mainCategory:mainCategory[0],
-            subCategory:"Hayat Bilgisi"
+            subCategory:subCategory[3]
 
         },
         name:"Hayat Bilgisi",
@@ -107,7 +119,7 @@ export const products = [
         imgPath:"/assets/images/mat1.png",
         category:{
             mainCategory:mainCategory[0],
-            subCategory:"Matematik"
+            subCategory:subCategory[4]
 
         },
         name:"Matematik",
@@ -126,7 +138,7 @@ export const products = [
         imgPath:"/assets/images/mat2.png",
         category:{
             mainCategory:mainCategory[1],
-            subCategory:"Matematik"
+            subCategory:subCategory[4]
 
         },
         name:"Matematik",
@@ -145,7 +157,7 @@ export const products = [
         imgPath:"/assets/images/mat3.png",
         category:{
             mainCategory:mainCategory[2],
-            subCategory:"Matematik"
+            subCategory:subCategory[4]
 
         },
         name:"Matematik",
@@ -164,7 +176,7 @@ export const products = [
         imgPath:"/assets/images/mat4.png",
         category:{
             mainCategory:mainCategory[3],
-            subCategory:"Matematik"
+            subCategory:subCategory[4]
 
         },
         name:"Matematik",
@@ -183,7 +195,7 @@ export const products = [
         imgPath:"/assets/images/sosyal4.png",
         category:{
             mainCategory:mainCategory[3],
-            subCategory:"Sosyal Bilgisi"
+            subCategory:subCategory[2]
 
         },
         name:"Sosyal Bilgisi",
@@ -202,7 +214,7 @@ export const products = [
         imgPath:"/assets/images/telafi1.png",
         category:{
             mainCategory:mainCategory[0],
-            subCategory:"Genel"
+            subCategory:subCategory[0]
 
         },
         name:"Telafi",
@@ -221,7 +233,7 @@ export const products = [
         imgPath:"/assets/images/tumders.png",
         category:{
             mainCategory:mainCategory[0],
-            subCategory:"Genel"
+            subCategory:subCategory[0]
 
         },
         name:"Tüm Dersler",
@@ -240,7 +252,7 @@ export const products = [
         imgPath:"/assets/images/turkce1.png",
         category:{
             mainCategory:mainCategory[0],
-            subCategory:"Turkce"
+            subCategory:subCategory[5]
 
         },
         name:"Türkçe",
@@ -259,7 +271,7 @@ export const products = [
         imgPath:"/assets/images/turkce3.png",
         category:{
             mainCategory:mainCategory[2],
-            subCategory:"Turkce"
+            subCategory:subCategory[5]
 
         },
         name:"Türkçe",
@@ -278,7 +290,7 @@ export const products = [
         imgPath:"/assets/images/turkce4.png",
         category:{
             mainCategory:mainCategory[3],
-            subCategory:"Turkce"
+            subCategory:subCategory[5]
 
         },
         name:"Türkçe",
