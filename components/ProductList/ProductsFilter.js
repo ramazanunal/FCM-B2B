@@ -4,13 +4,13 @@ import { MdKeyboardArrowLeft } from "react-icons/md";
 import { MdKeyboardArrowRight } from "react-icons/md";
 import { MdKeyboardDoubleArrowRight } from "react-icons/md";
 import {  mainCategory } from "./data";
-function ProductsFilter({filteredProducts,paginate,currentPage,productsPerPage, setSelectedCategory,filterStatus}) {
+function ProductsFilter({filteredProducts,paginate,currentPage,productsPerPage, setSelectedCategory,filterStatus,}) {
   
 
   const handleCategory = (e) => {
-   const selectedCategory = e.target.value;
-    setSelectedCategory(selectedCategory);
-    filterStatus(selectedCategory);
+   const selectCategory = e.target.value;
+    setSelectedCategory(selectCategory);
+    filterStatus(selectCategory);
     
   } 
 

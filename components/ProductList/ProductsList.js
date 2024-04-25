@@ -13,7 +13,7 @@ function ProductList() {
 
   const filterStatus = (status) => {
     setSelectedStatus(status);
-    if (status === "Tümü") {
+    if (status === "Tümü" || status === "Kategori Seçin") {
       setFilteredProducts(products);
     }else if (status === "Yayımlanmış") {
       const filterProducts = products.filter((item) => item.published === true);
@@ -21,6 +21,7 @@ function ProductList() {
     }else{
       let filteredByCategory = products.filter((item) => item.category.mainCategory === status)
       setFilteredProducts(filteredByCategory)
+      
     }
     
     console.log(status);
@@ -78,6 +79,7 @@ function ProductList() {
       <ProductsFilter
         filterStatus={filterStatus}
         setSelectedCategory={setSelectedCategory}
+        selectedCategory={selectedCategory}
         filteredProducts={filteredProducts}
         paginate={paginate}
         currentPage={currentPage}
