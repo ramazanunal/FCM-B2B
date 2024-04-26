@@ -3,6 +3,7 @@ import Header from "../Header";
 import SliderComponent from "../SliderComponent";
 import Footer from "../Footer";
 import Banner from "../Banner";
+import HomeCategories from "../HomeCategories";
 
 function Homepage() {
   return (
@@ -12,6 +13,9 @@ function Homepage() {
       </div>
       <div className="bg-white">
         <SliderComponent />
+      </div>
+      <div className="bg-white">
+        <HomeCategories />
       </div>
       <div className="bg-white">
         <Footer />
