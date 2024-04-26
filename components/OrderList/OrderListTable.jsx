@@ -6,15 +6,17 @@ const OrderListTable = ({ orders }) => {
   const [selectAllChecked, setSelectAllChecked] = useState(false);
   const [selectedOrderCheckboxes, setSelectedOrderCheckboxes] = useState({});
 
+  // statu Renkleri
   const statusColors = {
-    Beklemede: "bg-red-500 text-red-700",
-    Hazırlanıyor: "bg-green-200 text-green-800",
-    "Ödeme Bekleniyor": "bg-orange-200 text-amber-800",
-    Tamamlandı: "bg-slate-400 text-slate-700",
-    "İptal Edilen": "bg-gray-200",
-    "Başarısız Olan": "bg-gray-300",
+    Beklemede: "bg-[#e5e5e5] text-[#80808b]",
+    Hazırlanıyor: "bg-[#c7e1c7] text-[#5d7b45]",
+    "Ödeme Bekleniyor": "bg-[#f8dda5] text-[#876b17]",
+    Tamamlandı: "bg-[#c7d8e2] text-[#324356]",
+    "İptal Edildi": "bg-[#e3e5e3] text-[#7a7a7c]",
+    Başarısız: "bg-[#eaa4a4] text-[#762024]",
   };
 
+  
   const handleSelectAllCheckboxChange = (event) => {
     const { checked } = event.target;
     setSelectAllChecked(checked);
@@ -37,15 +39,15 @@ const OrderListTable = ({ orders }) => {
     <div className="overflow-x-auto border">
       <table className="min-w-full divide-y divide-gray-200">
         <thead className="bg-white">
-          <tr>
-            <th className="px-6 py-3 text-left text-xs font-medium">
+          <tr className="text-LightBlue">
+            <th className="px-6 py-3  text-left text-xs font-medium">
               <input
                 type="checkbox"
                 checked={selectAllChecked}
                 onChange={handleSelectAllCheckboxChange}
               />
             </th>
-            <th className="px-6 py-3 text-left text-base font-medium">
+            <th className="px-6 py-3 text-left text-base font-medium  ">
               Sipariş
             </th>
             <th className="px-6 py-3 text-left text-base font-medium">
@@ -61,7 +63,7 @@ const OrderListTable = ({ orders }) => {
             </th>
           </tr>
         </thead>
-        <tbody className="bg-white divide-y divide-gray-200">
+        <tbody className="bg-white divide-y divide-gray-200 ">
           {orders.map((order, index) => (
             <tr
               key={order.id}
@@ -74,12 +76,12 @@ const OrderListTable = ({ orders }) => {
                   onChange={() => handleSingleCheckboxChange(order.id)}
                 />
               </td>
-              <td className="px-6 py-4 whitespace-nowrap">
+              <td className="px-6 py-4 whitespace-nowrap text-LightBlue">
                 {order.orderNumber}
               </td>
               <td className="py-4 whitespace-nowrap flex items-center gap-3">
-                <BiHide className="hidden" />
-                <RxEyeOpen />
+                <BiHide className="hidden text-LightBlue" />
+                <RxEyeOpen className=" text-LightBlue" />
                 {order.invoiceNumber}
               </td>
               <td className="px-6 py-4 whitespace-nowrap">{order.date}</td>

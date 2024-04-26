@@ -45,7 +45,7 @@ const OrderList = () => {
       orderNumber: "Telefon",
       invoiceNumber: "INV457",
       date: "23 Nisan 2024",
-      status: "Beklemede",
+      status: "Başarısız Olan",
       total: "80₺",
       actions: (
         <div className="flex">
@@ -59,7 +59,7 @@ const OrderList = () => {
       orderNumber: "Telefon",
       invoiceNumber: "INV457",
       date: "23 Nisan 2024",
-      status: "Beklemede",
+      status: "İptal Edilen",
       total: "80₺",
       actions: (
         <div className="flex">
@@ -87,7 +87,7 @@ const OrderList = () => {
       orderNumber: "Telefon",
       invoiceNumber: "INV457",
       date: "23 Nisan 2024",
-      status: "Tamamlandı",
+      status: "Tamamlanan",
       total: "80₺",
       actions: (
         <div className="flex">
@@ -160,7 +160,7 @@ const OrderList = () => {
   // status fiiltresi  degisikligini yonetiyor
   const filterStatus = (status) => {
     setSelectedStatus(status);
-    filterOrders(searchValue, status, orderDate);
+    filterOrders(searchValue, status, orderDate, uniqueDates);
   };
 
   // Siparişleri arama girişine, duruma ve tarihe göre filtreler
@@ -180,14 +180,17 @@ const OrderList = () => {
     }
 
     if (date === "Tüm Tarihler") {
-      // Tüm Tarihler seçildiğinde, tüm siparişleri getir
     } else if (date) {
-      // Tarih seçildiğinde, tarihe göre filtreleme yap
       filteredOrders = filteredOrders.filter((order) => order.date === date);
     }
+
     filteredOrders.forEach((order) => {
       if (order.status === "Tamamlanan") {
         order.status = "Tamamlandı";
+      } else if (order.status === "İptal Edilen") {
+        order.status = "İptal Edildi";
+      } else if (order.status === "Başarısız Olan") {
+        order.status = "Başarısız";
       }
     });
     setFilteredOrders(filteredOrders);
@@ -208,7 +211,6 @@ const OrderList = () => {
         users.push(order.userId);
       }
     });
-
     setRegisteredUsers(users);
   }, [filteredOrders]);
 
@@ -231,7 +233,7 @@ const OrderList = () => {
   return (
     <>
       <div className="justify-between flex">
-        <div className="flex gap-2">
+        <div className="flex gap-2 text-LightBlue">
           {statuses.map((status, index) => (
             <React.Fragment key={index}>
               <span
@@ -273,7 +275,7 @@ const OrderList = () => {
         <div className="flex gap-4">
           {/* Filtreleme Seçenekleri */}
           <div className="flex gap-2">
-            {/* İşlemler Select */}
+            {/* Toplu İşlemler Select */}
             <select
               className="p-1 border rounded-md text-CustomGray w-64"
               name="filterActions"
