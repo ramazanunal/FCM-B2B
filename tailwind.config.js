@@ -14,6 +14,7 @@ module.exports = {
           "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
       },
       colors: {
+<<<<<<< HEAD
         primary: "#FAF9F6",
         DarkBlue: "#394c69",
         LightBlue: "#31acd8",
@@ -35,6 +36,17 @@ module.exports = {
         İptalEdilenText: "#7a7a7c",
         BaşarısızOlanBg: "#eaa4a4",
         BaşarısızOlanText: "#762024",
+=======
+        primary: '#FAF9F6',
+        DarkBlue: '#394c69',
+        LightBlue: '#31acd8',
+        CustomGray: '#404E65',
+        CustomRed: '#FF5B4B',
+        BaseLight: '#f8f8f8',
+        BaseDark: '#212121',
+        HoverGray: "#d1d5db",
+        FooterText: "#c0c7d1"
+>>>>>>> 9d193d15f6e0e7e6785ee2ca2b799f113c68eff2
       },
     },
   },

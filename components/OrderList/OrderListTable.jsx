@@ -16,7 +16,6 @@ const OrderListTable = ({ orders }) => {
     Başarısız: "bg-[#eaa4a4] text-[#762024]",
   };
 
-  
   const handleSelectAllCheckboxChange = (event) => {
     const { checked } = event.target;
     setSelectAllChecked(checked);
