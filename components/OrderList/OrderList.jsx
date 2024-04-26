@@ -16,20 +16,28 @@ const OrderList = () => {
       userId: 1,
       orderNumber: "Bilgisayar",
       invoiceNumber: "INV456",
-      date: "22 Nisan 2024",
+      date: "22 Nisan 2021",
       status: "Tamamlanan",
       total: "100₺",
-      actions: <button>Edit</button>,
+      actions: (
+        <div className="flex">
+          <button>Duzenle</button> <button>Sil</button>
+        </div>
+      ),
     },
     {
       id: 2,
       userId: 2,
       orderNumber: "Telefon",
       invoiceNumber: "INV457",
-      date: "23 Nisan 2024",
+      date: "23 Nisan 2021",
       status: "Beklemede",
       total: "80₺",
-      actions: <button>Edit</button>,
+      actions: (
+        <div className="flex">
+          <button>Duzenle</button> <button>Sil</button>
+        </div>
+      ),
     },
     {
       id: 3,
@@ -39,7 +47,11 @@ const OrderList = () => {
       date: "23 Nisan 2024",
       status: "Beklemede",
       total: "80₺",
-      actions: <button>Edit</button>,
+      actions: (
+        <div className="flex">
+          <button>Duzenle</button> <button>Sil</button>
+        </div>
+      ),
     },
     {
       id: 4,
@@ -49,7 +61,11 @@ const OrderList = () => {
       date: "23 Nisan 2024",
       status: "Beklemede",
       total: "80₺",
-      actions: <button>Edit</button>,
+      actions: (
+        <div className="flex">
+          <button>Duzenle</button> <button>Sil</button>
+        </div>
+      ),
     },
     {
       id: 5,
@@ -57,9 +73,13 @@ const OrderList = () => {
       orderNumber: "Telefon",
       invoiceNumber: "INV457",
       date: "23 Nisan 2024",
-      status: "Beklemede",
+      status: "Ödeme Bekleniyor",
       total: "80₺",
-      actions: <button>Edit</button>,
+      actions: (
+        <div className="flex">
+          <button>Duzenle</button> <button>Sil</button>
+        </div>
+      ),
     },
     {
       id: 6,
@@ -67,9 +87,13 @@ const OrderList = () => {
       orderNumber: "Telefon",
       invoiceNumber: "INV457",
       date: "23 Nisan 2024",
-      status: "Beklemede",
+      status: "Tamamlandı",
       total: "80₺",
-      actions: <button>Edit</button>,
+      actions: (
+        <div className="flex">
+          <button>Duzenle</button> <button>Sil</button>
+        </div>
+      ),
     },
     {
       id: 7,
@@ -79,7 +103,11 @@ const OrderList = () => {
       date: "23 Nisan 2024",
       status: "Beklemede",
       total: "80₺",
-      actions: <button>Edit</button>,
+      actions: (
+        <div className="flex">
+          <button>Duzenle</button> <button>Sil</button>
+        </div>
+      ),
     },
     {
       id: 8,
@@ -89,11 +117,16 @@ const OrderList = () => {
       date: "23 Nisan 2024",
       status: "Hazırlanıyor",
       total: "80₺",
-      actions: <button>Edit</button>,
+      actions: (
+        <div className="flex gap-2">
+          <button>Duzenle</button> <button>Sil</button>
+        </div>
+      ),
     },
   ];
 
   const [filteredOrders, setFilteredOrders] = useState(orders);
+  const [registeredUsers, setRegisteredUsers] = useState([]);
   const [searchValue, setSearchValue] = useState("");
   const [selectedStatus, setSelectedStatus] = useState("Tümü");
   const [orderDate, setOrderDate] = useState("");
@@ -152,7 +185,11 @@ const OrderList = () => {
       // Tarih seçildiğinde, tarihe göre filtreleme yap
       filteredOrders = filteredOrders.filter((order) => order.date === date);
     }
-
+    filteredOrders.forEach((order) => {
+      if (order.status === "Tamamlanan") {
+        order.status = "Tamamlandı";
+      }
+    });
     setFilteredOrders(filteredOrders);
   };
 
@@ -164,6 +201,15 @@ const OrderList = () => {
       }
     });
     setUniqueDates(dates);
+
+    const users = [];
+    filteredOrders.forEach((order) => {
+      if (!users.includes(order.userId)) {
+        users.push(order.userId);
+      }
+    });
+
+    setRegisteredUsers(users);
   }, [filteredOrders]);
 
   const handleChangePage = (direction) => {
@@ -273,8 +319,11 @@ const OrderList = () => {
               name="filterUsers"
             >
               <option hidden>Kayıtlı Kullanıcılara göre Filtrele</option>
-              <option>İşlemler</option>
-              <option>İşlemler</option>
+              {registeredUsers.map((userId, index) => (
+                <option key={index} value={userId}>
+                  {userId}
+                </option>
+              ))}
             </select>
             {/* Filtrele Butonu */}
             <button className="p-1 border border-LightBlue rounded-md">
