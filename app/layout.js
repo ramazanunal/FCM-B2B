@@ -1,7 +1,6 @@
-
 import { Inter } from "next/font/google";
-import '@/styles/globals.css';
-import 'react-toastify/dist/ReactToastify.css';
+import "@/styles/globals.css";
+import "react-toastify/dist/ReactToastify.css";
 import Providers from "@/providers";
 
 const inter = Inter({ subsets: ["latin"] });
@@ -17,10 +16,10 @@ export default function RootLayout({ children, session }) {
       <body className={inter.className}>
         {/* SessionProvider ile sarmallarız ki tüm route lara erişebilelim diye / yukarıda "use client" tanımlamayı unutma! */}
         <Providers session={session}>
-            {/* <Navbar links={links}/> */}
-            {children}
+          {/* <Navbar links={links}/> */}
+          {children}
         </Providers>
-        </body>
+      </body>
     </html>
   );
 }
