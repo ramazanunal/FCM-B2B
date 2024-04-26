@@ -4,7 +4,7 @@ const nextConfig = {
       //appDir: true,
     },
     images: {
-      domains: ['source.unsplash.com', 'images.unsplash.com', 'free4kwallpapers.com'],
+      domains: ['source.unsplash.com', 'images.unsplash.com', 'free4kwallpapers.com', 'caliskanari.com'], 
     },
   
   }
