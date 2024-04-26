@@ -1,6 +1,5 @@
-import HomeContainer from "@/containers/Home";
-import OrderContainer from "@/containers/Orders";
+import HomeContainer from '@/containers/Home';
 
 export default function Home() {
-  return <OrderContainer />;
+  return <HomeContainer />;
 }
