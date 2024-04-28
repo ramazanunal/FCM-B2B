@@ -1,6 +1,7 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import OrderListTable from "./OrderListTable";
+import { orders, statuses } from "./data";
 import {
   MdKeyboardArrowLeft,
   MdKeyboardArrowRight,
@@ -9,161 +10,19 @@ import {
 } from "react-icons/md";
 
 const OrderList = () => {
-  // Fake Data
-  const orders = [
-    {
-      id: 1,
-      userId: 1,
-      orderNumber: "Bilgisayar",
-      invoiceNumber: "INV456",
-      date: "22 Nisan 2021",
-      status: "Tamamlanan",
-      total: "100₺",
-      actions: (
-        <div className="flex">
-          <button>Duzenle</button> <button>Sil</button>
-        </div>
-      ),
-    },
-    {
-      id: 2,
-      userId: 2,
-      orderNumber: "Telefon",
-      invoiceNumber: "INV457",
-      date: "23 Nisan 2021",
-      status: "Beklemede",
-      total: "80₺",
-      actions: (
-        <div className="flex">
-          <button>Duzenle</button> <button>Sil</button>
-        </div>
-      ),
-    },
-    {
-      id: 3,
-      userId: 3,
-      orderNumber: "Telefon",
-      invoiceNumber: "INV457",
-      date: "23 Nisan 2024",
-      status: "Başarısız Olan",
-      total: "80₺",
-      actions: (
-        <div className="flex">
-          <button>Duzenle</button> <button>Sil</button>
-        </div>
-      ),
-    },
-    {
-      id: 4,
-      userId: 4,
-      orderNumber: "Telefon",
-      invoiceNumber: "INV457",
-      date: "23 Nisan 2024",
-      status: "İptal Edilen",
-      total: "80₺",
-      actions: (
-        <div className="flex">
-          <button>Duzenle</button> <button>Sil</button>
-        </div>
-      ),
-    },
-    {
-      id: 5,
-      userId: 5,
-      orderNumber: "Telefon",
-      invoiceNumber: "INV457",
-      date: "23 Nisan 2024",
-      status: "Ödeme Bekleniyor",
-      total: "80₺",
-      actions: (
-        <div className="flex">
-          <button>Duzenle</button> <button>Sil</button>
-        </div>
-      ),
-    },
-    {
-      id: 6,
-      userId: 6,
-      orderNumber: "Telefon",
-      invoiceNumber: "INV457",
-      date: "23 Nisan 2024",
-      status: "Tamamlanan",
-      total: "80₺",
-      actions: (
-        <div className="flex">
-          <button>Duzenle</button> <button>Sil</button>
-        </div>
-      ),
-    },
-    {
-      id: 7,
-      userId: 7,
-      orderNumber: "Telefon",
-      invoiceNumber: "INV457",
-      date: "23 Nisan 2024",
-      status: "Beklemede",
-      total: "80₺",
-      actions: (
-        <div className="flex">
-          <button>Duzenle</button> <button>Sil</button>
-        </div>
-      ),
-    },
-    {
-      id: 8,
-      userId: 8,
-      orderNumber: "Telefon",
-      invoiceNumber: "INV457",
-      date: "23 Nisan 2024",
-      status: "Hazırlanıyor",
-      total: "80₺",
-      actions: (
-        <div className="flex gap-2">
-          <button>Duzenle</button> <button>Sil</button>
-        </div>
-      ),
-    },
-  ];
-
   const [filteredOrders, setFilteredOrders] = useState(orders);
-  const [registeredUsers, setRegisteredUsers] = useState([]);
   const [searchValue, setSearchValue] = useState("");
   const [selectedStatus, setSelectedStatus] = useState("Tümü");
-  const [orderDate, setOrderDate] = useState("");
+  const [orderDate, setOrderDate] = useState("Tüm Tarihler");
   const [uniqueDates, setUniqueDates] = useState([]);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
 
-  // Statü listesi
-  const statuses = [
-    { name: "Tümü", count: orders.length },
-    { name: "Beklemede", count: countStatus("Beklemede") },
-    { name: "Hazırlanıyor", count: countStatus("Hazırlanıyor") },
-    { name: "Ödeme Bekleniyor", count: countStatus("Ödeme Bekleniyor") },
-    { name: "Tamamlanan", count: countStatus("Tamamlanan") },
-    { name: "İptal Edilen", count: countStatus("İptal Edilen") },
-    { name: "Başarısız Olan", count: countStatus("Başarısız Olan") },
-  ];
+  useEffect(() => {
+    const dates = [...new Set(filteredOrders.map((order) => order.date))];
+    setUniqueDates(dates);
+  }, [filteredOrders]);
 
-  // Statü sayılarını hesapla
-  function countStatus(status) {
-    return orders.filter((order) => order.status === status).length;
-  }
-
-  // Arama
-  const handleSearchChange = (event) => {
-    const { value } = event.target;
-    setSearchValue(value);
-    filterOrders(value, selectedStatus, orderDate);
-  };
-
-  // status fiiltresi  degisikligini yonetiyor
-  const filterStatus = (status) => {
-    setSelectedStatus(status);
-    filterOrders(searchValue, status, orderDate, uniqueDates);
-  };
-
-  // Siparişleri arama girişine, duruma ve tarihe göre filtreler
   const filterOrders = (searchValue, status, date) => {
     let filteredOrders = orders;
 
@@ -179,40 +38,34 @@ const OrderList = () => {
       );
     }
 
-    if (date === "Tüm Tarihler") {
-    } else if (date) {
+    if (date !== "Tüm Tarihler") {
       filteredOrders = filteredOrders.filter((order) => order.date === date);
     }
 
     filteredOrders.forEach((order) => {
       if (order.status === "Tamamlanan") {
         order.status = "Tamamlandı";
-      } else if (order.status === "İptal Edilen") {
-        order.status = "İptal Edildi";
-      } else if (order.status === "Başarısız Olan") {
+      } else if (order.status === "İptal edilen") {
+        order.status = "İptal edildi";
+      } else if (order.status === "Başarısız olan") {
         order.status = "Başarısız";
       }
     });
     setFilteredOrders(filteredOrders);
   };
 
-  useEffect(() => {
-    const dates = [];
-    filteredOrders.forEach((order) => {
-      if (!dates.includes(order.date)) {
-        dates.push(order.date);
-      }
-    });
-    setUniqueDates(dates);
+  // Arama
+  const handleSearchChange = (event) => {
+    const { value } = event.target;
+    setSearchValue(value);
+    filterOrders(value, selectedStatus, orderDate);
+  };
 
-    const users = [];
-    filteredOrders.forEach((order) => {
-      if (!users.includes(order.userId)) {
-        users.push(order.userId);
-      }
-    });
-    setRegisteredUsers(users);
-  }, [filteredOrders]);
+  // status fiiltresi  degisikligini yonetiyor
+  const filterStatus = (status) => {
+    setSelectedStatus(status);
+    filterOrders(searchValue, status, orderDate, uniqueDates);
+  };
 
   const handleChangePage = (direction) => {
     if (direction === "prev" && page > 0) {
@@ -276,6 +129,7 @@ const OrderList = () => {
           {/* Filtreleme Seçenekleri */}
           <div className="flex gap-2">
             {/* Toplu İşlemler Select */}
+
             <select
               className="p-1 border rounded-md text-CustomGray w-64"
               name="filterActions"
@@ -302,8 +156,9 @@ const OrderList = () => {
               className="p-1 border rounded-md text-BaseDark w-54 font-medium"
               name="filterDates"
               onChange={(e) => {
-                setOrderDate(e.target.value);
-                filterOrders(searchValue, selectedStatus, e.target.value); // Filtreleme işlemi burada çağrılıyor
+                const selectedDate = e.target.value;
+                setOrderDate(selectedDate);
+                filterOrders(searchValue, selectedStatus, selectedDate);
               }}
               value={orderDate}
             >
@@ -321,11 +176,7 @@ const OrderList = () => {
               name="filterUsers"
             >
               <option hidden>Kayıtlı Kullanıcılara göre Filtrele</option>
-              {registeredUsers.map((userId, index) => (
-                <option key={index} value={userId}>
-                  {userId}
-                </option>
-              ))}
+              <option>Kayıtlı Kullanıcılara göre Filtrele</option>
             </select>
             {/* Filtrele Butonu */}
             <button className="p-1 border border-LightBlue rounded-md">
