@@ -40,6 +40,19 @@ function ProductsFilter({
       setFilteredProducts(filteredByProductType);
     }
   };
+
+  //toplu işlemlere göre filtreleme
+  const handleAllFilter = (e) => {
+    const selectIsActive = e.target.value;
+    console.log(selectIsActive);
+    if (selectIsActive === "Toplu Islemler") {
+      setFilteredProducts(products)
+    }else{
+      const filteredActiveProduct = products.filter((item)=> item.active.toString() === selectIsActive)
+      console.log(filteredActiveProduct);
+      setFilteredProducts(filteredActiveProduct)
+    }
+  }
   return (
     <>
       <div className="flex justify-between items-center py-3">
@@ -49,12 +62,16 @@ function ProductsFilter({
               className="p-1 border rounded-md text-CustomGray w-64"
               name=""
               id=""
+              onChange={handleAllFilter}
             >
               <option className="" hidden>
                 Toplu Islemler
               </option>
-              <option>islemler</option>
-              <option>islemler</option>
+              <option className="" >
+                Toplu Islemler
+              </option>
+              <option value={true}>Aktif Olan Ürünler</option>
+              <option value={false}>Aktif Olmayan Ürünler</option>
             </select>
 
             <button className="p-1 border border-LightBlue rounded-md ">
@@ -111,14 +128,17 @@ function ProductsFilter({
         </div>
         <div className="flex items-center gap-2 text-DarkBlue ">
           <span className="text-CustomGray">
-            {filteredProducts.length} kitap
+            {filteredProducts.length} Kitap
           </span>
+          <div className="border  rounded-sm text-[18px] p-3">
           <MdKeyboardDoubleArrowLeft
-            className="border  rounded-sm text-[24px] p-1"
+           
             onClick={() => paginate(1)}
           />
-          <MdKeyboardArrowLeft
-            className={`border  rounded-sm text-[24px] p-1 ${
+          </div>
+          <div className="border  rounded-sm text-[18px] p-3">
+           <MdKeyboardArrowLeft
+            className={`${
               currentPage === 1
                 ? "cursor-not-allowed text-gray-300 "
                 : "cursor-pointer"
@@ -128,11 +148,13 @@ function ProductsFilter({
                 paginate(currentPage - 1);
               }
             }}
-          />
-          <span className="border  px-4 rounded bg-white">{currentPage}</span>
+          /></div>
+         
+          <span className="border  px-8 py-2 rounded bg-white">{currentPage}</span>
           <span>/ {Math.ceil(filteredProducts.length / productsPerPage)}</span>
+          <div className="border  rounded-sm text-[18px] p-3">
           <MdKeyboardArrowRight
-            className={`border rounded-sm text-[24px] p-1 ${
+            className={` ${
               currentPage * productsPerPage >= filteredProducts.length
                 ? "cursor-not-allowed text-gray-300"
                 : "cursor-pointer text-gray-900"
@@ -142,13 +164,15 @@ function ProductsFilter({
                 paginate(currentPage + 1);
               }
             }}
-          />
-          <MdKeyboardDoubleArrowRight
-            className="border  rounded-sm text-[24px] p-1"
+          /></div>
+          <div className="border  rounded-sm text-[18px] p-3"> 
+           <MdKeyboardDoubleArrowRight
+            
             onClick={() =>
               paginate(Math.ceil(filteredProducts.length / productsPerPage))
             }
-          />
+          /></div>
+        
         </div>
       </div>
     </>

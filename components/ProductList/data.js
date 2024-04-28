@@ -18,25 +18,7 @@ export const subCategory=[
 ]
 
 export const products = [
-    {
-        id: 1,
-        checkbox: <input type="checkbox" />,
-        imgPath:"/assets/images/akildefterim.png",
-        category:{
-            mainCategory:mainCategory[0],
-            subCategory:subCategory[0]
-
-        },
-        name:"Akıl Defterim ",
-        stok:"AD-001",
-        stokCount:20,
-        price:35.00,
-        date:{
-            productAdditionDate:"22 Nisan 2024",
-            lastUpdateDate:"21 Nisan 2024"
-        },
-        published:true,
-      },
+  
       {
         id: 2,
         checkbox: <input type="checkbox" />,
@@ -47,6 +29,7 @@ export const products = [
 
         },
         name:"Ev Ödevi",
+        active:false,
         stok:"ED-001",
         stokCount:20,
         price:45.00,
@@ -55,6 +38,25 @@ export const products = [
             lastUpdateDate:"24 Nisan 2024"
         }  ,
         published:true,     
+      },  {
+        id: 1,
+        checkbox: <input type="checkbox" />,
+        imgPath:"/assets/images/akildefterim.png",
+        category:{
+            mainCategory:mainCategory[0],
+            subCategory:subCategory[0]
+
+        },
+        name:"Akıl Defterim ",
+        active:false,
+        stok:"AD-001",
+        stokCount:20,
+        price:35.00,
+        date:{
+            productAdditionDate:"22 Nisan 2024",
+            lastUpdateDate:"21 Nisan 2024"
+        },
+        published:true,
       },
       {
         id: 3,
@@ -66,6 +68,7 @@ export const products = [
 
         },
         name:"Fen Bilgisi",
+        active:false,
         stok:"FB-003",
         stokCount:20,
         price:75.00,
@@ -85,6 +88,7 @@ export const products = [
 
         },
         name:"Fen Bilgisi",
+        active:false,
         stok:"FB-004",
         stokCount:20,
         price:75.00,
@@ -104,6 +108,7 @@ export const products = [
 
         },
         name:"Hayat Bilgisi",
+        active:false,
         stok:"HB-001",
         stokCount:20,
         price:75.00,
@@ -123,6 +128,7 @@ export const products = [
 
         },
         name:"Matematik",
+        active:true,
         stok:"MT-001",
         stokCount:20,
         price:75.00,
@@ -142,6 +148,7 @@ export const products = [
 
         },
         name:"Matematik",
+        active:true,
         stok:"MT-002",
         stokCount:20,
         price:85.00,
@@ -161,6 +168,7 @@ export const products = [
 
         },
         name:"Matematik",
+        active:true,
         stok:"MT-003",
         stokCount:20,
         price:95.00,
@@ -180,6 +188,7 @@ export const products = [
 
         },
         name:"Matematik",
+        active:true,
         stok:"MT-004",
         stokCount:0,
         price:105.00,
@@ -199,6 +208,7 @@ export const products = [
 
         },
         name:"Sosyal Bilgisi",
+        active:true,
         stok:"SB-004",
         stokCount:0,
         price:85.00,
@@ -218,6 +228,7 @@ export const products = [
 
         },
         name:"Telafi",
+        active:true,
         stok:"TL-001",
         stokCount:0,
         price:55.00,
@@ -237,6 +248,7 @@ export const products = [
 
         },
         name:"Tüm Dersler",
+        active:true,
         stok:"TD-001",
         stokCount:0,
         price:85.00,
@@ -256,6 +268,7 @@ export const products = [
 
         },
         name:"Türkçe",
+        active:true,
         stok:"TC-001",
         stokCount:0,
         price:85.00,
@@ -275,6 +288,7 @@ export const products = [
 
         },
         name:"Türkçe",
+        active:true,
         stok:"TC-003",
         stokCount:0,
         price:75.00,
@@ -294,6 +308,7 @@ export const products = [
 
         },
         name:"Türkçe",
+        active:true,
         stok:"TC-004",
         stokCount:0,
         price:95.00,

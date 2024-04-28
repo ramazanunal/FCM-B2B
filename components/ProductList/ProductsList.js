@@ -88,7 +88,7 @@ function ProductList() {
                 onClick={() => filterStatus(status.name)}
                 className={
                   selectedStatus === status.name
-                    ? "text-BaseDark cursor-pointer"
+                    ? "text-BaseDark font-medium cursor-pointer"
                     : "cursor-pointer"
                 }
               >
@@ -106,10 +106,10 @@ function ProductList() {
             <input type="text" className="p-2 border rounded-md" value={searchTerm}
             onChange={handleSearch}/>
             <button
-              className="p-2 border border-LightBlue rounded-md"
+              className="p-2 border border-LightBlue rounded-md text-black"
               type="submit"
             >
-              Siparişleri Ara
+              Ürün Ara
             </button>
           </form>
         </div>
