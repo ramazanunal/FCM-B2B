@@ -1,66 +1,148 @@
+import React, { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import React, { useState } from "react";
 import { RiShoppingBasketFill } from "react-icons/ri";
-import { FaEye } from "react-icons/fa";
-import { FaRegHeart } from "react-icons/fa";
+import { FaEye, FaRegHeart } from "react-icons/fa";
 
 function CategoryProducts({ selectedCategory }) {
   const [hoveredIndex, setHoveredIndex] = useState(null);
+  const [quantities, setQuantities] = useState({});
+  const [isQuickViewOpen, setIsQuickViewOpen] = useState(false);
+  const [isWishlistOpen, setIsWishlistOpen] = useState(false);
+
+  const handleQuantityChange = (productId, e) => {
+    const value = parseInt(e.target.value);
+    if (!isNaN(value)) {
+      setQuantities((prevQuantities) => ({
+        ...prevQuantities,
+        [productId]: value,
+      }));
+    }
+  };
+
+  const toggleQuickView = () => {
+    setIsQuickViewOpen(!isQuickViewOpen);
+  };
+
+  const toggleWishlist = () => {
+    setIsWishlistOpen(!isWishlistOpen);
+  };
+
+  const calculateDiscountedPrice = (price, discount) => {
+    if (discount && discount > 0) {
+      const discountedAmount = (price * discount) / 100;
+      return (price - discountedAmount).toFixed(2);
+    }
+    return price;
+  };
 
   return (
-    <div className="bg-white w-[1188px] pt-[60px] pb-[80px]">
-      <div className="flex flex-wrap justify-center">
+    <div className="bg-white w-[382px] md:w-[750px] lg:w-[970px] xl:w-[1188px] pt-[60px] pb-[80px] ">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 justify-center sm:mx-[35px] mb-[30px] px-[15px]">
         {selectedCategory.products.map((product, index) => (
           <div
             key={product.id}
-            className="p-[25px] border border-ProductsBorder rounded-md shadow-sm "
+            className="relative p-[10px] sm:p-[25px] border border-ProductsBorder rounded-md shadow-sm transition duration-300 ease-in-out transform hover:shadow-[0_0_20px_rgba(0,0,0,0.1)] overflow-hidden flex flex-row sm:flex-col  items-center sm:justify-center"
             onMouseEnter={() => setHoveredIndex(index)}
             onMouseLeave={() => setHoveredIndex(null)}
           >
-            <Link href={product.link} target="_blank" rel="noopener noreferrer">
+            {product.discount && (
+              <p className="absolute flex flex-col items-center justify-center top-16 -right-12 transform origin-top-right rotate-45 text-[16px] font-bold text-white bg-gradient-to-r from-yellow-400 to-orange-600 px-2 w-40 shadow-md shadow-orange-200">
+              %{product.discount}<span>İNDİRİM</span>
+                    </p>
+                  )}
+           <div className="w-[140px] md:w-[210px] h-[140px] md:h-[210px] mr-[10px] md:mr-0">
+           <Link href={product.link}>
               <Image
                 src={product.imagesrc}
                 alt={product.name}
-                className="w-56 h-56 object-cover"
+                className="object-cover w-[140px] md:w-[210px] h-[140px] md:h-[210px]"
                 width={210}
                 height={210}
               />
             </Link>
-            <div className="text-left pt-[15px]">
-              <Link
-                href={product.link}
-                target="_blank"
-                rel="noopener noreferrer"
-                className=" font-bold text-[16px] text-CustomGray "
-              >
-                {product.name}
-              </Link>
-              {product.price && (
-                <p className="italic text-LightBlue text-[23px] pt-[20px] font-semibold">
-                  <span>₺</span>
-                  {product.price}{" "}
-                </p>
-              )}
-            </div>
-            <div className="flex flex-row items-center justify-between mt-[10px]">
-              <div
-                className={`flex flex-row items-center justify-center text-LightBlue hover:text-CustomGray transition duration-300 ease-in-out transform`}
-              >
-                <span className="mr-2">
-                  <RiShoppingBasketFill className="w-[22px] h-[22px]" />
-                </span>
-                <p className="text-[13px] font-bold leading-[1px] mt-[2px]">Sepete Ekle</p>
+           </div>
+
+            <div className="flex flex-col  justify-between">
+              <div className="text-left md:pt-[15px] min-h-12 md:min-h-20">
+                <Link
+                  href={product.link}
+                  className="font-bold text-[14px] md:text-[16px] text-CustomGray leading-tight"
+                >
+                  <p>{product.name}</p>
+                </Link>
               </div>
-              <div className={`flex flex-row items-center justify-center text-LightBlue  ${
-                  hoveredIndex === index ? "opacity-100 transition duration-300 ease-in-out transform" : "opacity-0 transition duration-300 ease-in-out transform"
-                }`}>
-                <span>
-                  <FaEye className="w-[22px] h-[22px] hover:text-CustomGray transition duration-300 ease-in-out transform" />
-                </span>
-                <span>
-                  <FaRegHeart className="w-[22px] h-[22px] ml-[13px] hover:text-CustomGray transition duration-300 ease-in-out transform" />
-                </span>
+              <div className="flex-none">
+                <div>
+                  {product.price && (
+                    <p className="italic text-LightBlue text-[20px] md:text-[23px] sm:pt-[20px] font-semibold">
+                      <span>₺</span>
+                      {calculateDiscountedPrice(
+                        product.price.replace(",", "."),
+                        product.discount
+                      )}
+                    </p>
+                  )}
+                </div>
+                {product.status ? (
+                  <p className="text-CustomRed pt-[8px] md:pt-[20px] flex items-center justify-center font-bold">
+                    {product.status}
+                  </p>
+                ) : (
+                  <>
+                    <div className="flex justify-between items-center mt-[20px]">
+                      <div className="flex flex-col items-center justify-center text-LightBlue hover:text-CustomGray transition duration-300 ease-in-out transform">
+                        <div className="flex flex-row items-center justify-center ">
+                          <input
+                            type="number"
+                            min="1"
+                            value={quantities[product.id] || 1}
+                            onChange={(e) =>
+                              handleQuantityChange(product.id, e)
+                            }
+                            className="text-center w-12 md:w-16 h-8 border-2 border-LightBlue hover:border-CustomGray  hover:text-CustomGray transition duration-300 ease-in-out transformoutline-none rounded-md  text-LightBlue "
+                          />
+                          <span className="ml-2 ">
+                            <RiShoppingBasketFill className="w-[22px] md:w-[26px] h-[22px] md:h-[26px]" />
+                          </span>
+                        </div>
+                      </div>
+                      <div
+                        className={`flex items-center justify-center relative text-LightBlue ${
+                          hoveredIndex === index
+                            ? "opacity-100 transition duration-300 ease-in-out transform"
+                            : "opacity-0 transition duration-300 ease-in-out transform"
+                        }`}
+                      >
+                        <span
+                          className="relative cursor-pointer"
+                          onMouseEnter={toggleQuickView}
+                          onMouseLeave={toggleQuickView}
+                        >
+                          <FaEye className="w-[22px] h-[22px] hover:text-CustomGray transition duration-300 ease-in-out transform" />
+                          {isQuickViewOpen && (
+                            <div className="absolute bottom-[30px] left-[50%] transform -translate-x-1/2 bg-CustomGray text-white px-2 py-1 rounded-md text-[13px] w-[90px] md:w-[110px] flex items-center justify-center z-10">
+                              Quick View
+                            </div>
+                          )}
+                        </span>
+
+                        <span
+                          className="relative cursor-pointer"
+                          onMouseEnter={toggleWishlist}
+                          onMouseLeave={toggleWishlist}
+                        >
+                          <FaRegHeart className="w-[22px] h-[22px] ml-[13px] hover:text-CustomGray transition duration-300 ease-in-out transform" />
+                          {isWishlistOpen && (
+                            <div className="absolute bottom-[30px] left-[20%] md:left-[30%] transform -translate-x-1/2 bg-CustomGray text-white md:px-2 py-1 rounded-md text-[13px] w-[70px] md:w-[90px]  flex items-center justify-center z-10">
+                              Wishlist
+                            </div>
+                          )}
+                        </span>
+                      </div>
+                    </div>
+                  </>
+                )}
               </div>
             </div>
           </div>
