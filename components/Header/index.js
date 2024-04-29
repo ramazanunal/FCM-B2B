@@ -74,6 +74,7 @@ const Header = () => {
               width={119}
               height={135}
               alt="Çalışkan Arı Mağaza"
+              className="w-[93px] md:w-[119px] h-[105px] md:h-[135px]"
             />
           </div>
           <div className="flex flex-row  hidden lg:flex pt-4" id="mainmenuitem">
@@ -117,8 +118,8 @@ const Header = () => {
               ))}
             </ul>
           </div>
-
-          <div id="mainmenubuttons" className="flex flex-row items-center text-center justify-center text-CustomGray">
+          
+          <div className="flex flex-row items-center text-center justify-center text-CustomGray">
             {header.mainMenuButtons.map((mainMenuButtons) => (
               <div key={mainMenuButtons.id} className=" ">
                 <Link

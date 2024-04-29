@@ -1,5 +1,5 @@
 import HomeContainer from "@/containers/Home";
 
 export default function Home() {
-  return <HomeContainer />;
+  return <div className="w-full h-full"><HomeContainer /></div>;
 }
