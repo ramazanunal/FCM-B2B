@@ -36,11 +36,11 @@ const SliderComponent = () => {
         </div>
       ))}
       <div className="absolute top-1/2 transform -translate-y-1/2 left-12 ">
-        <button onClick={goToPreviousImage} className="flex items-center justify-center rounded-md  shadow-[0_5px_20px_rgba(0,0,0,0.3)] py-[15px] bg-white w-[40px] h-[40px] hover:bg-opacity-50 transition duration-300 ease-in-out transform "><IoIosArrowBack className="text-2xl fill-BaseDark"/></button>
+        <button onClick={goToPreviousImage} className="flex items-center justify-center rounded-md  shadow-[0_5px_20px_rgba(0,0,0,0.3)] py-[15px] bg-white w-[40px] h-[40px] bg-opacity-25 md:bg-opacity-100  hover:bg-opacity-50 transition duration-300 ease-in-out transform "><IoIosArrowBack className=" text-2xl fill-BaseDark/25 md:fill-BaseDark"/></button>
     
       </div>
       <div className="absolute top-1/2 transform -translate-y-1/2 right-12">
-      <button onClick={goToNextImage} className="flex items-center justify-center rounded-md  shadow-[0_5px_20px_rgba(0,0,0,0.3)] py-[15px] bg-white w-[40px] h-[40px] hover:bg-opacity-50 transition duration-300 ease-in-out transform "><IoIosArrowForward className="text-2xl fill-BaseDark "/></button>
+      <button onClick={goToNextImage} className="flex items-center justify-center rounded-md  shadow-[0_5px_20px_rgba(0,0,0,0.3)] py-[15px] bg-white w-[40px] h-[40px] bg-opacity-25 md:bg-opacity-100 hover:bg-opacity-50 transition duration-300 ease-in-out transform "><IoIosArrowForward className="text-2xl fill-BaseDark/25 md:fill-BaseDark "/></button>
       </div>
     </div>
   );

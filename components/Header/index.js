@@ -1,18 +1,20 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import headerStore from "@/utils/headerStore";
 import Link from "next/link";
 import Image from "next/image";
 import MobileMenu from "../MobileMenu";
+import FixedHeader from "../FixedHeader";
 
 const Header = () => {
   const { header } = headerStore();
   const [hoveredMenu, setHoveredMenu] = useState(null);
   const [hoveredMainMenu, setHoveredMainMenu] = useState(null);
 
+ 
   return (
     <div id="header">
-      <div className="hidden lg:flex items-center justify-between">
+      <div className="hidden lg:flex items-center justify-between ">
         <div
           id="ustmenu"
           className="h-[45px] bg-DarkBlue max-w-[1200px] container "
@@ -61,9 +63,9 @@ const Header = () => {
 
       <div
         id="altmenu"
-        className="p-[13px] md:p-[23px] lg:p-0 bg-white h-[165px] w-screen lg:w-full"
-      >
-        <div className="lg:p-[15px] mx-[35px] flex flex-row items-center justify-between">
+        className="p-[23px] lg:p-0 bg-white h-[165px] w-screen lg:w-full "
+        >
+        <div className="lg:p-[15px] md:mx-[35px] flex flex-row items-center justify-between">
           <div className="flex lg:hidden ">
             {/* Hamburger Menü */}
             <MobileMenu header={header} />
@@ -78,7 +80,7 @@ const Header = () => {
             />
           </div>
           <div className="flex flex-row  hidden lg:flex pt-4" id="mainmenuitem">
-            <ul className="flex flex-row items-center text-center justify-center text-CustomGray hidden lg:flex">
+            <ul className="flex flex-row items-center text-center justify-center text-CustomGray hidden lg:flex ml-[8px] md:ml-[36px]">
               {header.mainMenuItems.map((mainMenuItem) => (
                 <li
                   key={mainMenuItem.id}
@@ -90,7 +92,7 @@ const Header = () => {
                     className="flex flex-col items-center justify-center"
                     href={mainMenuItem.href}
                   >
-                    <span className="w-[53px] h-[53px] flex items-center justify-center">
+                    <span className="w-[53px] h-[53px] flex items-center justify-center ">
                       {mainMenuItem.icon}
                     </span>
                     <span className="uppercase text-[12px] font-bold tracking-[1px] pb-[15px] hover:text-LightBlue transition duration-300 ease-in-out transform uppercase ">
@@ -133,6 +135,8 @@ const Header = () => {
           </div>
         </div>
       </div>
+      <FixedHeader header={header} />
+
     </div>
   );
 };
