@@ -3,22 +3,18 @@ import { Formik, Form, Field } from "formik";
 import * as Yup from "yup";
 import { FaSearch, FaTimes } from "react-icons/fa";
 
-function SearchPanel({ onClose }) {
-  // Formik için form doğrulama şeması
+function SearchPanel({ toggleSearchPanel }) {
   const validationSchema = Yup.object().shape({
     s: Yup.string().required("Please enter a search term"),
   });
 
-  // Form submit işlevi
   const handleSubmit = (values, { resetForm }) => {
-    // Form submit işlemleri burada yapılabilir
     console.log("Submitted search term:", values.s);
-    // Formu sıfırla
     resetForm();
   };
 
   return (
-    <div className="w-full h-full fixed top-0 left-0 right-0 z-50  bg-gray-800 bg-opacity-75 flex items-center justify-center transition-transform duration-500 ease-in-out">
+    <div className="w-full h-full fixed top-0 left-0 right-0 z-50 bg-gray-800 bg-opacity-75 flex items-center justify-center transition-transform duration-500 ease-in-out">
       <Formik
         initialValues={{ s: "" }}
         validationSchema={validationSchema}
@@ -26,14 +22,14 @@ function SearchPanel({ onClose }) {
       >
         {({ errors, touched }) => (
           <div className="fixed top-0 left-0 right-0 z-50 bg-white h-[165px] flex items-center justify-center flex-col">
-            <Form id="ajax-search" className="container mx-auto  px-[15px] ">
+            <Form id="ajax-search" className="container mx-auto px-[15px] ">
               <div className="w-[1170px]">
                 <div className="relative text-[10px] uppercase text-[#555555] h-[57px] flex items-center ">
                   What are you looking for?
                   <button
                     className="absolute top-0 right-0 "
                     type="button"
-                    onClick={onClose}
+                    onClick={toggleSearchPanel} // Close button click handler
                   >
                     <FaTimes className=" w-[20px] h-[20px] text-[#555555] hover:text-red-600 hover:scale-110 transition duration-300 ease-in-out transform " />
                   </button>

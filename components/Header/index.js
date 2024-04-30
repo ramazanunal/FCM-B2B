@@ -12,18 +12,13 @@ const Header = () => {
   const { header } = headerStore();
   const [hoveredMenu, setHoveredMenu] = useState(null);
   const [hoveredMainMenu, setHoveredMainMenu] = useState(null);
+  const [isSearchOpen, setIsSearchOpen] = useState(false); // Search panel state
 
-  const [isSearchOpen, setIsSearchOpen] = useState(false); // Arama paneli state'i
-
-  // Arama panelini açma fonksiyonu
-  const openSearchPanel = () => {
-    setIsSearchOpen(true);
+  // Function to toggle search panel state
+  const toggleSearchPanel = () => {
+    setIsSearchOpen(!isSearchOpen);
   };
 
-  // Arama panelini kapatma fonksiyonu
-  const closeSearchPanel = () => {
-    setIsSearchOpen(false);
-  };
   return (
     <div id="header">
       <div className="hidden lg:flex items-center justify-between ">
@@ -137,7 +132,7 @@ const Header = () => {
           <div className="flex flex-row items-center text-center justify-center text-CustomGray">
             {header.mainMenuButtons.map((mainMenuButtons) => (
               <div key={mainMenuButtons.id} className=" ">
-                <button onClick={openSearchPanel}>
+            <button onClick={toggleSearchPanel}>
           <FaSearch />
         </button>
                 <Link
@@ -154,11 +149,7 @@ const Header = () => {
       </div>
       <FixedHeader header={header} />
       {isSearchOpen && (
-        <div className="search-panel-overlay" onClick={closeSearchPanel}>
-          <div className="search-panel">
-            <SearchPanel />
-          </div>
-        </div>
+        <SearchPanel toggleSearchPanel={toggleSearchPanel} />
       )}
     </div>
   );
