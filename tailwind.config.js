@@ -23,6 +23,8 @@ module.exports = {
         BaseDark: "#212121",
         HoverGray: "#d1d5db",
         FooterText: "#c0c7d1",
+        CategoriesTitle: "#d8d8d8",
+        ProductsBorder: "#eaeaea"
       },
       statusColor: {
         BeklemedeBg: "#e5e5e5",

@@ -28,7 +28,7 @@ const MobileMenu = ({ header }) => {
   };
 
   return (
-    <div className="block lg:hidden">
+    <div className="block xl:hidden">
       <button className="w-[50px] h-[50px]" onClick={() => setIsMenuOpen(true)}>
         <GiHamburgerMenu className="text-CustomGray w-[20px] h-[20px]" />
       </button>
