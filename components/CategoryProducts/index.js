@@ -42,29 +42,30 @@ function CategoryProducts({ selectedCategory }) {
         {selectedCategory.products.map((product, index) => (
           <div
             key={product.id}
-            className="relative p-[10px] sm:p-[25px] border border-ProductsBorder rounded-md shadow-sm transition duration-300 ease-in-out transform hover:shadow-[0_0_20px_rgba(0,0,0,0.1)] overflow-hidden flex flex-row sm:flex-col  items-center sm:justify-center"
+            className="relative p-[10px] sm:p-[25px] border border-ProductsBorder rounded-md shadow-sm transition duration-300 ease-in-out transform hover:shadow-[0_0_20px_rgba(0,0,0,0.1)] overflow-hidden flex flex-row sm:flex-col  items-center sm:justify-center "
             onMouseEnter={() => setHoveredIndex(index)}
             onMouseLeave={() => setHoveredIndex(null)}
           >
             {product.discount && (
-              <p className="absolute flex flex-col items-center justify-center top-16 -right-12 transform origin-top-right rotate-45 text-[16px] font-bold text-white bg-gradient-to-r from-yellow-400 to-orange-600 px-2 w-40 shadow-md shadow-orange-200">
-              %{product.discount}<span>İNDİRİM</span>
-                    </p>
-                  )}
-           <div className="w-[140px] md:w-[210px] h-[140px] md:h-[210px] mr-[10px] md:mr-0">
-           <Link href={product.link}>
-              <Image
-                src={product.imagesrc}
-                alt={product.name}
-                className="object-cover w-[140px] md:w-[210px] h-[140px] md:h-[210px]"
-                width={210}
-                height={210}
-              />
-            </Link>
-           </div>
+              <p className="absolute flex flex-col items-center justify-center top-16 -right-12 transform origin-top-right rotate-45 text-[12px] sm:text-[16px] font-bold text-white bg-gradient-to-r from-yellow-400 to-orange-600 px-2 w-40 shadow-md shadow-orange-200">
+                %{product.discount}
+                <span>İNDİRİM</span>
+              </p>
+            )}
+            <div className="w-2/5 sm:w-full mr-[10px] sm:mr-0">
+              <Link href={product.link}>
+                <Image
+                  src={product.imagesrc}
+                  alt={product.name}
+                  className="object-cover w-[140px] md:w-[210px] h-[140px] md:h-[210px]"
+                  width={210}
+                  height={210}
+                />
+              </Link>
+            </div>
 
-            <div className="flex flex-col  justify-between">
-              <div className="text-left md:pt-[15px] min-h-12 md:min-h-20">
+            <div className="w-3/5 sm:w-full flex flex-col  justify-between">
+            <div className={`text-left md:pt-[15px] min-h-12 md:min-h-20 ${product.discount ? 'mr-12 sm:mr-0' : ''}`}>
                 <Link
                   href={product.link}
                   className="font-bold text-[14px] md:text-[16px] text-CustomGray leading-tight"
@@ -100,7 +101,7 @@ function CategoryProducts({ selectedCategory }) {
                             onChange={(e) =>
                               handleQuantityChange(product.id, e)
                             }
-                            className="text-center w-12 md:w-16 h-8 border-2 border-LightBlue hover:border-CustomGray  hover:text-CustomGray transition duration-300 ease-in-out transformoutline-none rounded-md  text-LightBlue "
+                            className="text-center pr-2 sm:pr-0 w-14 md:w-16 h-8 border-2 border-LightBlue hover:border-CustomGray  hover:text-CustomGray transition duration-300 ease-in-out transformoutline-none rounded-md  text-LightBlue "
                           />
                           <span className="ml-2 ">
                             <RiShoppingBasketFill className="w-[22px] md:w-[26px] h-[22px] md:h-[26px]" />
@@ -116,25 +117,12 @@ function CategoryProducts({ selectedCategory }) {
                       >
                         <span
                           className="relative cursor-pointer"
-                          onMouseEnter={toggleQuickView}
-                          onMouseLeave={toggleQuickView}
-                        >
-                          <FaEye className="w-[22px] h-[22px] hover:text-CustomGray transition duration-300 ease-in-out transform" />
-                          {isQuickViewOpen && (
-                            <div className="absolute bottom-[30px] left-[50%] transform -translate-x-1/2 bg-CustomGray text-white px-2 py-1 rounded-md text-[13px] w-[90px] md:w-[110px] flex items-center justify-center z-10">
-                              Quick View
-                            </div>
-                          )}
-                        </span>
-
-                        <span
-                          className="relative cursor-pointer"
                           onMouseEnter={toggleWishlist}
                           onMouseLeave={toggleWishlist}
                         >
-                          <FaRegHeart className="w-[22px] h-[22px] ml-[13px] hover:text-CustomGray transition duration-300 ease-in-out transform" />
+                          <FaRegHeart className="w-[22px] h-[22px]  hover:text-CustomGray transition duration-300 ease-in-out transform mr-3" />
                           {isWishlistOpen && (
-                            <div className="absolute bottom-[30px] left-[20%] md:left-[30%] transform -translate-x-1/2 bg-CustomGray text-white md:px-2 py-1 rounded-md text-[13px] w-[70px] md:w-[90px]  flex items-center justify-center z-10">
+                            <div className="absolute bottom-[30px] left-[20%] md:left-[50%] transform -translate-x-1/2 bg-CustomGray text-white md:px-2 py-1 rounded-md text-[13px] w-[70px] md:w-[90px]  flex items-center justify-center z-10">
                               Wishlist
                             </div>
                           )}

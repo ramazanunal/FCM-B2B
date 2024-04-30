@@ -7,7 +7,7 @@ import Banner from "@/components/Banner";
 
 const HomeContainer = () => {
   return (
-    <div className="flex flex-col items-center  bg-[url('https://caliskanari.com/wp-content/uploads/2018/10/clothes-2049536750.jpg.webp')] bg-no-repeat bg-[#6bcdec]">
+    <div className=" flex flex-col items-center  bg-[url('https://caliskanari.com/wp-content/uploads/2018/10/clothes-2049536750.jpg.webp')] bg-no-repeat bg-[#6bcdec]">
       <div className="bg-white">
         <Header />
       </div>
