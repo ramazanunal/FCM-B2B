@@ -161,8 +161,7 @@ const headerStore = create((set) => ({
         href: "https://caliskanari.com/cart/",
         icon: (
           <RiShoppingBasketFill
-            style={{ width: "25px", height: "25px"}}
-            className="ml-[10px] sm:ml-[36px]"
+            className="w-[25px] h-[25px]"
           />
         ),
       },

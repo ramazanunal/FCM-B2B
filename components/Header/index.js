@@ -1,5 +1,5 @@
 "use client";
-import React, { useState,useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import headerStore from "@/utils/headerStore";
 import Link from "next/link";
 import Image from "next/image";
@@ -12,9 +12,8 @@ const Header = () => {
   const { header } = headerStore();
   const [hoveredMenu, setHoveredMenu] = useState(null);
   const [hoveredMainMenu, setHoveredMainMenu] = useState(null);
-  const [isSearchOpen, setIsSearchOpen] = useState(false); // Search panel state
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
 
-  // Function to toggle search panel state
   const toggleSearchPanel = () => {
     setIsSearchOpen(!isSearchOpen);
   };
@@ -71,7 +70,7 @@ const Header = () => {
       <div
         id="altmenu"
         className="p-[23px] lg:p-0 bg-white h-[165px] w-screen lg:w-full "
-        >
+      >
         <div className="lg:p-[15px] md:mx-[35px] flex flex-row items-center justify-between">
           <div className="flex lg:hidden ">
             {/* Hamburger Menü */}
@@ -96,14 +95,13 @@ const Header = () => {
                   onMouseLeave={() => setHoveredMainMenu(null)}
                 >
                   <Link
-                    className="flex flex-col items-center justify-center"
+                    className="flex flex-col items-center justify-center hover:text-LightBlue hover:scale-105 transition duration-300 ease-in-out transform"
                     href={mainMenuItem.href}
                   >
-                    
                     <span className="w-[53px] h-[53px] flex items-center justify-center ">
                       {mainMenuItem.icon}
                     </span>
-                    <span className="uppercase text-[12px] font-bold tracking-[1px] pb-[15px] hover:text-LightBlue transition duration-300 ease-in-out transform uppercase ">
+                    <span className="uppercase text-[12px] font-bold tracking-[1px] pb-[15px] ">
                       {mainMenuItem.text}
                     </span>
                   </Link>
@@ -128,18 +126,17 @@ const Header = () => {
               ))}
             </ul>
           </div>
-          
+
           <div className="flex flex-row items-center text-center justify-center text-CustomGray">
             {header.mainMenuButtons.map((mainMenuButtons) => (
-              <div key={mainMenuButtons.id} className=" ">
-            <button onClick={toggleSearchPanel}>
-          <FaSearch />
-        </button>
+              <div key={mainMenuButtons.id} className="flex flex-row items-center">
+                <button onClick={toggleSearchPanel}>
+                  <FaSearch className="w-[20px] h-[20px] hover:text-LightBlue hover:scale-110 transition duration-300 ease-in-out transform mr-[36px]"/>
+                </button>
                 <Link
-                  className="flex flex-col items-center justify-center  hover:text-LightBlue transition duration-300 ease-in-out transform "
+                  className="flex flex-col items-center justify-center  hover:text-LightBlue hover:scale-110 transition duration-300 ease-in-out transform "
                   href={mainMenuButtons.href}
                 >
-                    
                   <span>{mainMenuButtons.icon}</span>
                 </Link>
               </div>
@@ -148,9 +145,7 @@ const Header = () => {
         </div>
       </div>
       <FixedHeader header={header} />
-      {isSearchOpen && (
-        <SearchPanel toggleSearchPanel={toggleSearchPanel} />
-      )}
+      {isSearchOpen && <SearchPanel toggleSearchPanel={toggleSearchPanel} />}
     </div>
   );
 };

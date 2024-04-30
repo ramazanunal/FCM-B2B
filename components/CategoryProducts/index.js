@@ -92,7 +92,7 @@ function CategoryProducts({ selectedCategory }) {
                 ) : (
                   <>
                     <div className="flex justify-between items-center mt-[20px]">
-                      <div className="flex flex-col items-center justify-center text-LightBlue hover:text-CustomGray transition duration-300 ease-in-out transform">
+                      <div className="flex flex-col items-center justify-center text-LightBlue ">
                         <div className="flex flex-row items-center justify-center ">
                           <input
                             type="number"
@@ -101,10 +101,10 @@ function CategoryProducts({ selectedCategory }) {
                             onChange={(e) =>
                               handleQuantityChange(product.id, e)
                             }
-                            className="text-center pr-2 sm:pr-0 w-14 md:w-16 h-8 border-2 border-LightBlue hover:border-CustomGray  hover:text-CustomGray transition duration-300 ease-in-out transformoutline-none rounded-md  text-LightBlue "
+                            className="text-center pr-2 sm:pr-0 w-14 md:w-16 h-8 border-2 border-LightBlue hover:border-CustomGray  hover:text-CustomGray transition duration-300 ease-in-out transform outline-none rounded-md  text-LightBlue "
                           />
                           <span className="ml-2 ">
-                            <RiShoppingBasketFill className="w-[22px] md:w-[26px] h-[22px] md:h-[26px]" />
+                            <RiShoppingBasketFill className="w-[22px] md:w-[26px] h-[22px] md:h-[26px] hover:scale-105 hover:text-CustomGray transition duration-300 ease-in-out transform" />
                           </span>
                         </div>
                       </div>
@@ -120,9 +120,9 @@ function CategoryProducts({ selectedCategory }) {
                           onMouseEnter={toggleWishlist}
                           onMouseLeave={toggleWishlist}
                         >
-                          <FaRegHeart className="w-[22px] h-[22px]  hover:text-CustomGray transition duration-300 ease-in-out transform mr-3" />
+                          <FaRegHeart className="w-[22px] h-[22px]  hover:text-CustomGray  mr-3 hover:scale-105 transition duration-300 ease-in-out transform" />
                           {isWishlistOpen && (
-                            <div className="absolute bottom-[30px] left-[20%] md:left-[50%] transform -translate-x-1/2 bg-CustomGray text-white md:px-2 py-1 rounded-md text-[13px] w-[70px] md:w-[90px]  flex items-center justify-center z-10">
+                            <div className="absolute bottom-[30px] left-[20%] md:left-[30%] transform -translate-x-1/2 bg-CustomGray text-white md:px-2 py-1 rounded-md text-[13px] w-[70px] md:w-[90px]  flex items-center justify-center z-10">
                               Wishlist
                             </div>
                           )}
