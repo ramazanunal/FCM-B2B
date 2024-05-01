@@ -30,8 +30,8 @@ const FixedHeader = ({ header }) => {
 
   return (
     <div
-      className={`fixed top-0 left-0 right-0 z-50 bg-white shadow-lg h-[78px]   ${
-        isVisible ? "visible" : "hidden"
+      className={`fixed top-0 left-0 right-0 z-50 bg-white shadow-lg h-[78px] transition-all duration-300 ${
+        isVisible ? "opacity-100 transform translate-y-0" : "opacity-0 transform -translate-y-full"
       }`}
     >
       <div className="container mx-auto px-[80px] h-[78px]">
