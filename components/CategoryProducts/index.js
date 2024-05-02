@@ -108,26 +108,6 @@ function CategoryProducts({ selectedCategory }) {
                           </span>
                         </div>
                       </div>
-                      <div
-                        className={`flex items-center justify-center relative text-LightBlue ${
-                          hoveredIndex === index
-                            ? "opacity-100 transition duration-300 ease-in-out transform"
-                            : "opacity-0 transition duration-300 ease-in-out transform"
-                        }`}
-                      >
-                        <span
-                          className="relative cursor-pointer"
-                          onMouseEnter={toggleWishlist}
-                          onMouseLeave={toggleWishlist}
-                        >
-                          <FaRegHeart className="w-[22px] h-[22px]  hover:text-CustomGray  mr-3 hover:scale-105 transition duration-300 ease-in-out transform" />
-                          {isWishlistOpen && (
-                            <div className="absolute bottom-[30px] left-[20%] md:left-[30%] transform -translate-x-1/2 bg-CustomGray text-white md:px-2 py-1 rounded-md text-[13px] w-[70px] md:w-[90px]  flex items-center justify-center z-10">
-                              Wishlist
-                            </div>
-                          )}
-                        </span>
-                      </div>
                     </div>
                   </>
                 )}
