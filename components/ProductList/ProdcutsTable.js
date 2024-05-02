@@ -85,7 +85,7 @@ function ProdcutsTable({currentProducts,setSelectedProducts,selectedProducts}) {
     });
   }
 
-  return (
+  return (  
     <div className="overflow-x-auto border">
     <table className="min-w-full divide-y divide-gray-200">
       <thead className="bg-gray-50 ">
@@ -94,7 +94,7 @@ function ProdcutsTable({currentProducts,setSelectedProducts,selectedProducts}) {
             scope="col"
             className="px-6 py-3 text-left text-xs font-medium "
           >
-            <input type="checkbox"onChange={handleSelectAll} checked={selectAll} />
+            <input type="checkbox"onChange={handleSelectAll} checked={selectAll}  className='w-4 h-4 '/>
           </th>
           <th
             scope="col"
@@ -158,6 +158,8 @@ function ProdcutsTable({currentProducts,setSelectedProducts,selectedProducts}) {
           <td className="px-6 py-4 whitespace-nowrap">
           <input 
             type="checkbox" 
+            
+            className="w-4 h-4 text-LightBlue focus:bg-LightBlue border-LightBlue rounded-xl focus:ring-LightBlue "
             checked={selectedProducts.includes(product)} 
             onChange={() => handleProductSelect(product)} // Her bir ürünün onay kutusunu seçim işleyicisiyle bağla
           />
