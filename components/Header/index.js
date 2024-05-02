@@ -13,6 +13,7 @@ const Header = () => {
   const [hoveredMenu, setHoveredMenu] = useState(null);
   const [hoveredMainMenu, setHoveredMainMenu] = useState(null);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const [hoveredIcon, setHoveredIcon] = useState(null);
 
   const toggleSearchPanel = () => {
     setIsSearchOpen(!isSearchOpen);
@@ -85,43 +86,62 @@ const Header = () => {
               className="w-[93px] md:w-[119px] h-[105px] md:h-[135px]"
             />
           </div>
-          <div className="flex flex-row  hidden lg:flex pt-4" id="mainmenuitem">
+          <div className="flex flex-row hidden lg:flex pt-4" id="mainmenuitem">
             <ul className="flex flex-row items-center text-center justify-center text-CustomGray hidden lg:flex ml-[8px] md:ml-[36px]">
               {header.mainMenuItems.map((mainMenuItem) => (
                 <li
                   key={mainMenuItem.id}
-                  className="relative mr-[25px] leading-[1.3] w-[117px] mx-2"
-                  onMouseEnter={() => setHoveredMainMenu(mainMenuItem.id)}
-                  onMouseLeave={() => setHoveredMainMenu(null)}
+                  className={`relative mr-[25px] leading-[1.3] w-[117px] mx-2 `}
+                  onMouseEnter={() =>
+                    mainMenuItem.subMenus && setHoveredMainMenu(mainMenuItem.id)
+                  }
+                  onMouseLeave={() =>
+                    mainMenuItem.subMenus && setHoveredMainMenu(null)
+                  }
                 >
                   <Link
-                    className="flex flex-col items-center justify-center hover:text-LightBlue hover:scale-105 transition duration-300 ease-in-out transform"
+                    className="  flex flex-col items-center justify-center hover:text-LightBlue  transition duration-500 ease-in-out transform"
                     href={mainMenuItem.href}
                   >
-                    <span className="w-[53px] h-[53px] flex items-center justify-center ">
+                    <span
+                      className={`w-[53px] h-[53px] flex items-center justify-center ${
+                        hoveredIcon === mainMenuItem.id
+                          ? "motion-safe:animate-spin"
+                          : ""
+                      }`}
+                    >
                       {mainMenuItem.icon}
                     </span>
-                    <span className="uppercase text-[12px] font-bold tracking-[1px] pb-[15px] ">
+                    <span
+                      className="uppercase text-[12px] font-bold tracking-[1px] pb-[15px]"
+                      onMouseEnter={() => setHoveredIcon(mainMenuItem.id)}
+                      onMouseLeave={() => setHoveredIcon(null)}
+                    >
                       {mainMenuItem.text}
                     </span>
                   </Link>
-                  {hoveredMainMenu === mainMenuItem.id && (
-                    <div className="relative ">
-                      {mainMenuItem.subMenus &&
-                        mainMenuItem.subMenus.length > 0 && (
-                          <ul className="absolute top-0 -left-4 z-20 w-[215px] bg-LightBlue shadow-[0_5px_20px_rgba(0,0,0,0.3)] py-[15px] rounded-md text-white">
-                            {mainMenuItem.subMenus.map((subMenu) => (
-                              <li
-                                key={subMenu.id}
-                                className="mx-[20px] py-[11px] text-[15px] font-bold leading-[14px] cursor-pointer hover:text-HoverGray transition duration-300 ease-in-out transform text-left"
-                              >
-                                <Link href={subMenu.href}>{subMenu.text}</Link>
-                              </li>
-                            ))}
-                          </ul>
-                        )}
-                    </div>
-                  )}
+
+                  {mainMenuItem.subMenus &&
+                    mainMenuItem.subMenus.length > 0 && (
+                      <div
+                        className={`absolute top-28 -left-4 z-20 w-[215px] bg-LightBlue shadow-[0_5px_20px_rgba(0,0,0,0.3)] py-[15px] rounded-md text-white   ${
+                          hoveredMainMenu === mainMenuItem.id
+                            ? "transition-all opacity-100  duration-1000 ease-in-out transform translate-y-0"
+                            : " transition-all opacity-0  duration-1000  translate-y-full ease-in-out transform"
+                        }`}
+                      >
+                        <ul>
+                          {mainMenuItem.subMenus.map((subMenu) => (
+                            <li
+                              key={subMenu.id}
+                              className="mx-[20px] py-[11px] text-[15px] font-bold leading-[14px] cursor-pointer hover:text-HoverGray transition duration-300 ease-in-out transform text-left"
+                            >
+                              <Link href={subMenu.href}>{subMenu.text}</Link>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    )}
                 </li>
               ))}
             </ul>
@@ -129,9 +149,12 @@ const Header = () => {
 
           <div className="flex flex-row items-center text-center justify-center text-CustomGray">
             {header.mainMenuButtons.map((mainMenuButtons) => (
-              <div key={mainMenuButtons.id} className="flex flex-row items-center">
+              <div
+                key={mainMenuButtons.id}
+                className="flex flex-row items-center"
+              >
                 <button onClick={toggleSearchPanel}>
-                  <FaSearch className="w-[20px] h-[20px] hover:text-LightBlue hover:scale-110 transition duration-300 ease-in-out transform mr-[36px]"/>
+                  <FaSearch className="w-[20px] h-[20px] hover:text-LightBlue hover:scale-110 transition duration-300 ease-in-out transform mr-[36px]" />
                 </button>
                 <Link
                   className="flex flex-col items-center justify-center  hover:text-LightBlue hover:scale-110 transition duration-300 ease-in-out transform "
