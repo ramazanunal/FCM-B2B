@@ -91,7 +91,7 @@ function CategoryProducts({ selectedCategory }) {
                   </p>
                 ) : (
                   <>
-                    <div className="flex justify-between items-center mt-[20px]">
+                    <div className="flex justify-center items-center mt-[20px]">
                       <div className="flex flex-col items-center justify-center text-LightBlue ">
                         <div className="flex flex-row items-center justify-center ">
                           <input

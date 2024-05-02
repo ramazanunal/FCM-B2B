@@ -34,8 +34,7 @@ const FixedHeader = ({ header }) => {
         isVisible ? " transition-all  opacity-100 transform translate-y-0 duration-1000" : "transition-all  opacity-0 transform -translate-y-full duration-1000"
       }`}
     >
-      <div className="container mx-auto px-[80px] h-[78px] hidden lg:flex ">
-        <div className="flex justify-between items-center py-4">
+      <div className="container mx-auto px-[80px] h-[78px] hidden lg:flex items-center justify-between">
           <div className="flex items-center">
             <div>
               <Image
@@ -110,7 +109,6 @@ const FixedHeader = ({ header }) => {
           <div className="flex lg:hidden">
             <MobileMenu header={header} />
           </div>
-        </div>
       </div>
       
       <div
