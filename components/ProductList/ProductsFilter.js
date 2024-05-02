@@ -57,18 +57,14 @@ function ProductsFilter({
   //aktif pasif yapma
   const handleIsActive = (e) => {
     const selectProduct = e.target.value;
-    if (selectProduct === "Durum İşlemi") {
-      setFilteredProducts(products)
-    }else{
-      
-     selectedProducts.map((product) => product.active = selectProduct)
+    if (selectProduct !== "Durum İşlemi") {
+      selectedProducts.map((product) => product.active = selectProduct)
      const filteredActiveProduct = products.filter((item)=> item.active.toString() !== selectProduct)
      
      console.log(selectedProducts, "SELECT");
      setFilteredProducts(filteredActiveProduct)
      setSelectedProducts([])
-
-     
+     e.target.value="Durum İşlemi"
     }
   }
   return (
