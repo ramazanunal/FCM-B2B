@@ -30,8 +30,8 @@ const FixedHeader = ({ header }) => {
 
   return (
     <div
-      className={`fixed top-0 left-0 right-0 z-50 bg-white shadow-lg h-[78px] transition-all duration-300 ${
-        isVisible ? "opacity-100 transform translate-y-0" : "opacity-0 transform -translate-y-full"
+      className={`fixed top-0 left-0 right-0 z-50 bg-white shadow-lg h-[78px] hidden lg:flex   ${
+        isVisible ? " transition-all  opacity-100 transform translate-y-0 duration-1000" : "transition-all  opacity-0 transform -translate-y-full duration-1000"
       }`}
     >
       <div className="container mx-auto px-[80px] h-[78px]">
@@ -52,34 +52,40 @@ const FixedHeader = ({ header }) => {
                 <li
                   key={mainMenuItem.id}
                   className="relative mr-[25px] leading-[1.3] w-[117px] mx-2"
-                  onMouseEnter={() => setHoveredMainMenu(mainMenuItem.id)}
-                  onMouseLeave={() => setHoveredMainMenu(null)}
                 >
                   <Link
                     className="flex flex-col items-center justify-center"
                     href={mainMenuItem.href}
+                   
                   >
-                    <span className="w-[53px] h-[53px] flex items-center justify-center hover:text-LightBlue hover:scale-105 transition duration-300 ease-in-out transform cursor-pointer ">
+                    <span className="w-[53px] h-[53px] flex items-center justify-center
+                    text-CustomGray/75 hover:text-LightBlue hover:animate-bounce transition duration-300 ease-in-out transform cursor-pointer"
+                     onMouseEnter={() => setHoveredMainMenu(mainMenuItem.id)}
+                     onMouseLeave={() => setHoveredMainMenu(null)}>
                       {mainMenuItem.icon}
                     </span>
                   </Link>
-                  {hoveredMainMenu === mainMenuItem.id && (
-                    <div className="relative ">
-                      {mainMenuItem.subMenus &&
-                        mainMenuItem.subMenus.length > 0 && (
-                          <ul className="absolute top-0 -left-4 z-20 w-[215px] bg-LightBlue shadow-[0_5px_20px_rgba(0,0,0,0.3)] py-[15px] rounded-md text-white transition duration-300 ease-in-out">
-                            {mainMenuItem.subMenus.map((subMenu) => (
-                              <li
-                                key={subMenu.id}
-                                className="mx-[20px] py-[11px] text-[15px] font-bold leading-[14px] cursor-pointer hover:text-HoverGray transition duration-300 ease-in-out transform text-left"
-                              >
-                                <Link href={subMenu.href}>{subMenu.text}</Link>
-                              </li>
-                            ))}
-                          </ul>
-                        )}
-                    </div>
-                  )}
+                  {mainMenuItem.subMenus &&
+                    mainMenuItem.subMenus.length > 0 && (
+                      <div
+                        className={`absolute top-14 -left-4 z-20 w-[215px] bg-LightBlue shadow-[0_5px_20px_rgba(0,0,0,0.3)] py-[15px] rounded-md text-white   ${
+                          hoveredMainMenu === mainMenuItem.id
+                            ? "transition-all opacity-100  duration-1000 ease-in-out transform translate-y-0"
+                            : " transition-all opacity-0  duration-1000  translate-y-full ease-in-out transform"
+                        }`}
+                      >
+                        <ul>
+                          {mainMenuItem.subMenus.map((subMenu) => (
+                            <li
+                              key={subMenu.id}
+                              className="mx-[20px] py-[11px] text-[15px] font-bold leading-[14px] cursor-pointer hover:text-HoverGray transition duration-300 ease-in-out transform text-left"
+                            >
+                              <Link href={subMenu.href}>{subMenu.text}</Link>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    )}
                 </li>
               ))}
             </ul>
