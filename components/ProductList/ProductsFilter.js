@@ -61,7 +61,6 @@ function ProductsFilter({
       selectedProducts.map((product) => product.active = selectProduct)
      const filteredActiveProduct = products.filter((item)=> item.active.toString() !== selectProduct)
      
-     console.log(selectedProducts, "SELECT");
      setFilteredProducts(filteredActiveProduct)
      setSelectedProducts([])
      e.target.value="Durum İşlemi"
@@ -88,7 +87,7 @@ function ProductsFilter({
               <option value={false}>Aktif Olmayan Ürünler</option>
             </select>
             <select
-              className="p-1 border rounded-md text-CustomGray w-64"
+              className="p-1 border rounded-md text-CustomGray w-32"
               name=""
               id=""
               onChange={handleIsActive}
