@@ -11,7 +11,9 @@ function ProductsFilter({
   currentPage,
   productsPerPage,
   filterStatus,
-  setFilteredProducts
+  setFilteredProducts,
+  selectedProducts,
+  setSelectedProducts
 }) {
   const handleCategory = (e) => {
     const selectCategory = e.target.value;
@@ -44,13 +46,29 @@ function ProductsFilter({
   //toplu işlemlere göre filtreleme
   const handleAllFilter = (e) => {
     const selectIsActive = e.target.value;
-    console.log(selectIsActive);
     if (selectIsActive === "Toplu Islemler") {
       setFilteredProducts(products)
     }else{
       const filteredActiveProduct = products.filter((item)=> item.active.toString() === selectIsActive)
-      console.log(filteredActiveProduct);
       setFilteredProducts(filteredActiveProduct)
+    }
+  }
+
+  //aktif pasif yapma
+  const handleIsActive = (e) => {
+    const selectProduct = e.target.value;
+    if (selectProduct === "Durum İşlemi") {
+      setFilteredProducts(products)
+    }else{
+      
+     selectedProducts.map((product) => product.active = selectProduct)
+     const filteredActiveProduct = products.filter((item)=> item.active.toString() !== selectProduct)
+     
+     console.log(selectedProducts, "SELECT");
+     setFilteredProducts(filteredActiveProduct)
+     setSelectedProducts([])
+
+     
     }
   }
   return (
@@ -73,10 +91,23 @@ function ProductsFilter({
               <option value={true}>Aktif Olan Ürünler</option>
               <option value={false}>Aktif Olmayan Ürünler</option>
             </select>
+            <select
+              className="p-1 border rounded-md text-CustomGray w-64"
+              name=""
+              id=""
+              onChange={handleIsActive}
+            >
+              <option className="" hidden>
+                Durum İşlemi
+              </option>
+              <option className="" >
+                Durum İşlemi
+              </option>
+              <option value={true}>Ürünü Aktif Yap</option>
+              <option value={false}>Ürünü Pasif Yap</option>
+            </select>
 
-            <button className="p-1 border border-LightBlue rounded-md ">
-              Uygula
-            </button>
+           
           </div>
 
           <div className="flex gap-2 text-sm">
