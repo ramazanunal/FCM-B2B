@@ -30,11 +30,11 @@ const FixedHeader = ({ header }) => {
 
   return (
     <div
-      className={`fixed top-0 left-0 right-0 z-50 bg-white shadow-lg h-[78px] hidden lg:flex   ${
+      className={`fixed top-0 left-0 right-0 z-50 bg-white shadow-lg h-[165px] lg:h-[78px]   ${
         isVisible ? " transition-all  opacity-100 transform translate-y-0 duration-1000" : "transition-all  opacity-0 transform -translate-y-full duration-1000"
       }`}
     >
-      <div className="container mx-auto px-[80px] h-[78px]">
+      <div className="container mx-auto px-[80px] h-[78px] hidden lg:flex ">
         <div className="flex justify-between items-center py-4">
           <div className="flex items-center">
             <div>
@@ -90,7 +90,7 @@ const FixedHeader = ({ header }) => {
               ))}
             </ul>
           </div>
-          <div className="hidden lg:flex items-center">
+          <div className="hidden lg:flex items-center ">
             {header.mainMenuButtons.map((button) => (
               <div
                 key={button.id}
@@ -111,6 +111,44 @@ const FixedHeader = ({ header }) => {
             <MobileMenu header={header} />
           </div>
         </div>
+      </div>
+      
+      <div
+        id="altmenu"
+        className="p-[23px] lg:p-0 bg-white w-screen lg:w-full flex items-center justify-between lg:hidden h-[165px]"
+      >
+       
+          <div className="flex lg:hidden ">
+            {/* Hamburger Menü */}
+            <MobileMenu header={header} />
+          </div>
+          <div>
+            <Image
+              src={header.mainMenuLogo[0].logosrc}
+              width={93}
+              height={105}
+              alt="Çalışkan Arı Mağaza"
+            />
+          </div>
+          
+          <div className="flex flex-row items-center text-center justify-center text-CustomGray">
+            {header.mainMenuButtons.map((mainMenuButtons) => (
+              <div
+                key={mainMenuButtons.id}
+                className="flex flex-row items-center"
+              >
+                <button onClick={toggleSearchPanel}>
+                  <FaSearch className="w-[20px] h-[20px] hover:text-LightBlue hover:scale-110 transition duration-300 ease-in-out transform mr-[36px]" />
+                </button>
+                <Link
+                  className="flex flex-col items-center justify-center  hover:text-LightBlue hover:scale-110 transition duration-300 ease-in-out transform "
+                  href={mainMenuButtons.href}
+                >
+                  <span>{mainMenuButtons.icon}</span>
+                </Link>
+              </div>
+            ))}
+          </div>
       </div>
       {isSearchOpen && <SearchPanel toggleSearchPanel={toggleSearchPanel} />}
     </div>
