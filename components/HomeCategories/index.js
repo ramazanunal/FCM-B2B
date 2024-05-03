@@ -39,7 +39,7 @@ function HomeCategories() {
                   .map((category) => (
                     <li
                       key={category.id}
-                      className={`h-[40px] text-[14px] font-bold tracking-[1px] flex   items-center justify-center hover:text-LightBlue duration-300 ease-in-out transform ${
+                      className={`h-[40px] text-[14px] font-bold tracking-[1px] flex   items-center justify-center hover:text-LightBlue hover:scale-105 transition duration-300 ease-in-out transform cursor-pointer ${
                         selectedCategory.id === category.id
                           ? " text-LightBlue "
                           : " text-CategoriesTitle"
@@ -57,7 +57,7 @@ function HomeCategories() {
             {categories.map((category) => (
               <li
                 key={category.id}
-                className={`flex items-center justify-center text-[14px] font-bold rounded-full py-[22px] pr-[28px] pl-[28px] tracking-[1px]  h-[40px]  mx-[8px] mb-[8px] ${
+                className={`flex items-center justify-center text-[14px] font-bold rounded-full py-[22px] pr-[28px] pl-[28px] tracking-[1px]  h-[40px]  mx-[8px] mb-[8px] hover:scale-105 transition duration-300 ease-in-out transform cursor-pointer ${
                   selectedCategory.id === category.id
                     ? " border border-[3px] border-LightBlue text-LightBlue"
                     : " border border-2 border-CategoriesTitle text-CategoriesTitle"

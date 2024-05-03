@@ -155,17 +155,13 @@ const headerStore = create((set) => ({
       },
     ],
     mainMenuButtons: [
+      
       {
         id: 1,
-        href: "",
-        icon: <FaSearch style={{ width: "20px", height: "20px" }} />,
-      },
-      {
-        id: 2,
         href: "https://caliskanari.com/cart/",
         icon: (
           <RiShoppingBasketFill
-            style={{ width: "25px", height: "25px", marginLeft: "36px" }}
+            style={{ width: "25px", height: "25px"}}
           />
         ),
       },
