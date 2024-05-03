@@ -153,9 +153,17 @@ const Header = () => {
                 key={mainMenuButtons.id}
                 className="flex flex-row items-center"
               >
-                <button onClick={toggleSearchPanel}>
-                  <FaSearch className="w-[20px] h-[20px] hover:text-LightBlue hover:scale-110 transition duration-300 ease-in-out transform mr-[36px]" />
-                </button>
+                  <button className="relative" onClick={toggleSearchPanel}>
+                    <FaSearch className="w-[20px] h-[20px] hover:text-LightBlue hover:scale-110 transition duration-300 ease-in-out transform mr-[36px]" />
+                  </button>
+                  {isSearchOpen && (
+                    <div className="absolute top-40 rounded-xl right-24 z-[1000]	bg-white">
+                      <SearchPanel
+                        
+                        toggleSearchPanel={toggleSearchPanel}
+                      />
+                    </div>
+                  )}
                 <Link
                   className="flex flex-col items-center justify-center  hover:text-LightBlue hover:scale-110 transition duration-300 ease-in-out transform "
                   href={mainMenuButtons.href}
@@ -168,7 +176,6 @@ const Header = () => {
         </div>
       </div>
       <FixedHeader header={header} />
-      {isSearchOpen && <SearchPanel toggleSearchPanel={toggleSearchPanel} />}
     </div>
   );
 };
