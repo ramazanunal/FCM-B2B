@@ -113,7 +113,7 @@ const FixedHeader = ({ header }) => {
       
       <div
         id="altmenu"
-        className="p-[23px] lg:p-0 bg-white w-screen lg:w-full flex items-center justify-between lg:hidden h-[165px]"
+        className="relative p-[23px] lg:p-0 bg-white w-screen lg:w-full flex items-center justify-between lg:hidden h-[165px]"
       >
        
           <div className="flex lg:hidden ">
@@ -148,7 +148,9 @@ const FixedHeader = ({ header }) => {
             ))}
           </div>
       </div>
-      {isSearchOpen && <SearchPanel toggleSearchPanel={toggleSearchPanel} />}
+   <div className="absolute top-16 right-48 bg-white rounded-xl">
+   {isSearchOpen && <div><SearchPanel toggleSearchPanel={toggleSearchPanel} /></div>}
+   </div>
     </div>
   );
 };
