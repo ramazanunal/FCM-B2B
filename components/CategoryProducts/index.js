@@ -103,8 +103,8 @@ function CategoryProducts({ selectedCategory }) {
                             }
                             className="text-center pr-2 sm:pr-0 w-14 md:w-16 h-8 border-2 border-LightBlue hover:border-CustomGray  hover:text-CustomGray transition duration-300 ease-in-out transform outline-none rounded-md  text-LightBlue "
                           />
-                          <span className="ml-2 ">
-                            <RiShoppingBasketFill className="w-[22px] md:w-[26px] h-[22px] md:h-[26px] hover:scale-105 hover:text-CustomGray transition duration-300 ease-in-out transform" />
+                          <span className="ml-3 text-LightBlue font-bold hover:scale-105 transition-all transform seasy-im-out duration-500 cursor-pointer">
+                            Sepete Ekle
                           </span>
                         </div>
                       </div>
