@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { Formik, Form, Field } from "formik";
 import * as Yup from "yup";
 import { FaSearch, FaTimes } from "react-icons/fa";
@@ -8,32 +8,51 @@ import Link from "next/link";
 
 function SearchPanel({ toggleSearchPanel }) {
   const [searchResults, setSearchResults] = useState([]);
+  const [searchNoResults, setSearchNoResults] = useState(false);
 
   const validationSchema = Yup.object().shape({
     searchinput: Yup.string().required(""),
   });
 
-  const handleSubmit = (values, { resetForm }) => {
-    const searchTerm = values.searchinput.toLowerCase();
+  const handleSubmit = useCallback((values, { resetForm }) => {
+    const searchTerm = normalizeTurkishChars(values.searchinput.toLowerCase());
+    console.log("Search Term:", searchTerm);
     const results = [];
 
     categoryStore.getState().categories.forEach((category) => {
       category.products.forEach((product) => {
-        if (product.name.toLowerCase().includes(searchTerm)) {
+        if (
+          normalizeTurkishChars(product.name.toLowerCase()).includes(searchTerm)
+        ) {
           results.push(product);
         }
       });
     });
 
     setSearchResults(results);
+    setSearchNoResults(true);
     resetForm();
+  }, []);
+
+  useEffect(() => {
+    const initialSearchTerm = "initial search term";
+    handleSubmit({ searchinput: initialSearchTerm }, { resetForm: () => {} });
+  }, [handleSubmit]);
+
+  // Türkçe karakterleri normalize etmek için bir yardımcı fonksiyon
+  const normalizeTurkishChars = (str) => {
+    return str
+      .replace(/ı/g, "i")
+      .replace(/ğ/g, "g")
+      .replace(/ü/g, "u")
+      .replace(/ş/g, "s")
+      .replace(/ö/g, "o")
+      .replace(/ç/g, "c");
   };
 
   useEffect(() => {
-    // Başlangıçta bir arama yapmak için
-    const initialSearchTerm = "initial search term"; // İstediğiniz varsayılan arama terimi
-    handleSubmit({ searchinput: initialSearchTerm }, { resetForm: () => {} });
-  }, []); // Boş bağımlılık dizisi, yalnızca bileşen monte edildiğinde bir kere çalışır
+    setSearchNoResults(false);
+  }, []);
 
   return (
     <div className="w-full flex flex-col items-center justify-center transition-transform duration-500 ease-in-out shadow-[0_5px_20px_rgba(0,0,0,0.3)] py-[15px] z-[1000] rounded-xl ">
@@ -90,7 +109,7 @@ function SearchPanel({ toggleSearchPanel }) {
             <ul>
               {searchResults.map((product) => (
                 <li
-                  className="p-5 border-b border-LightBlue flex flex-row justify-start gap-4"
+                  className="p-5 shadow-b shadow-sm flex flex-row justify-start gap-4"
                   key={product.id}
                 >
                   <Image
@@ -99,17 +118,21 @@ function SearchPanel({ toggleSearchPanel }) {
                     height={70}
                     alt={product.name}
                   />
-                  <Link
-                    href={product.link}
-                    className="flex items-center"
-                  >
-                    <span className=" flex text-start">
-                      <p className="font-bold text-[16px] text-CustomGray hover:scale-105 hover:text-LightBlue transition-all transform easy-in-out duration-500">{product.name}</p>
+                  <Link href={product.link} className="flex items-center">
+                    <span className="flex text-start">
+                      <p className="font-bold text-[16px] text-CustomGray hover:scale-105 hover:text-LightBlue transition-all transform easy-in-out duration-500">
+                        {product.name}
+                      </p>
                     </span>
                   </Link>
                 </li>
               ))}
             </ul>
+          </div>
+        )}
+        {searchNoResults && searchResults.length === 0 && (
+          <div className="w-[400px] mt-4 flex items-center justify-center">
+            <p className="text-red-500 font-bold">Ürün bulunamadı</p>
           </div>
         )}
       </div>
