@@ -25,17 +25,7 @@ function ProductList() {
       setFilteredProducts(filterProducts);
     }
 
-    //stok durumuna göre filtreleme
-    if (status === "Stok durumuna göre filtreleme") {
-      setFilteredProducts(products);
-    }
-    if (status === "Stokta Olanlar") {
-      const filteredByStock = products.filter((item) => item.stokCount > 0);
-      setFilteredProducts(filteredByStock);
-    } else if (status === "Stokta Olmayanlar") {
-      const filteredOffStock = products.filter((item) => item.stokCount === 0);
-      setFilteredProducts(filteredOffStock);
-    }
+   
 
     //filtreleme yapılırsa ilk sayfaya dön
     setCurrentPage(1);

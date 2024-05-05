@@ -122,6 +122,12 @@ function ProdcutsTable({currentProducts,setSelectedProducts,selectedProducts}) {
           </th>
           <th
             scope="col"
+            className="px-6 py-3 text-left text-base font-medium  "
+          >
+            Stok Sayısı
+          </th>
+          <th
+            scope="col"
             className="px-6 flex items-center cursor-pointer py-3 text-left text-base font-medium "
             onClick={() => handleSort('price')}
           >
@@ -136,14 +142,15 @@ function ProdcutsTable({currentProducts,setSelectedProducts,selectedProducts}) {
             scope="col"
             className="px-6 py-3 text-left text-base font-medium "
           >
-            Kategori
+            Ders
           </th>
           <th
             scope="col"
             className="px-6 py-3 text-left text-base font-medium "
           >
-            Ürün Ekleme Tarihi
+            Sınıf
           </th>
+        
           <th
             scope="col"
             className="px-6 py-3 text-left text-base font-medium "
@@ -171,9 +178,10 @@ function ProdcutsTable({currentProducts,setSelectedProducts,selectedProducts}) {
               {product.name}
             </td>
             <td className="px-6 py-4 whitespace-nowrap text-BaseDark">{product.stok}</td>
+            <td className="px-6 py-4 whitespace-nowrap text-BaseDark">{product.stokCount}</td>
             <td className="px-6 py-4 whitespace-nowrap text-BaseDark">₺{product.price}</td>
-            <td className="px-6 py-4 whitespace-nowrap text-BaseDark">{product?.category?.mainCategory} ({product?.category?.subCategory})</td>
-            <td className="px-6 py-4 whitespace-nowrap text-BaseDark">{product?.date?.productAdditionDate}</td>
+            <td className="px-6 py-4 whitespace-nowrap text-BaseDark">{product?.category?.subCategory}</td>
+            <td className="px-6 py-4 whitespace-nowrap text-BaseDark">{product?.category?.mainCategory}</td>
             <td className="px-6 py-4 whitespace-nowrap text-BaseDark">{product?.date?.lastUpdateDate}</td>
           </tr>
         ))}
