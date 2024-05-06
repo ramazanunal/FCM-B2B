@@ -1,33 +1,12 @@
 import React, { useState } from "react";
+import { Formik, Form, Field } from "formik";
+import * as Yup from "yup";
 import Image from "next/image";
 import Link from "next/link";
-import { RiShoppingBasketFill } from "react-icons/ri";
-import { FaEye, FaRegHeart } from "react-icons/fa";
 
-function CategoryProducts({ selectedCategory }) {
+function CategoryProducts({ selectedCategory, setCartItemCount }) {
   const [hoveredIndex, setHoveredIndex] = useState(null);
-  const [quantities, setQuantities] = useState({});
-  const [isQuickViewOpen, setIsQuickViewOpen] = useState(false);
-  const [isWishlistOpen, setIsWishlistOpen] = useState(false);
-
-  const handleQuantityChange = (productId, e) => {
-    const value = parseInt(e.target.value);
-    if (!isNaN(value)) {
-      setQuantities((prevQuantities) => ({
-        ...prevQuantities,
-        [productId]: value,
-      }));
-    }
-  };
-
-  const toggleQuickView = () => {
-    setIsQuickViewOpen(!isQuickViewOpen);
-  };
-
-  const toggleWishlist = () => {
-    setIsWishlistOpen(!isWishlistOpen);
-  };
-
+  
   const calculateDiscountedPrice = (price, discount) => {
     if (discount && discount > 0) {
       const discountedAmount = (price * discount) / 100;
@@ -35,6 +14,30 @@ function CategoryProducts({ selectedCategory }) {
     }
     return price;
   };
+
+  const addToCart = (product, quantity) => {
+  // Sepetteki ürünleri kontrol et
+  let cartItems = JSON.parse(localStorage.getItem("cartItems")) || [];
+  const existingItemIndex = cartItems.findIndex(item => item.id === product.id);
+
+  if (existingItemIndex !== -1) {
+    // Ürün sepette zaten var, sadece miktarını artır
+    cartItems[existingItemIndex].quantity += quantity;
+  } else {
+    // Ürün sepette yok, yeni ürün olarak ekle
+    const newItem = { ...product, quantity };
+    cartItems.push(newItem);
+  }
+
+  // Local storage güncelle
+  localStorage.setItem("cartItems", JSON.stringify(cartItems));
+  console.log("Sepete eklenen ürün:", product);
+
+  // Sepet sayacını güncelle
+  const itemCount = cartItems.length;
+  setCartItemCount(itemCount);
+};
+
 
   return (
     <div className="bg-white w-[382px] md:w-[750px] lg:w-[970px] xl:w-[1188px] pt-[60px] pb-[80px] ">
@@ -65,7 +68,7 @@ function CategoryProducts({ selectedCategory }) {
             </div>
 
             <div className="w-3/5 sm:w-full flex flex-col  justify-between">
-            <div className={`text-left md:pt-[15px] min-h-12 md:min-h-20 ${product.discount ? 'mr-12 sm:mr-0' : ''}`}>
+              <div className={`text-left md:pt-[15px] min-h-12 md:min-h-20 ${product.discount ? 'mr-12 sm:mr-0' : ''}`}>
                 <Link
                   href={product.link}
                   className="font-bold text-[14px] md:text-[16px] text-CustomGray leading-tight"
@@ -92,22 +95,38 @@ function CategoryProducts({ selectedCategory }) {
                 ) : (
                   <>
                     <div className="flex justify-center items-center mt-[20px]">
-                      <div className="flex flex-col items-center justify-center text-LightBlue ">
-                        <div className="flex flex-row items-center justify-center ">
-                          <input
-                            type="number"
-                            min="1"
-                            value={quantities[product.id] || 1}
-                            onChange={(e) =>
-                              handleQuantityChange(product.id, e)
-                            }
-                            className="text-center pr-2 sm:pr-0 w-14 md:w-16 h-8 border-2 border-LightBlue hover:border-CustomGray  hover:text-CustomGray transition duration-300 ease-in-out transform outline-none rounded-md  text-LightBlue "
-                          />
-                          <span className="ml-3 text-LightBlue font-bold hover:scale-105 transition-all transform seasy-im-out duration-500 cursor-pointer">
-                            Sepete Ekle
-                          </span>
-                        </div>
-                      </div>
+                      <Formik
+                        initialValues={{ quantity: 1 }}
+                        validationSchema={Yup.object({
+                          quantity: Yup.number()
+                            .min(1, "En az 1 adet girebilirsiniz")
+                            .required("Bir miktar girin"),
+                        })}
+                        onSubmit={(values) => {
+                          addToCart(product, values.quantity);
+                        }}
+                      >
+                        {({ errors, touched }) => (
+                          <Form>
+                            <div className="flex flex-col items-center justify-center text-LightBlue ">
+                              <div className="flex flex-row items-center justify-center ">
+                                <Field
+                                  type="number"
+                                  min="1"
+                                  name="quantity"
+                                  className="text-center pr-2 sm:pr-0 w-14 md:w-16 h-8 border-2 border-LightBlue hover:border-CustomGray  hover:text-CustomGray transition duration-300 ease-in-out transform outline-none rounded-md  text-LightBlue "
+                                />
+                                <button type="submit" className="ml-3 text-LightBlue font-bold hover:scale-105 transition-all transform seasy-im-out duration-500 cursor-pointer">
+                                  Sepete Ekle
+                                </button>
+                              </div>
+                              {errors.quantity && touched.quantity && (
+                                <div className="text-red-500">{errors.quantity}</div>
+                              )}
+                            </div>
+                          </Form>
+                        )}
+                      </Formik>
                     </div>
                   </>
                 )}
