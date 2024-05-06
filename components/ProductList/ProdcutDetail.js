@@ -4,7 +4,7 @@ import { SlBasket } from "react-icons/sl";
 function ProdcutDetail({ product }) {
   return (
     <div className="flex justify-center items-center">
-      <div className="grid grid-cols-3  px-14 pt-14 bg-gray-50">
+      <div className="grid grid-cols-3  px-14 pt-14 bg-gray-50 w-full">
         <div className="col-span-1 ">
           <img src={product.imgPath} alt={product.name} />
         </div>
@@ -30,7 +30,7 @@ function ProdcutDetail({ product }) {
                 <div className="text-green-500 text-lg">{product.stokCount}</div>
             </div>
          </div>
-         <div className="flex space-x-3 items-center ml-20 mt-8">
+         <div className="flex space-x-3 items-center ml-20 mt-8 mb-10">
                 <input type="number" className="bg-gray-200 border-2 border-gray-400 w-10 rounded" />
                 <div className="px-3 py-[6px] bg-red-500 text-white font-bold rounded-md">
                     <SlBasket/>
