@@ -110,37 +110,37 @@ const headerStore = create((set) => ({
         icon: <RiBook3Line style={{ width: "35px", height: "35px" }} />,
         subMenus: [
           {
-            id: 2,
+            id: 1,
             text: "2. Sınıf",
             href: "https://caliskanari.com/urun-kategori/heyday/2-sinif-english/",
           },
           {
-            id: 3,
+            id: 2,
             text: "3. Sınıf",
             href: "https://caliskanari.com/urun-kategori/heyday/3-sinif-english/",
           },
           {
-            id: 4,
+            id: 3,
             text: "4. Sınıf",
             href: "https://caliskanari.com/urun-kategori/heyday/4-sinif-english/",
           },
           {
-            id: 5,
+            id: 4,
             text: "5. Sınıf",
             href: "https://caliskanari.com/urun-kategori/heyday/5-sinif-english/",
           },
           {
-            id: 6,
+            id: 5,
             text: "6. Sınıf",
             href: "https://caliskanari.com/urun-kategori/heyday/6-sinif-english/",
           },
           {
-            id: 7,
+            id: 6,
             text: "7. Sınıf",
             href: "https://caliskanari.com/urun-kategori/heyday/7-sinif-english/",
           },
           {
-            id: 8,
+            id: 7,
             text: "8. Sınıf",
             href: "https://caliskanari.com/urun-kategori/heyday/8-sinif-english/",
           },
