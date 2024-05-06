@@ -9,6 +9,7 @@ const FixedHeader = ({ header }) => {
   const [hoveredMainMenu, setHoveredMainMenu] = useState(null);
   const [isVisible, setIsVisible] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const [hoveredSubMenu, setHoveredSubMenu] = useState(null);
 
   const toggleSearchPanel = () => {
     setIsSearchOpen(!isSearchOpen);
@@ -47,10 +48,17 @@ const FixedHeader = ({ header }) => {
           </div>
           <div className="flex flex-row hidden lg:flex " id="mainmenuitem">
             <ul className="flex flex-row items-center text-center justify-center text-CustomGray hidden lg:flex ml-[8px] md:ml-[36px]">
-              {header.mainMenuItems.map((mainMenuItem) => (
+            {header.mainMenuItems.map((mainMenuItem, index) => (
                 <li
                   key={mainMenuItem.id}
                   className="relative mr-[25px] leading-[1.3] w-[117px] mx-2"
+                  onMouseEnter={() => {
+                    setHoveredMainMenu(index);
+                    if (hoveredSubMenu !== null) {
+                      setHoveredSubMenu(null);
+                    }
+                  }}
+                   onMouseLeave={() => setHoveredMainMenu(null)}
                 >
                   <Link
                     className="flex flex-col items-center justify-center"
@@ -59,8 +67,7 @@ const FixedHeader = ({ header }) => {
                   >
                     <span className="w-[53px] h-[53px] flex items-center justify-center
                     text-CustomGray/75 hover:text-LightBlue hover:animate-bounce transition duration-300 ease-in-out transform cursor-pointer"
-                     onMouseEnter={() => setHoveredMainMenu(mainMenuItem.id)}
-                     onMouseLeave={() => setHoveredMainMenu(null)}>
+                  >
                       {mainMenuItem.icon}
                     </span>
                   </Link>
@@ -68,7 +75,7 @@ const FixedHeader = ({ header }) => {
                     mainMenuItem.subMenus.length > 0 && (
                       <div
                         className={`absolute top-14 -left-4 z-20 w-[215px] bg-LightBlue shadow-[0_5px_20px_rgba(0,0,0,0.3)] py-[15px] rounded-md text-white   ${
-                          hoveredMainMenu === mainMenuItem.id
+                          hoveredMainMenu === index
                             ? "transition-all opacity-100  duration-1000 ease-in-out transform translate-y-0"
                             : " transition-all opacity-0  duration-1000  translate-y-full ease-in-out transform"
                         }`}
