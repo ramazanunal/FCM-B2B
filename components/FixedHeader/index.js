@@ -4,6 +4,7 @@ import Image from "next/image";
 import MobileMenu from "../MobileMenu";
 import SearchPanel from "../SearchPanel";
 import { FaSearch } from "react-icons/fa";
+import { RiShoppingBasketFill } from "react-icons/ri";
 
 const FixedHeader = ({ header }) => {
   const [hoveredMainMenu, setHoveredMainMenu] = useState(null);
@@ -32,7 +33,9 @@ const FixedHeader = ({ header }) => {
   return (
     <div
       className={`fixed top-0 left-0 right-0 z-50 bg-white shadow-lg h-[165px] lg:h-[78px]   ${
-        isVisible ? " transition-all  opacity-100 transform translate-y-0 duration-1000" : "transition-all  opacity-0 transform -translate-y-full duration-1000"
+        isVisible
+          ? " transition-all  opacity-100 transform translate-y-0 duration-1000"
+          : "transition-all  opacity-0 transform -translate-y-full duration-1000"
       }`}
     >
       <div className="container mx-auto px-[80px] h-[78px] hidden lg:flex items-center justify-between">
@@ -68,54 +71,56 @@ const FixedHeader = ({ header }) => {
                     <span className="w-[53px] h-[53px] flex items-center justify-center
                     text-CustomGray/75 hover:text-LightBlue hover:animate-bounce transition duration-300 ease-in-out transform cursor-pointer"
                   >
-                      {mainMenuItem.icon}
-                    </span>
-                  </Link>
-                  {mainMenuItem.subMenus &&
-                    mainMenuItem.subMenus.length > 0 && (
-                      <div
-                        className={`absolute top-14 -left-4 z-20 w-[215px] bg-LightBlue shadow-[0_5px_20px_rgba(0,0,0,0.3)] py-[15px] rounded-md text-white   ${
-                          hoveredMainMenu === index
-                            ? "transition-all opacity-100  duration-1000 ease-in-out transform translate-y-0"
-                            : " transition-all opacity-0  duration-1000  translate-y-full ease-in-out transform"
-                        }`}
-                      >
-                        <ul>
-                          {mainMenuItem.subMenus.map((subMenu) => (
-                            <li
-                              key={subMenu.id}
-                              className="mx-[20px] py-[11px] text-[15px] font-bold leading-[14px] cursor-pointer hover:text-HoverGray transition duration-300 ease-in-out transform text-left"
-                            >
-                              <Link href={subMenu.href}>{subMenu.text}</Link>
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
-                    )}
-                </li>
-              ))}
-            </ul>
-          </div>
-          <div className="hidden lg:flex items-center ">
-            {header.mainMenuButtons.map((button) => (
-              <div
-                key={button.id}
-                className="flex flex-row items-center justify-center"
-              >
-                <button onClick={toggleSearchPanel}>
-                  <FaSearch className="w-[20px] h-[20px] text-CustomGray hover:text-LightBlue hover:scale-110 transition duration-300 ease-in-out transform mr-[36px]" />
-                </button>
-                <Link href={button.href} className="flex items-center justify-center">
-                  <button className="text-CustomGray hover:text-LightBlue hover:scale-105 transition duration-300 ease-in-out transform cursor-pointer">
-                    {button.icon}
-                  </button>
+                    {mainMenuItem.icon}
+                  </span>
                 </Link>
-              </div>
+                {mainMenuItem.subMenus && mainMenuItem.subMenus.length > 0 && (
+                  <div
+                    className={`absolute top-22 -left-4 z-[1000] w-[215px] bg-LightBlue shadow-[0_5px_20px_rgba(0,0,0,0.3)] py-[15px] rounded-md text-white transition-all duration-1000 ease-in-out transform ${
+                      hoveredMainMenu === index
+                        ? "opacity-100 translate-y-0"
+                        : "opacity-0 translate-y-10 pointer-events-none"
+                    }`}
+                  >
+                    <ul>
+                      {mainMenuItem.subMenus.map((subMenu) => (
+                        <li
+                          key={subMenu.id}
+                          className="mx-[20px] py-[11px] text-[15px] font-bold leading-[14px] cursor-pointer hover:text-HoverGray transition duration-300 ease-in-out transform text-left"
+                        >
+                          <Link href={subMenu.href}>{subMenu.text}</Link>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+              </li>
             ))}
-          </div>
-          <div className="flex lg:hidden">
-            <MobileMenu header={header} />
-          </div>
+          </ul>
+        </div>
+        <div className="hidden lg:flex items-center ">
+          {header.mainMenuButtons.map((button) => (
+            <div
+              key={button.id}
+              className="flex flex-row items-center justify-center"
+            >
+              <button onClick={toggleSearchPanel}>
+                <FaSearch className="w-[20px] h-[20px] text-CustomGray hover:text-LightBlue hover:scale-110 transition duration-300 ease-in-out transform mr-[36px]" />
+              </button>
+              <Link
+                href={button.href}
+                className="flex items-center justify-center"
+              >
+                <button className="text-CustomGray hover:text-LightBlue hover:scale-105 transition duration-300 ease-in-out transform cursor-pointer">
+                  {button.icon}
+                </button>
+              </Link>
+            </div>
+          ))}
+        </div>
+        <div className="flex lg:hidden">
+          <MobileMenu header={header} />
+        </div>
       </div>
       
       <div
@@ -147,9 +152,13 @@ const FixedHeader = ({ header }) => {
                 </button>
                 <Link
                   className="flex flex-col items-center justify-center  hover:text-LightBlue hover:scale-110 transition duration-300 ease-in-out transform "
-                  href={mainMenuButtons.href}
+                  href="/cart"
                 >
-                  <span>{mainMenuButtons.icon}</span>
+                  <span>
+                    <RiShoppingBasketFill
+                      style={{ width: "25px", height: "25px" }}
+                    />
+                  </span>
                 </Link>
               </div>
             ))}
