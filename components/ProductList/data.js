@@ -37,7 +37,10 @@ export const products = [
             productAdditionDate:"20 Nisan 2024",
             lastUpdateDate:"24 Nisan 2024"
         }  ,
-        published:true,     
+        published:true,   
+        writer:"Emrah Eskibağcı",
+        publisher:"Çalışkan Arı",
+        barkod:"111111111111"
       },  {
         id: 1,
         checkbox: <input type="checkbox" />,
@@ -57,6 +60,9 @@ export const products = [
             lastUpdateDate:"21 Nisan 2024"
         },
         published:true,
+        writer:"Emrah Eskibağcı",
+        publisher:"Çalışkan Arı",
+        barkod:"111111111111"
       },
       {
         id: 3,
@@ -76,7 +82,10 @@ export const products = [
             productAdditionDate:"20 Nisan 2024",
             lastUpdateDate:"24 Nisan 2024"
         }    ,
-        published:false,   
+        published:false, 
+        writer:"Emrah Eskibağcı" ,
+        publisher:"Çalışkan Arı",
+        barkod:"111111111111"  
       },
       {
         id: 4,
@@ -96,7 +105,10 @@ export const products = [
             productAdditionDate:"20 Nisan 2024",
             lastUpdateDate:"24 Nisan 2024"
         }   ,
-        published:false,    
+        published:false,   
+        writer:"Emrah Eskibağcı",
+        publisher:"Çalışkan Arı",
+        barkod:"111111111111"  
       },
       {
         id: 5,
@@ -116,7 +128,10 @@ export const products = [
             productAdditionDate:"20 Nisan 2024",
             lastUpdateDate:"24 Nisan 2024"
         }    ,
-        published:false,   
+        published:false,  
+        writer:"Emrah Eskibağcı",
+        publisher:"Çalışkan Arı",
+        barkod:"111111111111"  
       },
       {
         id: 6,
@@ -136,7 +151,10 @@ export const products = [
             productAdditionDate:"20 Nisan 2024",
             lastUpdateDate:"24 Nisan 2024"
         }  ,
-        published:true,     
+        published:true,   
+        writer:"Emrah Eskibağcı" ,
+        publisher:"Çalışkan Arı",
+        barkod:"111111111111"  
       },
       {
         id: 7,
@@ -156,7 +174,10 @@ export const products = [
             productAdditionDate:"20 Nisan 2024",
             lastUpdateDate:"24 Nisan 2024"
         }  ,
-        published:true,     
+        published:true,    
+        writer:"Emrah Eskibağcı",
+        publisher:"Çalışkan Arı",
+        barkod:"111111111111" 
       },
       {
         id: 8,
@@ -177,6 +198,9 @@ export const products = [
             lastUpdateDate:"24 Nisan 2024"
         }       ,
         published:true,
+        writer:"Emrah Eskibağcı",
+        publisher:"Çalışkan Arı",
+        barkod:"111111111111" 
       },
       {
         id: 9,
@@ -197,6 +221,9 @@ export const products = [
             lastUpdateDate:"24 Nisan 2024"
         }      ,
         published:true, 
+        writer:"Emrah Eskibağcı",
+        publisher:"Çalışkan Arı",
+        barkod:"111111111111" 
       },
       {
         id: 10,
@@ -217,6 +244,9 @@ export const products = [
             lastUpdateDate:"24 Nisan 2024"
         }       ,
         published:true,
+        writer:"Emrah Eskibağcı",
+        publisher:"Çalışkan Arı",
+        barkod:"111111111111" 
       },
       {
         id: 11,
@@ -237,6 +267,9 @@ export const products = [
             lastUpdateDate:"24 Nisan 2024"
         }     ,
         published:true,  
+        writer:"Emrah Eskibağcı",
+        publisher:"Çalışkan Arı",
+        barkod:"111111111111" 
       },
       {
         id: 12,
@@ -257,6 +290,9 @@ export const products = [
             lastUpdateDate:"24 Nisan 2024"
         }       ,
         published:true,
+        writer:"Emrah Eskibağcı",
+        publisher:"Çalışkan Arı",
+        barkod:"111111111111" 
       },
       {
         id: 13,
@@ -277,6 +313,9 @@ export const products = [
             lastUpdateDate:"24 Nisan 2024"
         }       ,
         published:true,
+        writer:"Emrah Eskibağcı",
+        publisher:"Çalışkan Arı",
+        barkod:"111111111111"
       },
       {
         id: 14,
@@ -297,6 +336,9 @@ export const products = [
             lastUpdateDate:"24 Nisan 2024"
         }      ,
         published:true, 
+        writer:"Emrah Eskibağcı",
+        publisher:"Çalışkan Arı",
+        barkod:"111111111111" 
       },
       {
         id: 15,
@@ -317,6 +359,9 @@ export const products = [
             lastUpdateDate:"24 Nisan 2024"
         }       ,
         published:true,
+        writer:"Emrah Eskibağcı",
+        publisher:"Çalışkan Arı",
+        barkod:"111111111111"
       },
 ]
 

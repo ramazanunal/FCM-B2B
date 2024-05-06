@@ -113,7 +113,7 @@ function ProductsFilter({
         <div className="flex gap-4 ">
           <div className="flex gap-2">
             <select
-            className={`p-1 border rounded-md text-CustomGray w-64 ${selectedCategory !== "Ders Seçin" && "bg-LightBlue/80 text-white font-semibold"}`}
+            className={`p-2 border cursor-pointer rounded-md text-CustomGray w-36 shadow-2xl  ${selectedCategory !== "Ders Seçin" && "bg-NavyBlue text-white font-semibold"}`}
               name=""
               id=""
               onChange={handleAllFilter}
@@ -126,7 +126,7 @@ function ProductsFilter({
               <option value={false}>Aktif Olmayan Ürünler</option>
             </select>
             <select
-              className="p-1 border rounded-md text-CustomGray w-32"
+              className="p-2 cursor-pointer shadow-2xl border rounded-md text-CustomGray w-32"
               name=""
               id=""
               onChange={handleIsActive}
@@ -142,7 +142,7 @@ function ProductsFilter({
 
           <div className="flex gap-2 items-center  text-sm">
             <select
-              className={`p-1 border rounded-md text-CustomGray w-30 ${selectedCategory !== "Ders Seçin" && "bg-LightBlue/80 text-white font-semibold"}`}
+              className={`p-2 cursor-pointer shadow-2xl border rounded-md text-CustomGray w-30 ${selectedCategory !== "Ders Seçin" && "bg-NavyBlue text-white font-semibold"}`}
               name=""
               id=""
               onChange={handleCategory}
@@ -161,7 +161,7 @@ function ProductsFilter({
             </select>
            
             <select
-            className={`p-1 border rounded-md text-CustomGray w-44 ${selectedProductType !== "Ürün tipine göre filtreleme" && "bg-LightBlue/80 text-white font-semibold"}`}
+            className={`p-2 cursor-pointer shadow-2xl border rounded-md text-CustomGray w-44 ${selectedProductType !== "Ürün tipine göre filtreleme" && "bg-NavyBlue text-white font-semibold"}`}
               name=""
               id=""
               onChange={handleProductType}
@@ -176,7 +176,7 @@ function ProductsFilter({
               ))}
             </select>
             <select
-            className={`p-1 border rounded-md text-CustomGray w-52 ${selectedStock !== "Stok durumuna göre filtreleme" && "bg-LightBlue/80 text-white font-semibold"}`}
+            className={`p-2 cursor-pointer shadow-2xl border rounded-md text-CustomGray w-52 ${selectedStock !== "Stok durumuna göre filtreleme" && "bg-NavyBlue text-white font-semibold"}`}
               name=""
               id=""
               onChange={handleStock}
@@ -188,8 +188,8 @@ function ProductsFilter({
               <option>Stokta Olmayanlar</option>
             </select>
          <button
-              className={`p-1 font-[500] border  rounded-md  
-                          ${anyFilterSelected ?"border-LightBlue hover:bg-LightBlue/60 hover:text-white" : "text-gray-400 border-gray-400 cursor-not-allowed"}
+              className={`p-1 cursor-pointer font-[500] border text-NavyBlue  rounded-md  
+                          ${anyFilterSelected ?"border-NavyBlue hover:bg-NavyBlue hover:text-white" : "text-NavyBlue border-gray-400 cursor-not-allowed"}
               `}
               onClick={handleClearFilters}
             >
@@ -208,7 +208,7 @@ function ProductsFilter({
           className={`${
             currentPage === 1
               ? "cursor-not-allowed text-gray-300 "
-              : "cursor-pointer hover:bg-gray-200 duration-300 hover:border-LightBlue hover:rounded-xl"
+              : "cursor-pointer hover:bg-gray-200 duration-300 hover:border-NavyBlue hover:rounded-xl"
           } border-2 rounded-sm text-[18px] p-3 `}
             onClick={() => paginate(1)}
           >
@@ -218,7 +218,7 @@ function ProductsFilter({
             className={`${
               currentPage === 1
                 ? "cursor-not-allowed text-gray-300 "
-                : "cursor-pointer hover:bg-gray-200 duration-300 hover:border-LightBlue hover:rounded-xl"
+                : "cursor-pointer hover:bg-gray-200 duration-300 hover:border-NavyBlue hover:rounded-xl"
             } border-2 rounded-sm text-[18px] p-3`}
             onClick={() => {
               if (currentPage !== 1) {
@@ -229,7 +229,7 @@ function ProductsFilter({
             <MdKeyboardArrowLeft />
           </div>
 
-          <span className="border  px-4 py-2 rounded-full bg-LightBlue bg-opacity-50 text-gray-900">
+          <span className="border  px-4 py-2 rounded-full bg-NavyBlue text-white">
             {currentPage}
           </span>
           <span>/ {Math.ceil(filteredProducts.length / productsPerPage)}</span>
@@ -237,7 +237,7 @@ function ProductsFilter({
             className={` ${
               currentPage * productsPerPage >= filteredProducts.length
                 ? "cursor-not-allowed text-gray-300"
-                : "cursor-pointer hover:bg-gray-200 duration-300 hover:border-LightBlue hover:rounded-xl "
+                : "cursor-pointer hover:bg-gray-200 duration-300 hover:border-NavyBlue hover:rounded-xl "
             } rounded-sm text-[18px] p-3 border-2`}
             onClick={() => {
               if (currentPage * productsPerPage < filteredProducts.length) {
@@ -251,7 +251,7 @@ function ProductsFilter({
           className={` ${
             currentPage * productsPerPage >= filteredProducts.length
               ? "cursor-not-allowed text-gray-300"
-              : "cursor-pointer hover:bg-gray-200 duration-300 hover:border-LightBlue hover:rounded-xl"
+              : "cursor-pointer hover:bg-gray-200 duration-300 hover:border-NavyBlue hover:rounded-xl"
           } rounded-sm text-[18px] p-3 border-2`}
             onClick={() =>
               paginate(Math.ceil(filteredProducts.length / productsPerPage))

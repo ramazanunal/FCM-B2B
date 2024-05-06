@@ -3,6 +3,8 @@ import { FaImage } from "react-icons/fa6";
 import { PiCaretUpDownFill } from "react-icons/pi";
 import { FaCaretDown } from "react-icons/fa";
 import { FaCaretUp } from "react-icons/fa";
+import ProductModal from './ProductModal';
+import Link from 'next/link';
 
 
 
@@ -10,8 +12,14 @@ import { FaCaretUp } from "react-icons/fa";
 function ProdcutsTable({currentProducts,setSelectedProducts,selectedProducts}) {
   const [sortOrder, setSortOrder] = useState('asc');
   const [sortedColumn, setSortedColumn] = useState(null);
-  
+  const [isOpenModal, setIsOpenModal] = useState(false)
+  const [productImage, setProductImage] = useState(null)
 
+
+  const handleOpenModal = (product) => {
+    setIsOpenModal(true)
+    setProductImage(product)
+  }
   const handleSort = (column) => {
     if (sortedColumn === column) {
       // Sıralama sırasını tersine çevir
@@ -35,8 +43,7 @@ function ProdcutsTable({currentProducts,setSelectedProducts,selectedProducts}) {
     // checkbox işlmeleri BAşlangıç
 
    
-  
-    console.log(selectedProducts);
+
   
     const handleSelectAll = () => {
       setSelectAll(!selectAll);
@@ -88,7 +95,7 @@ function ProdcutsTable({currentProducts,setSelectedProducts,selectedProducts}) {
   return (  
     <div className="overflow-x-auto border">
     <table className="min-w-full divide-y divide-gray-200">
-      <thead className="bg-gray-50 ">
+      <thead className="bg-NavyBlue text-white ">
         <tr>
           <th
             scope="col"
@@ -171,22 +178,35 @@ function ProdcutsTable({currentProducts,setSelectedProducts,selectedProducts}) {
             onChange={() => handleProductSelect(product)} // Her bir ürünün onay kutusunu seçim işleyicisiyle bağla
           />
         </td>
-            <td className="px-6 py-4 whitespace-nowrap">
-             <img src= {product.imgPath} className='w-12' alt="" />
+            <td className="px-6 py-4 whitespace-nowrap" onClick={() => {handleOpenModal(product)}}>
+             <img src= {product.imgPath} className='w-20' alt="" />
             </td>
-            <td className="px-6 py-4 whitespace-nowrap">
+            <Link href={`/products/${product.id}`}>
+             <td className="px-6 py-4 whitespace-nowrap cursor-pointer">
               {product.name}
             </td>
+            </Link>
+           
             <td className="px-6 py-4 whitespace-nowrap text-BaseDark">{product.stok}</td>
             <td className="px-6 py-4 whitespace-nowrap text-BaseDark">{product.stokCount}</td>
             <td className="px-6 py-4 whitespace-nowrap text-BaseDark">₺{product.price}</td>
             <td className="px-6 py-4 whitespace-nowrap text-BaseDark">{product?.category?.subCategory}</td>
             <td className="px-6 py-4 whitespace-nowrap text-BaseDark">{product?.category?.mainCategory}</td>
-            <td className="px-6 py-4 whitespace-nowrap text-BaseDark">{product?.date?.lastUpdateDate}</td>
+            <td className="px-6 py-4 whitespace-nowrap space-x-10 text-BaseDark">
+            <span>{product?.date?.lastUpdateDate}</span>
+            <span>
+            {product?.stokCount <= 0 && 
+              <span className="p-2  rounded-xl text-sm bg-red-400 text-white">Satışa uygun değil</span>
+            }
+            </span>
+            </td>
           </tr>
         ))}
       </tbody>
     </table>
+    
+         { isOpenModal && <ProductModal setIsOpenModal={setIsOpenModal} productImage={productImage} />}
+    
   </div>
   )
 }
