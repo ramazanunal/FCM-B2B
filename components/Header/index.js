@@ -1,5 +1,5 @@
 "use client";
-import React, { useState  } from "react";
+import React, { useState, useEffect } from "react";
 import headerStore from "@/utils/headerStore";
 import Link from "next/link";
 import Image from "next/image";
@@ -7,6 +7,8 @@ import MobileMenu from "../MobileMenu";
 import FixedHeader from "../FixedHeader";
 import { FaSearch } from "react-icons/fa";
 import SearchPanel from "../SearchPanel";
+import { RiShoppingBasketFill } from "react-icons/ri";
+import useCartItemCount from "@/utils/useCartItemCount";
 
 const Header = () => {
   const { header } = headerStore();
@@ -15,6 +17,7 @@ const Header = () => {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [hoveredIcon, setHoveredIcon] = useState(null);
   const [hoveredSubMenu, setHoveredSubMenu] = useState(null);
+  const [cartItemCount, setCartItemCount] = useCartItemCount(0);
 
   const toggleSearchPanel = () => {
     setIsSearchOpen(!isSearchOpen);
@@ -124,13 +127,14 @@ const Header = () => {
                       {mainMenuItem.text}
                     </span>
                   </Link>
+
                   {mainMenuItem.subMenus &&
                     mainMenuItem.subMenus.length > 0 && (
                       <div
-                        className={`absolute top-22 -left-4 z-[1000] w-[215px] bg-LightBlue shadow-[0_5px_20px_rgba(0,0,0,0.3)] py-[15px] rounded-md text-white   ${
+                        className={`absolute top-22 -left-4 z-[1000] w-[215px] bg-LightBlue shadow-[0_5px_20px_rgba(0,0,0,0.3)] py-[15px] rounded-md text-white transition-all duration-1000 ease-in-out transform ${
                           hoveredMainMenu === index
-                            ? "transition-all opacity-100  duration-1000 ease-in-out transform translate-y-0"
-                            : " transition-all opacity-0  duration-1000  translate-y-full ease-in-out transform"
+                            ? "opacity-100 translate-y-0"
+                            : "opacity-0 translate-y-10 pointer-events-none"
                         }`}
                       >
                         <ul>
@@ -165,10 +169,21 @@ const Header = () => {
                   </div>
                 )}
                 <Link
-                  className="flex flex-col items-center justify-center  hover:text-LightBlue hover:scale-110 transition duration-300 ease-in-out transform "
-                  href={mainMenuButtons.href}
+                  className="flex flex-col items-center justify-center  hover:text-LightBlue hover:scale-110 transition duration-300 ease-in-out transform relative"
+                  href="/cart"
                 >
-                  <span>{mainMenuButtons.icon}</span>
+                  <span>
+                    <RiShoppingBasketFill
+                      style={{ width: "25px", height: "25px" }}
+                    />
+                  </span>
+                  {cartItemCount > 0 && (
+                    <div className="absolute -top-5 -right-5 bg-[#ff5b4b] rounded-full px-3 py-1">
+                      <span className="text-white font-extrabold text-[14px] ">
+                        {cartItemCount}
+                      </span>
+                    </div>
+                  )}
                 </Link>
               </div>
             ))}

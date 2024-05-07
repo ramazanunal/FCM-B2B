@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import { MdOutlineArrowDropDown } from "react-icons/md";
 import categoryStore from "@/utils/categoryStore";
 import CategoryProducts from "../CategoryProducts";
+import useCartItemCount from "@/utils/useCartItemCount";
 
 function HomeCategories() {
   const categories = categoryStore((state) => state.categories);
@@ -17,6 +18,7 @@ function HomeCategories() {
   const toggleDropdown = () => {
     setIsDropdownOpen(!isDropdownOpen);
   };
+  const [cartItemCount, setCartItemCount] = useCartItemCount();
 
   return (
     <div className="bg-white w-[1188px] pt-[60px] pb-[80px] ">
@@ -71,7 +73,7 @@ function HomeCategories() {
         </div>
       </div>
       <div className="flex items-center justify-center mt-[70px]">
-      <CategoryProducts selectedCategory={selectedCategory} />
+      <CategoryProducts selectedCategory={selectedCategory} setCartItemCount={setCartItemCount}/>
       </div>
     </div>
   );
