@@ -1,6 +1,7 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import { Formik, Form, Field } from "formik";
+import Image from "next/image";
 
 const ShoppingCart = () => {
   const [cartItems, setCartItems] = useState(
@@ -37,7 +38,8 @@ const ShoppingCart = () => {
   }, []);
 
   return (
-    <div>
+    <div  id="shoppingcart"
+    className="bg-white   w-[1188px] h-screen" >
       <h1>Sepetim</h1>
       {uniqueCartItems.length === 0 ? (
         <p>Sepetiniz boş.</p>
@@ -45,8 +47,11 @@ const ShoppingCart = () => {
         <ul>
           {uniqueCartItems.map((item) => (
             <li key={item.id}>
+                            {/* <Image src={item.imagesrc} alt={item.name} width={600} height={600} />  */}
+
               {item.name} - {item.price}
               <Formik
+              key={JSON.stringify(item)}
                 initialValues={{ quantity: item.quantity }}
                 onSubmit={(values, { resetForm }) => {
                   handleQuantityChange(item.id, values.quantity);
