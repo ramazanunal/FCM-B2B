@@ -1,12 +1,15 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Formik, Form, Field } from "formik";
 import * as Yup from "yup";
 import Image from "next/image";
 import Link from "next/link";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import useCartItemCount from "@/utils/useCartItemCount";
 
 function CategoryProducts({ selectedCategory, setCartItemCount }) {
   const [hoveredIndex, setHoveredIndex] = useState(null);
-  
+
   const calculateDiscountedPrice = (price, discount) => {
     if (discount && discount > 0) {
       const discountedAmount = (price * discount) / 100;
@@ -16,27 +19,51 @@ function CategoryProducts({ selectedCategory, setCartItemCount }) {
   };
 
   const addToCart = (product, quantity) => {
-  // Sepetteki ürünleri kontrol et
-  let cartItems = JSON.parse(localStorage.getItem("cartItems")) || [];
-  const existingItemIndex = cartItems.findIndex(item => item.id === product.id);
+    // Sepetteki ürünleri kontrol et
+    let cartItems = JSON.parse(localStorage.getItem("cartItems")) || [];
+    const existingItemIndex = cartItems.findIndex((item) => item.id === product.id);
 
-  if (existingItemIndex !== -1) {
-    // Ürün sepette zaten var, sadece miktarını artır
-    cartItems[existingItemIndex].quantity += quantity;
-  } else {
-    // Ürün sepette yok, yeni ürün olarak ekle
-    const newItem = { ...product, quantity };
-    cartItems.push(newItem);
-  }
+    if (existingItemIndex !== -1) {
+      // Ürün sepette zaten var, sadece miktarını artır
+      cartItems[existingItemIndex].quantity += quantity;
+    } else {
+      // Ürün sepette yok, yeni ürün olarak ekle
+      const newItem = { ...product, quantity };
+      cartItems.push(newItem);
+    }
 
-  // Local storage güncelle
-  localStorage.setItem("cartItems", JSON.stringify(cartItems));
-  console.log("Sepete eklenen ürün:", product);
+    // Local storage güncelle
+    localStorage.setItem("cartItems", JSON.stringify(cartItems));
+    console.log("Sepete eklenen ürün:", product);
 
-  // Sepet sayacını güncelle
-  const itemCount = cartItems.length;
-  setCartItemCount(itemCount);
-};
+    // Sepet sayacını güncelle
+    const itemCount = cartItems.length;
+    setCartItemCount(itemCount);
+
+    toast.success("Ürün sepete eklendi", {
+      position: "top-right",
+      autoClose: 2000, 
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+    });
+  };
+
+  useEffect(() => {
+    const handleCartChange = () => {
+      const cartItems = JSON.parse(localStorage.getItem("cartItems")) || [];
+      const itemCount = cartItems.length;
+      setCartItemCount(itemCount);
+    };
+
+    window.addEventListener("cartChange", handleCartChange);
+
+    return () => {
+      window.removeEventListener("cartChange", handleCartChange);
+    };
+}, [setCartItemCount]); // setCartItemCount bağımlılık listesine eklendi
 
 
   return (
@@ -135,6 +162,7 @@ function CategoryProducts({ selectedCategory, setCartItemCount }) {
           </div>
         ))}
       </div>
+      <ToastContainer />
     </div>
   );
 }
