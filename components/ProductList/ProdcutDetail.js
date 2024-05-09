@@ -3,7 +3,7 @@ import { SlBasket } from "react-icons/sl";
 
 function ProdcutDetail({ product }) {
   return (
-    <div className="flex justify-center items-center">
+    <div className="flex flex-col justify-center items-center">
       <div className="grid grid-cols-3  px-14 pt-14 bg-gray-50 w-full">
         <div className="col-span-1 ">
           <img src={product.imgPath} alt={product.name} />
@@ -32,11 +32,44 @@ function ProdcutDetail({ product }) {
          </div>
          <div className="flex space-x-3 items-center ml-20 mt-8 mb-10">
                 <input type="number" className="bg-gray-200 border-2 border-gray-400 w-10 rounded" />
-                <div className="px-3 py-[6px] bg-red-500 text-white font-bold rounded-md">
+                <div className="px-3 py-[6px] bg-red-500 text-white font-bold rounded-md cursor-pointer">
                     <SlBasket/>
                 </div>
          </div>
         </div>
+      </div>
+      <div className=" flex flex-col  w-[95%]">
+        <div className="flex">
+            <h2 className="  p-4 bg-gray-700 text-white font-[500] rounded">Detaylar</h2>
+        </div>
+          <div className="text-gray-500 mt-6 w-[80%] pl-5">
+            <span >
+            {product.desc}
+            </span>  
+          </div>
+          <div className="text-gray-700 mt-6 w-[80%] pl-5 text-xl" >
+            <h4>Kitabın Özellikleri</h4>
+          </div>
+          <div className="grid grid-cols-2">
+
+          <div className="pl-10 mt-10 mb-10 space-y-2 font-[600]">
+              <div className="border p-2">Basım Dili </div>
+              <div className="border p-2">Sayfa Sayısı </div>
+              <div className="border p-2">Kapak Türü </div>
+              <div className="border p-2">Kağıt Türü</div>
+              <div className="border p-2">Basım Yeri</div>
+              <div className="border p-2">En / Boy</div>
+          </div>
+          <div className="mt-10 mb-10 space-y-2 text-gray-600 mr-10 ">
+            <div className="border p-2">{product.bookDetail.printingLang}</div>
+            <div className="border p-2">{product.bookDetail.numberOfPages}</div>
+            <div className="border p-2">{product.bookDetail.coverType}</div>
+            <div className="border p-2">{product.bookDetail.paperType}</div>
+            <div className="border p-2">{product.bookDetail.placeOfPublication}</div>
+            <div className="border p-2">{product.bookDetail.width} / {product.bookDetail.height} cm</div>
+          </div>
+          </div>
+          
       </div>
     </div>
   );
