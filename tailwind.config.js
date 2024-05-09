@@ -24,7 +24,8 @@ module.exports = {
         HoverGray: "#d1d5db",
         FooterText: "#c0c7d1",
         CategoriesTitle: "#d8d8d8",
-        ProductsBorder: "#eaeaea"
+        ProductsBorder: "#eaeaea",
+        BasketRed: "#f87171",
       },
       statusColor: {
         BeklemedeBg: "#e5e5e5",
