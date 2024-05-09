@@ -19,7 +19,7 @@ const FixedHeader = ({ header }) => {
   useEffect(() => {
     const handleScroll = () => {
       const scrollPosition = window.scrollY;
-      if (scrollPosition > 210) {
+      if (scrollPosition > 260) {
         setIsVisible(true);
       } else {
         setIsVisible(false);
