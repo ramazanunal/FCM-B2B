@@ -1,9 +1,9 @@
-import ShoppingCart from '@/components/ShoppingCart'
+import CartContainer from '@/containers/Cart'
 import React from 'react'
 
 function CartPage() {
   return (
-    <div><ShoppingCart/></div>
+    <div><CartContainer/></div>
   )
 }
 

@@ -2,6 +2,9 @@ import { Inter } from "next/font/google";
 import "@/styles/globals.css";
 import "react-toastify/dist/ReactToastify.css";
 import Providers from "@/providers";
+import Header from "@/components/Header";
+import Footer from "@/components/Footer";
+import Banner from "@/components/Banner";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -17,7 +20,16 @@ export default function RootLayout({ children, session }) {
         {/* SessionProvider ile sarmallarız ki tüm route lara erişebilelim diye / yukarıda "use client" tanımlamayı unutma! */}
         <Providers session={session}>
           {/* <Navbar links={links}/> */}
-          {children}
+          <div className=" flex flex-col items-center w-full h-screen bg-[url('https://caliskanari.com/wp-content/uploads/2018/10/clothes-2049536750.jpg.webp')] bg-no-repeat bg-[#6bcdec]">
+            <div className="bg-white">
+              <Header />
+            </div>
+            <div className="bg-white">{children}</div>
+            <div className="bg-white  bottom-0">
+              <Footer />
+            </div>
+            <Banner />
+          </div>
         </Providers>
       </body>
     </html>
