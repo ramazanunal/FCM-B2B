@@ -1,10 +1,13 @@
+import Link from "next/link";
 import React from "react";
 import { SlBasket } from "react-icons/sl";
 
 function ProdcutDetail({ product }) {
   return (
     <div className="flex flex-col justify-center items-center">
+  
       <div className="grid grid-cols-3  px-14 pt-14 bg-gray-50 w-full">
+        
         <div className="col-span-1 ">
           <img src={product.imgPath} alt={product.name} />
         </div>
@@ -69,6 +72,16 @@ function ProdcutDetail({ product }) {
             <div className="border p-2">{product.bookDetail.width} / {product.bookDetail.height} cm</div>
           </div>
           </div>
+          <div className="w-full flex justify-end py-5 px-10">
+         
+          <div className="p-2 bg-red-300 rounded-lg text-white ">
+          <Link href="/products">
+          Geri
+          </Link>
+          
+        </div>
+
+        </div>
           
       </div>
     </div>

@@ -71,7 +71,7 @@ function ProductList() {
 
   return (
     <>
-      <div className=" justify-between flex  ">
+      <div className=" justify-between flex flex-wrap md:flex-nowrap space-y-4 md:space-y-0  ">
         <div className="flex gap-2">
           {status.map((status, index) => (
             <React.Fragment key={index}>
@@ -92,16 +92,17 @@ function ProductList() {
             </React.Fragment>
           ))}
         </div>
-        <div className="flex">
-          <form action="" className="flex gap-2">
+        <div className="flex ">
+          <form action="" className="flex gap-2 ">
             <input
               type="text"
-              className="p-2 border rounded-md"
+              className="p-2 border rounded-md "
+              placeholder="Search.."
               value={searchTerm}
               onChange={handleSearch}
             />
             <button
-              className="p-2 border border-LightBlue rounded-md text-black"
+              className="p-2 border text-xs md:text-base  border-LightBlue rounded-md text-black"
               type="submit"
             >
               Ürün Ara

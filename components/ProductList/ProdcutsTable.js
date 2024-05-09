@@ -181,13 +181,15 @@ function ProdcutsTable({currentProducts,setSelectedProducts,selectedProducts}) {
             <td className="px-6 py-4 whitespace-nowrap" onClick={() => {handleOpenModal(product)}}>
              <img src= {product.imgPath} className='w-20' alt="" />
             </td>
-            <Link href={`/products/${product.id}`}>
-             <td className="px-6 py-4 whitespace-nowrap cursor-pointer">
-              {product.name}
-            </td>
-            </Link>
            
-            <td className="px-6 py-4 whitespace-nowrap text-BaseDark">{product.stok}</td>
+             <td className="px-6 py-4 whitespace-nowrap  border">
+             <Link href={`/products/${product.id}`} className='cursor-pointer hover:text-[#0284c7]  '>
+              {product.name}
+              </Link>
+            </td>
+            
+           
+            <td className="px-6 py-4 whitespace-nowrap text-BaseDark border">{product.stok}</td>
             <td className="px-6 py-4 whitespace-nowrap text-BaseDark">{product.stokCount}</td>
             <td className="px-6 py-4 whitespace-nowrap text-BaseDark">₺{product.price}</td>
             <td className="px-6 py-4 whitespace-nowrap text-BaseDark">{product?.category?.subCategory}</td>

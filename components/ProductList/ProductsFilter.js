@@ -109,16 +109,16 @@ function ProductsFilter({
 
   return (
     <>
-      <div className="flex justify-between items-center py-3">
-        <div className="flex gap-4 ">
-          <div className="flex gap-2">
+      <div className="flex flex-wrap md:flex-nowrap justify-between items-center py-3">
+        <div className="flex gap-2 flex-wrap md:flex-nowrap items-center">
+          <div className="flex  gap-2 ">
             <select
-            className={`p-2 border cursor-pointer rounded-md text-CustomGray w-36 shadow-2xl  ${selectedCategory !== "Ders Seçin" && "bg-NavyBlue text-white font-semibold"}`}
+            className={`p-2 border cursor-pointer rounded-md text-CustomGray md:w-36 w-full  shadow-2xl `}
               name=""
               id=""
               onChange={handleAllFilter}
             >
-              <option className="" hidden>
+              <option  hidden >
                 Toplu Islemler
               </option>
               <option className="">Toplu Islemler</option>
@@ -126,7 +126,7 @@ function ProductsFilter({
               <option value={false}>Aktif Olmayan Ürünler</option>
             </select>
             <select
-              className="p-2 cursor-pointer shadow-2xl border rounded-md text-CustomGray w-32"
+              className="p-2 cursor-pointer shadow-2xl border rounded-md text-CustomGray md:w-32 w-full "
               name=""
               id=""
               onChange={handleIsActive}
@@ -140,9 +140,9 @@ function ProductsFilter({
             </select>
           </div>
 
-          <div className="flex gap-2 items-center  text-sm">
+          <div className="flex flex-wrap md:flex-nowrap gap-2 items-center  text-sm">
             <select
-              className={`p-2 cursor-pointer shadow-2xl border rounded-md text-CustomGray w-30 ${selectedCategory !== "Ders Seçin" && "bg-NavyBlue text-white font-semibold"}`}
+              className={`p-2 cursor-pointer shadow-2xl border rounded-md text-CustomGray md:w-30  w-full ${selectedCategory !== "Ders Seçin" && "bg-NavyBlue text-white font-semibold"}`}
               name=""
               id=""
               onChange={handleCategory}
@@ -161,7 +161,7 @@ function ProductsFilter({
             </select>
            
             <select
-            className={`p-2 cursor-pointer shadow-2xl border rounded-md text-CustomGray w-44 ${selectedProductType !== "Ürün tipine göre filtreleme" && "bg-NavyBlue text-white font-semibold"}`}
+            className={`p-2  cursor-pointer shadow-2xl border rounded-md text-CustomGray md:w-44 w-full  ${selectedProductType !== "Ürün tipine göre filtreleme" && "bg-NavyBlue text-white font-semibold"}`}
               name=""
               id=""
               onChange={handleProductType}
@@ -176,7 +176,7 @@ function ProductsFilter({
               ))}
             </select>
             <select
-            className={`p-2 cursor-pointer shadow-2xl border rounded-md text-CustomGray w-52 ${selectedStock !== "Stok durumuna göre filtreleme" && "bg-NavyBlue text-white font-semibold"}`}
+            className={`p-2 cursor-pointer shadow-2xl border rounded-md text-CustomGray md:w-52 w-full  ${selectedStock !== "Stok durumuna göre filtreleme" && "bg-NavyBlue text-white font-semibold"}`}
               name=""
               id=""
               onChange={handleStock}
@@ -188,7 +188,7 @@ function ProductsFilter({
               <option>Stokta Olmayanlar</option>
             </select>
          <button
-              className={`p-1 cursor-pointer font-[500] border text-NavyBlue  rounded-md  
+              className={`p-1 cursor-pointer font-[500] border text-NavyBlue  rounded-md  mt-2 mb-3 
                           ${anyFilterSelected ?"border-NavyBlue hover:bg-NavyBlue hover:text-white" : "text-NavyBlue border-gray-400 cursor-not-allowed"}
               `}
               onClick={handleClearFilters}
@@ -201,7 +201,7 @@ function ProductsFilter({
           </div>
         </div>
         <div className="flex items-center gap-2 text-DarkBlue ">
-          <span className="text-CustomGray">
+          <span className="text-CustomGray md:text-base text-xs">
             {filteredProducts.length} Kitap
           </span>
           <div
@@ -209,7 +209,7 @@ function ProductsFilter({
             currentPage === 1
               ? "cursor-not-allowed text-gray-300 "
               : "cursor-pointer hover:bg-gray-200 duration-300 hover:border-NavyBlue hover:rounded-xl"
-          } border-2 rounded-sm text-[18px] p-3 `}
+          } border-2 rounded-sm text-[18px] md:p-3 p-1 `}
             onClick={() => paginate(1)}
           >
             <MdKeyboardDoubleArrowLeft />
@@ -219,7 +219,7 @@ function ProductsFilter({
               currentPage === 1
                 ? "cursor-not-allowed text-gray-300 "
                 : "cursor-pointer hover:bg-gray-200 duration-300 hover:border-NavyBlue hover:rounded-xl"
-            } border-2 rounded-sm text-[18px] p-3`}
+            } border-2 rounded-sm text-[18px] md:p-3 p-1`}
             onClick={() => {
               if (currentPage !== 1) {
                 paginate(currentPage - 1);
@@ -229,7 +229,7 @@ function ProductsFilter({
             <MdKeyboardArrowLeft />
           </div>
 
-          <span className="border  px-4 py-2 rounded-full bg-NavyBlue text-white">
+          <span className="border  md:px-4 md:py-2 py-1 px-3 rounded-full bg-NavyBlue text-white">
             {currentPage}
           </span>
           <span>/ {Math.ceil(filteredProducts.length / productsPerPage)}</span>
@@ -238,7 +238,7 @@ function ProductsFilter({
               currentPage * productsPerPage >= filteredProducts.length
                 ? "cursor-not-allowed text-gray-300"
                 : "cursor-pointer hover:bg-gray-200 duration-300 hover:border-NavyBlue hover:rounded-xl "
-            } rounded-sm text-[18px] p-3 border-2`}
+            } rounded-sm text-[18px] md:p-3 p-1 border-2`}
             onClick={() => {
               if (currentPage * productsPerPage < filteredProducts.length) {
                 paginate(currentPage + 1);
@@ -252,7 +252,7 @@ function ProductsFilter({
             currentPage * productsPerPage >= filteredProducts.length
               ? "cursor-not-allowed text-gray-300"
               : "cursor-pointer hover:bg-gray-200 duration-300 hover:border-NavyBlue hover:rounded-xl"
-          } rounded-sm text-[18px] p-3 border-2`}
+          } rounded-sm text-[18px] md:p-3 p-1 border-2`}
             onClick={() =>
               paginate(Math.ceil(filteredProducts.length / productsPerPage))
             }
