@@ -62,10 +62,10 @@ function SearchPanel({ toggleSearchPanel }) {
         onSubmit={handleSubmit}
       >
         {({ errors, touched }) => (
-          <div className="bg-white w-[400px]  flex items-center justify-center flex-col">
+          <div className="bg-white w-[310px] sm:w-[400px]  flex items-center justify-center flex-col">
             <Form
               id="ajax-search"
-              className="container mx-auto px-[30px] md:px-[15px] "
+              className="container mx-auto px-3 sm:px-[30px] md:px-[15px] "
             >
               <div>
                 <div className="relative text-[10px] uppercase text-[#555555] pt-10 flex items-center ">
@@ -82,7 +82,7 @@ function SearchPanel({ toggleSearchPanel }) {
                   <Field
                     name="searchinput"
                     placeholder="Search products..."
-                    className={`form-control text-[15px] w-[310px] flex items-start font-bold lowercase outline-none ${
+                    className={`form-control text-[15px] w-[250px] sm:w-[310px] flex items-start font-bold lowercase outline-none ${
                       errors.searchinput && touched.searchinput
                         ? "is-invalid"
                         : ""
@@ -105,7 +105,7 @@ function SearchPanel({ toggleSearchPanel }) {
       </Formik>{" "}
       <div>
         {searchResults.length > 0 && (
-          <div className="w-[400px] mt-4 overflow-y-auto max-h-80 ">
+          <div className="w-[310px] sm:w-[400px] mt-4 overflow-y-auto max-h-80 ">
             <ul>
               {searchResults.map((product) => (
                 <li

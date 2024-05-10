@@ -164,7 +164,7 @@ const Header = () => {
                   <FaSearch className="w-[20px] h-[20px] hover:text-LightBlue hover:scale-110 transition duration-300 ease-in-out transform mr-2 sm:mr-[36px]" />
                 </button>
                 {isSearchOpen && (
-                  <div className="absolute top-40 rounded-xl right-24 z-[1000]	bg-white">
+                  <div className="absolute top-28 md:top-32 lg:top-40 rounded-xl  right-0 md:right-24 z-[1000]	bg-white">
                     <SearchPanel toggleSearchPanel={toggleSearchPanel} />
                   </div>
                 )}
