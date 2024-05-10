@@ -13,7 +13,7 @@ function Footer() {
           <div className="order-2 sm:order-1 text-FooterText text-[14px] py-[3px] mb-[20px] sm:mb-0 mt-[20px] sm:mt-0">
             {text[0].name}
           </div>
-          <div className="order-1 sm:order-2 rounded-full bg-CustomGray w-[90px] h-[90px] flex items-center justify-center hover:bg-LightBlue transition duration-300 ease-in-out transform px-[15px]">
+          <div className="order-1 sm:order-2 rounded-full bg-CustomGray w-[90px] h-[90px] flex items-center justify-center hover:bg-LightBlue transition duration-500 ease-in-out transform px-[15px]">
             <Image
               src={footerLogo[0].logosrc}
               width={70}

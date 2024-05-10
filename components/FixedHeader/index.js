@@ -105,7 +105,7 @@ const FixedHeader = ({ header }) => {
               className="flex flex-row items-center justify-center"
             >
               <button onClick={toggleSearchPanel}>
-                <FaSearch className="w-[20px] h-[20px] text-CustomGray hover:text-LightBlue hover:scale-110 transition duration-300 ease-in-out transform mr-[36px]" />
+                <FaSearch className="w-[20px] h-[20px] text-CustomGray hover:text-LightBlue hover:scale-110 transition duration-300 ease-in-out transform mr-2 sm:mr-[36px]" />
               </button>
               <Link
                 href={button.href}

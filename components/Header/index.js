@@ -161,7 +161,7 @@ const Header = () => {
                 className="flex flex-row items-center"
               >
                 <button className="relative" onClick={toggleSearchPanel}>
-                  <FaSearch className="w-[20px] h-[20px] hover:text-LightBlue hover:scale-110 transition duration-300 ease-in-out transform mr-[36px]" />
+                  <FaSearch className="w-[20px] h-[20px] hover:text-LightBlue hover:scale-110 transition duration-300 ease-in-out transform mr-2 sm:mr-[36px]" />
                 </button>
                 {isSearchOpen && (
                   <div className="absolute top-40 rounded-xl right-24 z-[1000]	bg-white">
