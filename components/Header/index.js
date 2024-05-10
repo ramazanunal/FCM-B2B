@@ -17,7 +17,7 @@ const Header = () => {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [hoveredIcon, setHoveredIcon] = useState(null);
   const [hoveredSubMenu, setHoveredSubMenu] = useState(null);
-  const [cartItemCount, setCartItemCount] = useCartItemCount(0);
+  const cartItemCount = useCartItemCount(); 
 
   const toggleSearchPanel = () => {
     setIsSearchOpen(!isSearchOpen);

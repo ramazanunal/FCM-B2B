@@ -1,16 +1,25 @@
-"use client"
 import { useState, useEffect } from "react";
 
 const useCartItemCount = () => {
     const [cartItemCount, setCartItemCount] = useState(0);
 
-    useEffect(() => {
-        const cartItems = JSON.parse(localStorage.getItem("cartItems")) || [];
-        const itemCount = cartItems.length;
+    const updateCartItemCount = () => {
+        const itemCount = JSON.parse(localStorage.getItem("cartItems"))?.length || 0;
         setCartItemCount(itemCount);
-    }, []); // Boş bağımlılık dizisi, bu etkinin yalnızca bir kez, bileşen bağlandığında çalışmasını sağlar
-  
-    return [cartItemCount, setCartItemCount]; // State'i ve state'i güncellemek için fonksiyonu döndür
+    };
+
+    useEffect(() => {
+        // İlk değeri ayarla
+        updateCartItemCount();
+
+        // Her 1 saniyede bir güncelleme yap
+        const intervalId = setInterval(updateCartItemCount, 1000);
+
+        // Temizlik yap
+        return () => clearInterval(intervalId);
+    }, []);
+
+    return cartItemCount;
 };
 
 export default useCartItemCount;
