@@ -7,7 +7,6 @@ import Link from "next/link";
 import categoryStore from "@/utils/categoryStore";
 import OrderInformation from "../OrderInformation";
 
-
 const ShoppingCart = () => {
   const [cartItems, setCartItems] = useState(
     JSON.parse(localStorage.getItem("cartItems")) || []
@@ -68,10 +67,26 @@ const ShoppingCart = () => {
     return product ? product.stock : 0; // Eğer ürün bulunamazsa 0 döndür
   };
 
+  //genel toplam
+  const totalPrice = uniqueCartItems.reduce((total, item) => {
+    const itemPrice = parseFloat(item.price.replace(",", "."));
+    return total + itemPrice * item.quantity;
+  }, 0);
+
+  //iskonto tutarı
+  const totalDiscount = uniqueCartItems.reduce((total, item) => {
+    const itemPrice = parseFloat(item.price.replace(",", "."));
+    const discountedPrice = calculateDiscountedPrice(itemPrice, item.discount);
+    return total + (itemPrice - discountedPrice) * item.quantity;
+  }, 0);
+
+  //sepet tutarı
+  const totalAmountAfterDiscount = totalPrice - totalDiscount;
+
   return (
     <div
       id="shoppingcart"
-      className="bg-white flex items-center flex-col py-[60px] w-[1188px] "
+      className="bg-white flex items-center flex-col py-[35px] sm:py-[60px] w-screen lg:w-[1188px] "
     >
       <div className="flex items-center justify-center text-[35px] md:text-[48px] text-CustomGray leading-[41px] font-bold italic mb-[45px]">
         Sepet
@@ -92,18 +107,18 @@ const ShoppingCart = () => {
         </div>
       ) : (
         <div>
-          <table className="border border-slate-100 px-5 py-3">
+          <table className="border border-slate-100 px-5 py-3 text-[12px] md:text-[14px] lg:text-[16px] mx-auto sm:mx-0">
             <thead className="border border-slate-100 px-5 py-3">
               <tr>
                 <th className="border border-slate-100 px-5 py-3  ">
                   <p className="flex jutify-start">Ürün Adı</p>
                 </th>
-                <th className="border border-slate-100 px-5 py-3">Birim</th>
-                <th className="border border-slate-100 px-5 py-3">İsk.</th>
+                <th className="border border-slate-100 px-5 py-3 hidden lg:table-cell">Birim</th>
+                <th className="border border-slate-100 px-5 py-3 hidden lg:table-cell">İsk.</th>
                 <th className="border border-slate-100 px-5 py-3">Net</th>
-                <th className="border border-slate-100 px-5 py-3 ">Stok</th>
+                <th className="border border-slate-100 px-5 py-3 hidden lg:table-cell">Stok</th>
                 <th className="border border-slate-100 px-5 py-3">
-                  <p className="flex jutify-start">Adet</p>
+                  <p className="flex justify-center sm:jutify-start">Adet</p>
                 </th>
                 <th className="border border-slate-100 px-5 py-3"></th>
               </tr>
@@ -111,28 +126,28 @@ const ShoppingCart = () => {
             <tbody>
               {uniqueCartItems.map((item) => (
                 <tr key={item.id}>
-                  <td className="border border-slate-100 px-5 py-3 ">
-                    <div className="flex flex-row items-center ">
+                  <td className="border border-slate-100 px-2 sm:px-5 py-3 ">
+                    <div className="flex flex-col sm:flex-row items-center text-center">
                       <Image
                         src={item.imagesrc}
                         alt={item.name}
                         width={60}
                         height={60}
                       />
-                      <span>{item.name}</span>
+                       <p className="w-[70px] sm:w-full">{item.name}</p>
                     </div>
                   </td>
-                  <td className="border border-slate-100 px-5 py-3  ">
+                  <td className="border border-slate-100 px-5 py-3  hidden lg:table-cell">
                     <span className="flex items-center justify-center">
-                      {item.price} TL{" "}
+                      {item.price} TL
                     </span>
                   </td>
-                  <td className="border border-slate-100 px-5 py-3 ">
+                  <td className="border border-slate-100 px-5 py-3 hidden lg:table-cell">
                     <span className="flex items-center justify-center">
                       {item.discount ? `%${item.discount},00` : "%0"}
                     </span>
                   </td>
-                  <td className="border border-slate-100 px-5 py-3 ">
+                  <td className="border border-slate-100 px-2 sm:px-5 py-3 ">
                     <span className="flex items-center justify-center">
                       {calculateDiscountedPrice(
                         item.price.replace(",", "."),
@@ -141,12 +156,12 @@ const ShoppingCart = () => {
                       TL
                     </span>
                   </td>
-                  <td className="border border-slate-100 px-5 py-3 bg-BasketRed">
+                  <td className="border border-slate-100 px-5 py-3 bg-BasketRed hidden lg:table-cell">
                     <span className="flex items-center justify-center ">
                       {getProductStock(item.id)}
                     </span>
                   </td>
-                  <td className="border border-slate-100 px-5 py-3 bg-BasketRed">
+                  <td className="border border-slate-100 px-2 sm:px-5 py-3 sm:bg-BasketRed">
                     <span className="flex items-center justify-center">
                       <Formik
                         key={JSON.stringify(item)}
@@ -157,7 +172,7 @@ const ShoppingCart = () => {
                         }}
                       >
                         {({ values, handleChange }) => (
-                          <Form className="flex flex-row items-center ">
+                          <Form className="flex flex-col sm:flex-row gap-2 sm:gap-0 items-center ">
                             <Field
                               type="number"
                               name="quantity"
@@ -167,7 +182,7 @@ const ShoppingCart = () => {
                               className="text-center w-16 h-10 border rounded-md border-slate-200 hover:border-CustomGray transition duration-500 ease-in-out transform outline-none"
                             />
                             <button
-                              className="flex items-center justify-center bg-slate-200 font-semibold	py-2 px-4 rounded-md ml-[24px] hover:scale-105 transition-all duration-500 transform ease-in-out hover:bg-slate-300"
+                              className="flex items-center justify-center bg-slate-200 font-semibold	py-2 px-4 rounded-md sm:ml-[24px] hover:scale-105 transition-all duration-500 transform ease-in-out hover:bg-slate-300"
                               type="submit"
                             >
                               Güncelle
@@ -178,7 +193,7 @@ const ShoppingCart = () => {
                     </span>
                   </td>
 
-                  <td className="border border-slate-100 px-5 py-3">
+                  <td className="border border-slate-100 px-2 sm:px-5 py-3">
                     <button
                       className="flex items-center justify-center bg-BasketRed text-white font-semibold	p-2 rounded-md hover:scale-105 transition-all duration-500 transform ease-in-out hover:bg-CustomRed"
                       onClick={() => handleItemDelete(item.id)}
@@ -190,7 +205,68 @@ const ShoppingCart = () => {
               ))}
             </tbody>
           </table>
-          <OrderInformation/>
+          <div><OrderInformation /></div>
+          <div className="mx:12 sm:mx-0">
+            <div className="flex justify-center sm:justify-end my-12 text-[14px]">
+              <div className="flex flex-col gap-3">
+                <div className="flex flex-row gap-12">
+                  <p className="w-[100px] flex justify-end">
+                    <span className="bg-BasketRed text-white">
+                      Genel Tutar:
+                    </span>
+                  </p>
+                  <p className="w-[100px] flex justify-end">
+                    <span className="bg-BasketRed text-white">
+                      {totalPrice.toFixed(2)} TL
+                    </span>
+                  </p>
+                </div>
+                <div className="flex flex-row gap-12">
+                  <p className="w-[100px] flex justify-end">
+                    <span className="bg-BasketRed text-white">
+                      İskonto Tutarı:
+                    </span>
+                  </p>
+                  <p className="w-[100px] flex justify-end">
+                    <span className="bg-BasketRed text-white">
+                      {totalDiscount.toFixed(2)} TL
+                    </span>
+                  </p>
+                </div>
+                <div className="flex flex-row gap-12">
+                  <p className="w-[100px] flex justify-end">
+                    <span className="bg-BasketRed text-white">KDV Tutarı:</span>
+                  </p>
+                  <p className="w-[100px] flex justify-end">
+                    <span className="bg-BasketRed text-white">0,00 TL</span>
+                  </p>
+                </div>
+                <div className="flex flex-row gap-12">
+                  <p className="w-[100px] flex justify-end">
+                    <span className="bg-BasketRed text-white">
+                      Sepet Tutarı:
+                    </span>
+                  </p>
+                  <p className="w-[100px] flex justify-end">
+                    <span className="bg-BasketRed text-white">
+                      {totalAmountAfterDiscount.toFixed(2)} TL
+                    </span>
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div className="flex flex-col sm:flex-row sm:justify-end gap-4 mx-12 sm:mx-0">
+              <button className="bg-blue-900 text-white font-semibold p-2 rounded-md hover:scale-105 transition-all duration-500 transform ease-in-out">
+                Cari Hesap ile Sipariş Ver
+              </button>
+              <button className="bg-blue-900 text-white font-semibold p-2 rounded-md hover:scale-105 transition-all duration-500 transform ease-in-out">
+                Havale ile Sipariş Ver
+              </button>
+              <button className="bg-blue-900 text-white font-semibold p-2 rounded-md hover:scale-105 transition-all duration-500 transform ease-in-out">
+                Kredi Kartı ile Sipariş Ver
+              </button>
+            </div>
+          </div>
         </div>
       )}
     </div>
