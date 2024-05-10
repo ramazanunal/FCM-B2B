@@ -6,24 +6,41 @@ import { TbShoppingCartX } from "react-icons/tb";
 import Link from "next/link";
 import categoryStore from "@/utils/categoryStore";
 import OrderInformation from "../OrderInformation";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const ShoppingCart = () => {
   const [cartItems, setCartItems] = useState(
     JSON.parse(localStorage.getItem("cartItems")) || []
   );
+  const [updating, setUpdating] = useState(false);
+  const [updatingItems, setUpdatingItems] = useState({});
 
   const handleQuantityChange = (itemId, newQuantity) => {
-    // Ürün miktarını güncelleme
-    const updatedCartItems = cartItems.map((item) => {
-      if (item.id === itemId) {
-        return { ...item, quantity: newQuantity };
-      }
-      return item;
-    });
+    setUpdating(true); // Güncelleme başladığında true
+    setUpdatingItems({ ...updatingItems, [itemId]: true });
 
-    // Güncellenmiş sepeti state'e ve Local Storage'a kaydetme
-    setCartItems(updatedCartItems);
-    localStorage.setItem("cartItems", JSON.stringify(updatedCartItems));
+    setTimeout(() => {
+      setUpdating(false); // 5 saniye sonra false
+      setUpdatingItems({ ...updatingItems, [itemId]: false });
+      // Ürün miktarını güncelleme işlemi
+      const updatedCartItems = cartItems.map((item) => {
+        if (item.id === itemId) {
+          return { ...item, quantity: newQuantity };
+        }
+        return item;
+      });
+
+      // Güncellenmiş sepeti state'e ve Local Storage'a kaydetme
+      setCartItems(updatedCartItems);
+      localStorage.setItem("cartItems", JSON.stringify(updatedCartItems));
+
+      if (updatedCartItems) {
+        toast.success("Ürün adediniz başarıyla güncellendi");
+      } else {
+        toast.error("Ürün adediniz güncellenemedi");
+      }
+    }, 5000); // 5 saniye
   };
 
   const handleItemDelete = (itemId) => {
@@ -113,10 +130,16 @@ const ShoppingCart = () => {
                 <th className="border border-slate-100 px-5 py-3  ">
                   <p className="flex jutify-start">Ürün Adı</p>
                 </th>
-                <th className="border border-slate-100 px-5 py-3 hidden lg:table-cell">Birim</th>
-                <th className="border border-slate-100 px-5 py-3 hidden lg:table-cell">İsk.</th>
+                <th className="border border-slate-100 px-5 py-3 hidden lg:table-cell">
+                  Birim
+                </th>
+                <th className="border border-slate-100 px-5 py-3 hidden lg:table-cell">
+                  İsk.
+                </th>
                 <th className="border border-slate-100 px-5 py-3">Net</th>
-                <th className="border border-slate-100 px-5 py-3 hidden lg:table-cell">Stok</th>
+                <th className="border border-slate-100 px-5 py-3 hidden lg:table-cell">
+                  Stok
+                </th>
                 <th className="border border-slate-100 px-5 py-3">
                   <p className="flex justify-center sm:jutify-start">Adet</p>
                 </th>
@@ -134,7 +157,7 @@ const ShoppingCart = () => {
                         width={60}
                         height={60}
                       />
-                       <p className="w-[70px] sm:w-full">{item.name}</p>
+                      <p className="w-[70px] sm:w-full">{item.name}</p>
                     </div>
                   </td>
                   <td className="border border-slate-100 px-5 py-3  hidden lg:table-cell">
@@ -182,10 +205,19 @@ const ShoppingCart = () => {
                               className="text-center w-16 h-10 border rounded-md border-slate-200 hover:border-CustomGray transition duration-500 ease-in-out transform outline-none"
                             />
                             <button
-                              className="flex items-center justify-center bg-slate-200 font-semibold	py-2 px-4 rounded-md sm:ml-[24px] hover:scale-105 transition-all duration-500 transform ease-in-out hover:bg-slate-300"
+                              className="flex items-center justify-center bg-slate-200 font-semibold py-2 px-4 rounded-md sm:ml-[24px] hover:scale-105 transition-all duration-500 transform ease-in-out hover:bg-slate-300 w-[101px] h-[40px]"
                               type="submit"
+                              disabled={updating} // Güncelleme sırasında butonu devre dışı bırak
                             >
-                              Güncelle
+                              {updatingItems[item.id] ? (
+                                <div className="flex flex-row items-center justify-center gap-1 ">
+                                  <div className="h-2 w-2 rounded-full animate-pulse bg-LightBlue"></div>
+                                  <div className="h-2 w-2 rounded-full animate-pulse bg-LightBlue"></div>
+                                  <div className="h-2 w-2 rounded-full animate-pulse bg-LightBlue"></div>
+                                </div>
+                              ) : (
+                                "Güncelle"
+                              )}
                             </button>
                           </Form>
                         )}
@@ -205,7 +237,9 @@ const ShoppingCart = () => {
               ))}
             </tbody>
           </table>
-          <div><OrderInformation /></div>
+          <div>
+            <OrderInformation />
+          </div>
           <div className="mx:12 sm:mx-0">
             <div className="flex justify-center sm:justify-end my-12 text-[14px]">
               <div className="flex flex-col gap-3">
@@ -269,6 +303,7 @@ const ShoppingCart = () => {
           </div>
         </div>
       )}
+      <ToastContainer />
     </div>
   );
 };
