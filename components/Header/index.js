@@ -190,7 +190,7 @@ const Header = () => {
           </div>
         </div>
       </div>
-      <FixedHeader header={header} />
+      <FixedHeader header={header} cartItemCount={cartItemCount} />
     </div>
   );
 };
