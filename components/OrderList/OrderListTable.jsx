@@ -37,8 +37,8 @@ const OrderListTable = ({ orders }) => {
   return (
     <div className="overflow-x-auto border">
       <table className="min-w-full divide-y divide-gray-200">
-        <thead className="bg-white">
-          <tr className="text-LightBlue">
+        <thead className="bg-NavyBlue text-white ">
+          <tr>
             <th className="px-6 py-3  text-left text-xs font-medium">
               <input
                 type="checkbox"

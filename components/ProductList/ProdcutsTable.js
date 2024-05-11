@@ -182,14 +182,14 @@ function ProdcutsTable({currentProducts,setSelectedProducts,selectedProducts}) {
              <img src= {product.imgPath} className='w-20' alt="" />
             </td>
            
-             <td className="px-6 py-4 whitespace-nowrap  border">
+             <td className="px-6 py-4 whitespace-nowrap  ">
              <Link href={`/products/${product.id}`} className='cursor-pointer hover:text-[#0284c7]  '>
               {product.name}
               </Link>
             </td>
             
            
-            <td className="px-6 py-4 whitespace-nowrap text-BaseDark border">{product.stok}</td>
+            <td className="px-6 py-4 whitespace-nowrap text-BaseDark ">{product.stok}</td>
             <td className="px-6 py-4 whitespace-nowrap text-BaseDark">{product.stokCount}</td>
             <td className="px-6 py-4 whitespace-nowrap text-BaseDark">₺{product.price}</td>
             <td className="px-6 py-4 whitespace-nowrap text-BaseDark">{product?.category?.subCategory}</td>
