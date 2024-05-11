@@ -117,8 +117,8 @@ const FixedHeader = ({ header, cartItemCount }) => {
                   />
                 </span>
                 {cartItemCount > 0 && (
-                  <div className="absolute -top-5 -right-5 bg-[#ff5b4b] rounded-full px-3 py-1">
-                    <span className="text-white font-extrabold text-[14px] ">
+                  <div className="absolute -top-3 -right-4 bg-[#ff5b4b] rounded-full px-[5px]  flex items-center justify-center">
+                  <span className="text-white font-extrabold text-[16px] w-[14px] h-[24px] flex items-center justify-center">
                       {cartItemCount}
                     </span>
                   </div>
@@ -168,8 +168,8 @@ const FixedHeader = ({ header, cartItemCount }) => {
                   />
                 </span>
                 {cartItemCount > 0 && (
-                  <div className="absolute -top-5 -right-5 bg-[#ff5b4b] rounded-full px-3 py-1">
-                    <span className="text-white font-extrabold text-[14px] ">
+                 <div className="absolute -top-3 -right-4 bg-[#ff5b4b] rounded-full px-[5px]  flex items-center justify-center">
+                 <span className="text-white font-extrabold text-[16px] w-[14px] h-[24px] flex items-center justify-center">
                       {cartItemCount}
                     </span>
                   </div>
