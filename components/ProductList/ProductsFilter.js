@@ -20,6 +20,7 @@ function ProductsFilter({
   const [selectedStock, setSelectedStock] = useState(
     "Stok durumuna göre filtreleme"
   );
+  const [selectedAll, setSelectedAll] = useState("Toplu Islemler")
   const [anyFilterSelected, setAnyFilterSelected] = useState(false);
   //Filtre temizleme fonksiyonu
   const handleClearFilters = () => {
@@ -32,7 +33,8 @@ function ProductsFilter({
   // Toplu filtreleme başlangıç
   useEffect(() => {
     handleFilters();
-  }, [selectedCategory, selectedProductType, selectedStock]);
+    
+  }, [selectedCategory, selectedProductType, selectedStock,selectedAll]);
 
   const handleCategory = (e) => {
     setSelectedCategory(e.target.value);
@@ -51,6 +53,12 @@ function ProductsFilter({
     setAnyFilterSelected(true)
     handleFilters();
   };
+  const handleAllFilter = (e) => {
+    setSelectedAll(e.target.value);
+    setAnyFilterSelected(true)
+    handleFilters()
+      
+    };
   const handleFilters = () => {
     let filteredProducts = [...products];
     if (selectedCategory !== "Ders Seçin") {
@@ -74,23 +82,21 @@ function ProductsFilter({
         );
       }
     }
+    if (selectedAll === "Toplu Islemler") {
+      setFilteredProducts(products);
+    } else {
+       filteredProducts = products.filter(
+        (item) => item.active.toString() === selectedAll
+      );
+      
+    }
     setFilteredProducts(filteredProducts);
   };
 
   // Toplu filtreleme bitiş
 
-  //toplu işlemlere göre filtreleme
-  const handleAllFilter = (e) => {
-    const selectIsActive = e.target.value;
-    if (selectIsActive === "Toplu Islemler") {
-      setFilteredProducts(products);
-    } else {
-      const filteredActiveProduct = products.filter(
-        (item) => item.active.toString() === selectIsActive
-      );
-      setFilteredProducts(filteredActiveProduct);
-    }
-  };
+
+ 
 
   //aktif pasif yapma
   const handleIsActive = (e) => {
@@ -113,10 +119,12 @@ function ProductsFilter({
         <div className="flex gap-2 flex-wrap md:flex-nowrap items-center">
           <div className="flex  gap-2 ">
             <select
-            className={`p-2 border cursor-pointer rounded-md text-CustomGray md:w-36 w-full  shadow-2xl `}
+            className={`p-2 cursor-pointer shadow-2xl border rounded-md text-CustomGray md:w-36  w-full ${selectedAll !== "Toplu Islemler" && "bg-NavyBlue text-white font-semibold"}`}
+
               name=""
               id=""
               onChange={handleAllFilter}
+              value={selectedAll}
             >
               <option  hidden >
                 Toplu Islemler
@@ -176,7 +184,7 @@ function ProductsFilter({
               ))}
             </select>
             <select
-            className={`p-2 cursor-pointer shadow-2xl border rounded-md text-CustomGray md:w-52 w-full  ${selectedStock !== "Stok durumuna göre filtreleme" && "bg-NavyBlue text-white font-semibold"}`}
+            className={`p-2 cursor-pointer shadow-2xl border rounded-md text-CustomGray md:w-48 w-full  ${selectedStock !== "Stok durumuna göre filtreleme" && "bg-NavyBlue text-white font-semibold"}`}
               name=""
               id=""
               onChange={handleStock}
@@ -188,7 +196,7 @@ function ProductsFilter({
               <option>Stokta Olmayanlar</option>
             </select>
          <button
-              className={`p-1 cursor-pointer font-[500] border text-NavyBlue  rounded-md  mt-2 mb-3 
+              className={`p-1 cursor-pointer font-[500] border text-NavyBlue  rounded-md  mt-2 mb-3 text-sm
                           ${anyFilterSelected ?"border-NavyBlue hover:bg-NavyBlue hover:text-white" : "text-NavyBlue border-gray-400 cursor-not-allowed"}
               `}
               onClick={handleClearFilters}
