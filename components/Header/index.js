@@ -143,7 +143,7 @@ const Header = () => {
                               key={subMenu.id}
                               className="mx-[20px] py-[11px] text-[15px] font-bold leading-[14px] cursor-pointer hover:text-HoverGray transition duration-300 ease-in-out transform text-left"
                             >
-                              <Link href={subMenu.href}>{subMenu.text}</Link>
+                              <Link href={`/urun-kategori/${subMenu.id}`}>{subMenu.text}</Link>
                             </li>
                           ))}
                         </ul>
