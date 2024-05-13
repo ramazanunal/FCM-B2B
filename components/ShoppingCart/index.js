@@ -10,12 +10,18 @@ import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 const ShoppingCart = () => {
+  
   const [cartItems, setCartItems] = useState(
     JSON.parse(localStorage.getItem("cartItems")) || []
   );
   const [updating, setUpdating] = useState(false);
   const [updatingItems, setUpdatingItems] = useState({});
-
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const cartItemsFromStorage = JSON.parse(localStorage.getItem("cartItems")) || [];
+      setCartItems(cartItemsFromStorage);
+    }
+  }, []);
   const handleQuantityChange = (itemId, newQuantity) => {
     setUpdating(true); // Güncelleme başladığında true
     setUpdatingItems({ ...updatingItems, [itemId]: true });
