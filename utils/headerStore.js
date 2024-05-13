@@ -1,4 +1,4 @@
-import create from "zustand";
+import { create } from 'zustand'
 import { GrEdit } from "react-icons/gr";
 import { RiBook3Line } from "react-icons/ri";
 import { LuBaby } from "react-icons/lu";

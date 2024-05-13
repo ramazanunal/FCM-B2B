@@ -1,4 +1,4 @@
-import create from 'zustand';
+import { create } from 'zustand'
 
 const useBannerStore = create((set) => ({
   content: "750 TL ve üzeri alışverişlerinizde kargo ücretsiz!",
