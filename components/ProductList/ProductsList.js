@@ -1,5 +1,5 @@
 "use client";
-import React, { useState,useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import { products, status, category } from "./data";
 import ProductsFilter from "./ProductsFilter";
 import ProdcutsTable from "./ProdcutsTable";
@@ -11,60 +11,51 @@ function ProductList() {
   const [productsPerPage] = useState(10);
 
   const [searchTerm, setSearchTerm] = useState("");
- 
+
+  const [selectedProducts, setSelectedProducts] = useState([]);
 
 
 
   const filterStatus = (status) => {
     setSelectedStatus(status);
     if (status === "Tümü") {
-      setFilteredProducts(products)
-     
-    }else if (status === "Yayımlanmış") {
+      setFilteredProducts(products);
+    } else if (status === "Yayımlanmış") {
       const filterProducts = products.filter((item) => item.published === true);
       setFilteredProducts(filterProducts);
     }
 
-    
-    //stok durumuna göre filtreleme
-    if (status === "Stok durumuna göre filtreleme") {
-      setFilteredProducts(products);
-    }
-    if (status === "Stokta Olanlar") {
-      const filteredByStock = products.filter((item) => item.stokCount > 0)
-      setFilteredProducts(filteredByStock)
-    }else if (status === "Stokta Olmayanlar"){
-      const filteredOffStock = products.filter((item) => item.stokCount === 0)
-      setFilteredProducts(filteredOffStock)
-    }
-
-  
-
-
-
+   
 
     //filtreleme yapılırsa ilk sayfaya dön
-    setCurrentPage(1)
-  }
-
-
+    setCurrentPage(1);
+  };
 
   //Arama inputu işlemleri
   const handleSearch = (event) => {
     const term = event.target.value;
     setSearchTerm(term);
-    const filtered = products.filter((product) =>
-      product.name.toLowerCase().includes(term.toLowerCase()) ||
-       product.stok.toLowerCase().includes(term.toLowerCase()) || 
-       product.category.mainCategory.toLowerCase().includes(term.toLowerCase()) ||
-       product.category.subCategory.toLowerCase().includes(term.toLowerCase())||
-       product.date.productAdditionDate.toLowerCase().includes(term.toLowerCase())||
-       product.date.lastUpdateDate.toLowerCase().includes(term.toLowerCase())||
-       product.price.toString().includes(term)
+    const filtered = products.filter(
+      (product) =>
+        product.name.toLowerCase().includes(term.toLowerCase()) ||
+        product.stok.toLowerCase().includes(term.toLowerCase()) ||
+        product.category.mainCategory
+          .toLowerCase()
+          .includes(term.toLowerCase()) ||
+        product.category.subCategory
+          .toLowerCase()
+          .includes(term.toLowerCase()) ||
+        product.date.productAdditionDate
+          .toLowerCase()
+          .includes(term.toLowerCase()) ||
+        product.date.lastUpdateDate
+          .toLowerCase()
+          .includes(term.toLowerCase()) ||
+        product.price.toString().includes(term)
     );
     setFilteredProducts(filtered);
     setCurrentPage(1); // Arama yapıldığında ilk sayfaya dön
-  };  
+  };
   // sayfa değiştirme işlevi
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
@@ -80,7 +71,7 @@ function ProductList() {
 
   return (
     <>
-      <div className=" justify-between flex  ">
+      <div className=" justify-between flex flex-wrap md:flex-nowrap space-y-4 md:space-y-0  ">
         <div className="flex gap-2">
           {status.map((status, index) => (
             <React.Fragment key={index}>
@@ -101,12 +92,17 @@ function ProductList() {
             </React.Fragment>
           ))}
         </div>
-        <div className="flex">
-          <form action="" className="flex gap-2">
-            <input type="text" className="p-2 border rounded-md" value={searchTerm}
-            onChange={handleSearch}/>
+        <div className="flex ">
+          <form action="" className="flex gap-2 ">
+            <input
+              type="text"
+              className="p-2 border rounded-md "
+              placeholder="Search.."
+              value={searchTerm}
+              onChange={handleSearch}
+            />
             <button
-              className="p-2 border border-LightBlue rounded-md text-black"
+              className="p-2 border text-xs md:text-base  border-LightBlue rounded-md text-black"
               type="submit"
             >
               Ürün Ara
@@ -121,8 +117,16 @@ function ProductList() {
         paginate={paginate}
         currentPage={currentPage}
         productsPerPage={productsPerPage}
+        selectedProducts={selectedProducts}
+        setSelectedProducts={setSelectedProducts}
       />
-      <ProdcutsTable currentProducts={currentProducts} />
+      <ProdcutsTable
+        currentProducts={currentProducts}
+        selectedProducts={selectedProducts}
+        setSelectedProducts={setSelectedProducts}
+       
+        
+      />
     </>
   );
 }

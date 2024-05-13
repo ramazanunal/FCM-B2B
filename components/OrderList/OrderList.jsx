@@ -17,6 +17,11 @@ const OrderList = () => {
   const [uniqueDates, setUniqueDates] = useState([]);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
+  const [selectAll, setSelectAll] = useState("Toplu İşlemler");
+
+  const handleSelectAll = (e) => {
+    setSelectAll(e.target.value);
+  };
 
   useEffect(() => {
     const dates = [...new Set(filteredOrders.map((order) => order.date))];
@@ -115,7 +120,7 @@ const OrderList = () => {
               className="p-2 border rounded-md"
             />
             <button
-              className="p-2 border border-LightBlue rounded-md"
+              className="p-1 border border-LightBlue text-sm rounded-md"
               type="submit"
             >
               Siparişleri Ara
@@ -131,8 +136,12 @@ const OrderList = () => {
             {/* Toplu İşlemler Select */}
 
             <select
-              className="p-1 border rounded-md text-CustomGray w-64"
+              className={`p-1 border rounded-md text-CustomGray w-64 ${
+                selectAll !== "Toplu İşlemler" ? "bg-NavyBlue text-white" : ""
+              }`}
               name="filterActions"
+              value={selectAll}
+              onChange={handleSelectAll}
             >
               <option hidden>Toplu İşlemler</option>
               <option>Toplu İşlemler</option>
@@ -144,16 +153,14 @@ const OrderList = () => {
               <option>PDF Fatura</option>
               <option>PDF Paketleme Fişi</option>
             </select>
-            {/* Uygula Butonu */}
-            <button className="p-1 border border-LightBlue rounded-md">
-              Uygula
-            </button>
           </div>
 
           <div className="flex gap-2">
             {/* Tarihler Select */}
             <select
-              className="p-1 border rounded-md text-BaseDark w-54 font-medium"
+              className={`p-1 border rounded-md text-BaseDark w-54 font-medium ${
+                orderDate !== "Tüm Tarihler" ? "bg-NavyBlue text-white" : ""
+              }`}
               name="filterDates"
               onChange={(e) => {
                 const selectedDate = e.target.value;
@@ -171,52 +178,68 @@ const OrderList = () => {
             </select>
 
             {/* Kayıtlı Kullanıcılara Göre Filtreleme Select */}
-            <select
-              className="p-1 border rounded-md text-CustomGray w-80"
-              name="filterUsers"
-            >
+            <select className="" name="filterUsers">
               <option hidden>Kayıtlı Kullanıcılara göre Filtrele</option>
               <option>Kayıtlı Kullanıcılara göre Filtrele</option>
             </select>
             {/* Filtrele Butonu */}
-            <button className="p-1 border border-LightBlue rounded-md">
-              Filtrele
+            <button
+              className={`p-1 cursor-pointer font-[500] border text-NavyBlue  rounded-md  hover:bg-NavyBlue hover:text-white text-sm `}
+            >
+              Filtre Temizle
             </button>
           </div>
         </div>
 
         {/* Sıralama ve Sayfalama */}
-        <div className="flex items-center gap-2 text-DarkBlue">
+        <div className="flex items-center gap-2 ">
           <p className="text-CustomGray">{filteredOrders.length} öge</p>
-
-          <MdKeyboardDoubleArrowLeft
-            className="border rounded-sm text-[24px] p-1 cursor-pointer"
-            onClick={() => handleChangePage("prev")}
-          />
-
-          <MdKeyboardArrowLeft
-            className={`border rounded-sm text-[24px] p-1 ${
-              page === 0 ? "text-gray-300 cursor-not-allowed" : "cursor-pointer"
+          <div
+            className={`border-2 rounded-sm text-[18px]  md:p-3 p-1${
+              page === 0
+                ? "cursor-not-allowed text-gray-300"
+                : "cursor-pointer hover:bg-gray-200 duration-300 hover:border-NavyBlue hover:rounded-xl"
             }`}
             onClick={() => handleChangePage("prev")}
-          />
+          >
+            <MdKeyboardDoubleArrowLeft />
+          </div>
 
-          <span className="border px-4 rounded bg-white">{page + 1}</span>
+          <div
+            className={`border-2 rounded-sm text-[18px] md:p-3 p-1${
+              page === 0
+                ? " cursor-not-allowed text-gray-300"
+                : "cursor-pointer hover:bg-gray-200 duration-300 hover:border-NavyBlue hover:rounded-xl"
+            }`}
+            onClick={() => handleChangePage("prev")}
+          >
+            <MdKeyboardArrowLeft />
+          </div>
+
+          <span className="border  md:px-4 md:py-2 py-1 px-3 rounded-full bg-NavyBlue text-white">{page + 1}</span>
           <span>/ {Math.ceil(filteredOrders.length / rowsPerPage)}</span>
 
-          <MdKeyboardArrowRight
-            className={`border rounded-sm text-[24px] p-1 ${
+          <div
+            className={`border-2 rounded-sm text-[18px] md:p-3 p-1${
               (page + 1) * rowsPerPage >= filteredOrders.length
-                ? "text-gray-300 cursor-not-allowed"
-                : "cursor-pointer"
+                ? " cursor-not-allowed text-gray-300"
+                : "cursor-pointer hover:bg-gray-200 duration-300 hover:border-NavyBlue hover:rounded-xl"
             }`}
             onClick={() => handleChangePage("next")}
-          />
+          >
+            <MdKeyboardArrowRight />
+          </div>
 
-          <MdKeyboardDoubleArrowRight
-            className="border rounded-sm text-[24px] p-1 cursor-pointer"
+          <div
+            className={`border-2 rounded-sm text-[18px] md:p-3 p-1${
+              (page + 1) * rowsPerPage >= filteredOrders.length
+                ? "cursor-not-allowed text-gray-300 "
+                : "cursor-pointer hover:bg-gray-200 duration-300 hover:border-NavyBlue hover:rounded-xl"
+            }`}
             onClick={() => handleChangePage("next")}
-          />
+          >
+            <MdKeyboardDoubleArrowRight />
+          </div>
         </div>
       </div>
       <OrderListTable orders={paginatedOrders} />
