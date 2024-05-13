@@ -18,7 +18,8 @@ function HomeCategories() {
   const toggleDropdown = () => {
     setIsDropdownOpen(!isDropdownOpen);
   };
-  const [cartItemCount, setCartItemCount] = useCartItemCount();
+  const cartItemCount = useCartItemCount();
+
 
   return (
     <div className="bg-white w-[1188px] pt-[60px] pb-[80px] ">
@@ -73,7 +74,7 @@ function HomeCategories() {
         </div>
       </div>
       <div className="flex items-center justify-center mt-[70px]">
-      <CategoryProducts selectedCategory={selectedCategory} setCartItemCount={setCartItemCount}/>
+      <CategoryProducts selectedCategory={selectedCategory} />
       </div>
     </div>
   );

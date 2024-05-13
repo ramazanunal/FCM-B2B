@@ -6,7 +6,7 @@ import SearchPanel from "../SearchPanel";
 import { FaSearch } from "react-icons/fa";
 import { RiShoppingBasketFill } from "react-icons/ri";
 
-const FixedHeader = ({ header }) => {
+const FixedHeader = ({ header, cartItemCount }) => {
   const [hoveredMainMenu, setHoveredMainMenu] = useState(null);
   const [isVisible, setIsVisible] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
@@ -15,11 +15,11 @@ const FixedHeader = ({ header }) => {
   const toggleSearchPanel = () => {
     setIsSearchOpen(!isSearchOpen);
   };
-  
+
   useEffect(() => {
     const handleScroll = () => {
       const scrollPosition = window.scrollY;
-      if (scrollPosition > 210) {
+      if (scrollPosition > 260) {
         setIsVisible(true);
       } else {
         setIsVisible(false);
@@ -39,36 +39,36 @@ const FixedHeader = ({ header }) => {
       }`}
     >
       <div className="container mx-auto px-[80px] h-[78px] hidden lg:flex items-center justify-between">
-          <div className="flex items-center">
-            <div>
-              <Image
-                src={header.mainMenuLogo[0].logosrc}
-                width={45}
-                height={50}
-                alt="Çalışkan Arı Mağaza"
-              />
-            </div>
+        <div className="flex items-center">
+          <div>
+            <Image
+              src={header.mainMenuLogo[0].logosrc}
+              width={45}
+              height={50}
+              alt="Çalışkan Arı Mağaza"
+            />
           </div>
-          <div className="flex flex-row hidden lg:flex " id="mainmenuitem">
-            <ul className="flex flex-row items-center text-center justify-center text-CustomGray hidden lg:flex ml-[8px] md:ml-[36px]">
+        </div>
+        <div className="flex flex-row hidden lg:flex " id="mainmenuitem">
+          <ul className="flex flex-row items-center text-center justify-center text-CustomGray hidden lg:flex ml-[8px] md:ml-[36px]">
             {header.mainMenuItems.map((mainMenuItem, index) => (
-                <li
-                  key={mainMenuItem.id}
-                  className="relative mr-[25px] leading-[1.3] w-[117px] mx-2"
-                  onMouseEnter={() => {
-                    setHoveredMainMenu(index);
-                    if (hoveredSubMenu !== null) {
-                      setHoveredSubMenu(null);
-                    }
-                  }}
-                   onMouseLeave={() => setHoveredMainMenu(null)}
+              <li
+                key={mainMenuItem.id}
+                className="relative mr-[25px] leading-[1.3] w-[117px] mx-2"
+                onMouseEnter={() => {
+                  setHoveredMainMenu(index);
+                  if (hoveredSubMenu !== null) {
+                    setHoveredSubMenu(null);
+                  }
+                }}
+                onMouseLeave={() => setHoveredMainMenu(null)}
+              >
+                <Link
+                  className="flex flex-col items-center justify-center"
+                  href={mainMenuItem.href}
                 >
-                  <Link
-                    className="flex flex-col items-center justify-center"
-                    href={mainMenuItem.href}
-                   
-                  >
-                    <span className="w-[53px] h-[53px] flex items-center justify-center
+                  <span
+                    className="w-[53px] h-[53px] flex items-center justify-center
                     text-CustomGray/75 hover:text-LightBlue hover:animate-bounce transition duration-300 ease-in-out transform cursor-pointer"
                   >
                     {mainMenuItem.icon}
@@ -105,15 +105,24 @@ const FixedHeader = ({ header }) => {
               className="flex flex-row items-center justify-center"
             >
               <button onClick={toggleSearchPanel}>
-                <FaSearch className="w-[20px] h-[20px] text-CustomGray hover:text-LightBlue hover:scale-110 transition duration-300 ease-in-out transform mr-[36px]" />
+                <FaSearch className="w-[20px] h-[20px] text-CustomGray hover:text-LightBlue hover:scale-110 transition duration-300 ease-in-out transform mr-2 sm:mr-[36px]" />
               </button>
               <Link
-                href={button.href}
-                className="flex items-center justify-center"
+                href="/cart"
+                className="flex flex-col items-center text-CustomGray justify-center hover:text-LightBlue hover:scale-110 transition duration-300 ease-in-out transform "
               >
-                <button className="text-CustomGray hover:text-LightBlue hover:scale-105 transition duration-300 ease-in-out transform cursor-pointer">
-                  {button.icon}
-                </button>
+                <span>
+                  <RiShoppingBasketFill
+                    style={{ width: "25px", height: "25px" }}
+                  />
+                </span>
+                {cartItemCount > 0 && (
+                  <div className="absolute -top-3 -right-4 bg-[#ff5b4b] rounded-full px-[5px]  flex items-center justify-center">
+                  <span className="text-white font-extrabold text-[16px] w-[14px] h-[24px] flex items-center justify-center">
+                      {cartItemCount}
+                    </span>
+                  </div>
+                )}
               </Link>
             </div>
           ))}
@@ -122,51 +131,61 @@ const FixedHeader = ({ header }) => {
           <MobileMenu header={header} />
         </div>
       </div>
-      
+
       <div
         id="altmenu"
-        className="relative p-[23px] lg:p-0 bg-white w-screen lg:w-full flex items-center justify-between lg:hidden h-[165px]"
+        className="relative p-[23px]  lg:p-0 bg-white w-screen flex items-center justify-between lg:hidden "
       >
-       
-          <div className="flex lg:hidden ">
-            {/* Hamburger Menü */}
-            <MobileMenu header={header} />
-          </div>
-          <div>
-            <Image
-              src={header.mainMenuLogo[0].logosrc}
-              width={93}
-              height={105}
-              alt="Çalışkan Arı Mağaza"
-            />
-          </div>
-          
-          <div className="flex flex-row items-center text-center justify-center text-CustomGray">
-            {header.mainMenuButtons.map((mainMenuButtons) => (
-              <div
-                key={mainMenuButtons.id}
-                className="flex flex-row items-center"
+        <div className="flex lg:hidden ">
+          {/* Hamburger Menü */}
+          <MobileMenu header={header} />
+        </div>
+        <div>
+          <Image
+            src={header.mainMenuLogo[0].logosrc}
+            width={93}
+            height={105}
+            alt="Çalışkan Arı Mağaza"
+          />
+        </div>
+
+        <div className="flex flex-row items-center text-center justify-center text-CustomGray">
+          {header.mainMenuButtons.map((mainMenuButtons) => (
+            <div
+              key={mainMenuButtons.id}
+              className="flex flex-row items-center"
+            >
+              <button onClick={toggleSearchPanel}>
+                <FaSearch className="w-[20px] h-[20px] hover:text-LightBlue hover:scale-110 transition duration-300 ease-in-out transform mr-2 sm:mr-[36px]" />
+              </button>
+              <Link
+                href="/cart"
+                className="flex flex-col items-center justify-center hover:text-LightBlue hover:scale-110 transition duration-300 ease-in-out transform "
               >
-                <button onClick={toggleSearchPanel}>
-                  <FaSearch className="w-[20px] h-[20px] hover:text-LightBlue hover:scale-110 transition duration-300 ease-in-out transform mr-[36px]" />
-                </button>
-                <Link
-                  className="flex flex-col items-center justify-center  hover:text-LightBlue hover:scale-110 transition duration-300 ease-in-out transform "
-                  href="/cart"
-                >
-                  <span>
-                    <RiShoppingBasketFill
-                      style={{ width: "25px", height: "25px" }}
-                    />
-                  </span>
-                </Link>
-              </div>
-            ))}
-          </div>
+                <span>
+                  <RiShoppingBasketFill
+                    style={{ width: "25px", height: "25px" }}
+                  />
+                </span>
+                {cartItemCount > 0 && (
+                 <div className="absolute -top-3 -right-4 bg-[#ff5b4b] rounded-full px-[5px]  flex items-center justify-center">
+                 <span className="text-white font-extrabold text-[16px] w-[14px] h-[24px] flex items-center justify-center">
+                      {cartItemCount}
+                    </span>
+                  </div>
+                )}
+              </Link>
+            </div>
+          ))}
+        </div>
       </div>
-   <div className="absolute top-16 right-48 bg-white rounded-xl">
-   {isSearchOpen && <div><SearchPanel toggleSearchPanel={toggleSearchPanel} /></div>}
-   </div>
+      <div className="absolute top-32 lg:top-16 right-0 sm:right-12 md:right-24 lg:right-36 bg-white rounded-xl">
+        {isSearchOpen && (
+          <div>
+            <SearchPanel toggleSearchPanel={toggleSearchPanel} />
+          </div>
+        )}
+      </div>
     </div>
   );
 };

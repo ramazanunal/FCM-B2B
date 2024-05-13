@@ -20,7 +20,7 @@ export default function RootLayout({ children, session }) {
         {/* SessionProvider ile sarmallarız ki tüm route lara erişebilelim diye / yukarıda "use client" tanımlamayı unutma! */}
         <Providers session={session}>
           {/* <Navbar links={links}/> */}
-          <div className=" flex flex-col items-center w-full h-screen bg-[url('https://caliskanari.com/wp-content/uploads/2018/10/clothes-2049536750.jpg.webp')] bg-no-repeat bg-[#6bcdec]">
+          <div className=" flex w-full h-full flex-col items-center bg-[url('https://caliskanari.com/wp-content/uploads/2018/10/clothes-2049536750.jpg.webp')] bg-no-repeat bg-[#6bcdec]">
             <div className="bg-white">
               <Header />
             </div>

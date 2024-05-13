@@ -17,7 +17,7 @@ const Header = () => {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [hoveredIcon, setHoveredIcon] = useState(null);
   const [hoveredSubMenu, setHoveredSubMenu] = useState(null);
-  const [cartItemCount, setCartItemCount] = useCartItemCount(0);
+  const cartItemCount = useCartItemCount(); 
 
   const toggleSearchPanel = () => {
     setIsSearchOpen(!isSearchOpen);
@@ -161,10 +161,10 @@ const Header = () => {
                 className="flex flex-row items-center"
               >
                 <button className="relative" onClick={toggleSearchPanel}>
-                  <FaSearch className="w-[20px] h-[20px] hover:text-LightBlue hover:scale-110 transition duration-300 ease-in-out transform mr-[36px]" />
+                  <FaSearch className="w-[20px] h-[20px] hover:text-LightBlue hover:scale-110 transition duration-300 ease-in-out transform mr-2 sm:mr-[36px]" />
                 </button>
                 {isSearchOpen && (
-                  <div className="absolute top-40 rounded-xl right-24 z-[1000]	bg-white">
+                  <div className="absolute top-28 md:top-32 lg:top-40 rounded-xl  right-0 md:right-24 z-[1000]	bg-white">
                     <SearchPanel toggleSearchPanel={toggleSearchPanel} />
                   </div>
                 )}
@@ -178,8 +178,8 @@ const Header = () => {
                     />
                   </span>
                   {cartItemCount > 0 && (
-                    <div className="absolute -top-5 -right-5 bg-[#ff5b4b] rounded-full px-3 py-1">
-                      <span className="text-white font-extrabold text-[14px] ">
+                    <div className="absolute -top-3 -right-4 bg-[#ff5b4b] rounded-full px-[5px]  flex items-center justify-center">
+                      <span className="text-white font-extrabold text-[16px] w-[14px] h-[24px]">
                         {cartItemCount}
                       </span>
                     </div>
@@ -190,7 +190,7 @@ const Header = () => {
           </div>
         </div>
       </div>
-      <FixedHeader header={header} />
+      <FixedHeader header={header} cartItemCount={cartItemCount} />
     </div>
   );
 };

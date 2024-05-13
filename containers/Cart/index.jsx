@@ -1,11 +1,12 @@
-import ShoppingCart from '@/components/ShoppingCart'
-import React from 'react'
+import React from 'react';
+import ShoppingCart from '@/components/ShoppingCart';
 
-function CartContainer() {
+const CartContainer = () => {
   return (
-    <div className="bg-white"><ShoppingCart/></div>
+    <div className="bg-white">
+      {typeof window !== 'undefined' && <ShoppingCart />}
+    </div>
+  );
+};
 
-  )
-}
-
-export default CartContainer
+export default CartContainer;
