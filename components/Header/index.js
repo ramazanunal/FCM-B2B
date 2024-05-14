@@ -17,7 +17,7 @@ const Header = () => {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [hoveredIcon, setHoveredIcon] = useState(null);
   const [hoveredSubMenu, setHoveredSubMenu] = useState(null);
-  const cartItemCount = useCartItemCount(); 
+  const cartItemCount = useCartItemCount();
 
   const toggleSearchPanel = () => {
     setIsSearchOpen(!isSearchOpen);
@@ -107,20 +107,22 @@ const Header = () => {
                   }}
                 >
                   <Link
-                    className="  flex flex-col items-center justify-center hover:text-LightBlue  transition duration-500 ease-in-out transform"
+                    className={`flex flex-col items-center justify-center `}
                     href={mainMenuItem.href}
                   >
                     <span
-                      className={`w-[53px] h-[53px] flex items-center justify-center ${
+                      className={`w-[60px] h-[60px] flex items-center justify-center ${
                         hoveredIcon === mainMenuItem.id
-                          ? "motion-safe:animate-spin"
-                          : ""
+                          ? "scale-105 text-LightBlue transition-all duration-500 ease-in-out transform"
+                          : "transition-all duration-500 ease-in-out transform"
                       }`}
                     >
-                      {mainMenuItem.icon}
+                      <span className="w-[40px] h-[40px] ">
+                        {mainMenuItem.icon}
+                      </span>
                     </span>
                     <span
-                      className="uppercase text-[12px] font-bold tracking-[1px] pb-[15px]"
+                      className="uppercase text-[12px] font-bold tracking-[1px] pb-[15px] hover:text-LightBlue transition duration-500 ease-in-out transform"
                       onMouseEnter={() => setHoveredIcon(mainMenuItem.id)}
                       onMouseLeave={() => setHoveredIcon(null)}
                     >
@@ -143,7 +145,9 @@ const Header = () => {
                               key={subMenu.id}
                               className="mx-[20px] py-[11px] text-[15px] font-bold leading-[14px] cursor-pointer hover:text-HoverGray transition duration-300 ease-in-out transform text-left"
                             >
-                              <Link href={`/urun-kategori/${subMenu.id}`}>{subMenu.text}</Link>
+                              <Link href={`/urun-kategori/${subMenu.id}`}>
+                                {subMenu.text}
+                              </Link>
                             </li>
                           ))}
                         </ul>
