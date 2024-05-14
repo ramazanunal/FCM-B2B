@@ -11,17 +11,20 @@ import "react-toastify/dist/ReactToastify.css";
 
 const ShoppingCart = () => {
   
-  const [cartItems, setCartItems] = useState(
-    JSON.parse(localStorage.getItem("cartItems")) || []
-  );
+  const initialCartItems = () => {
+    if (typeof window !== "undefined") {
+      const storedCartItems = localStorage.getItem("cartItems");
+      return storedCartItems ? JSON.parse(storedCartItems) : [];
+    }
+    return [];
+  };
+  
+  const [cartItems, setCartItems] = useState(initialCartItems);
+  
+  
   const [updating, setUpdating] = useState(false);
   const [updatingItems, setUpdatingItems] = useState({});
-  useEffect(() => {
-    if (typeof window !== "undefined") {
-      const cartItemsFromStorage = JSON.parse(localStorage.getItem("cartItems")) || [];
-      setCartItems(cartItemsFromStorage);
-    }
-  }, []);
+  
   const handleQuantityChange = (itemId, newQuantity) => {
     setUpdating(true); // Güncelleme başladığında true
     setUpdatingItems({ ...updatingItems, [itemId]: true });
