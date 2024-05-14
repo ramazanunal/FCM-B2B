@@ -4,7 +4,7 @@ import ShoppingCart from '@/components/ShoppingCart';
 const CartContainer = () => {
   return (
     <div className="bg-white">
-      {typeof window !== 'undefined' && <ShoppingCart />}
+      {typeof window === 'undefined' && <ShoppingCart />}
     </div>
   );
 };

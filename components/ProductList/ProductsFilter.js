@@ -15,18 +15,18 @@ function ProductsFilter({
 }) {
   const [selectedCategory, setSelectedCategory] = useState("Ders Seçin");
   const [selectedProductType, setSelectedProductType] = useState(
-    "Ürün tipine göre filtreleme"
+    "Ürüne göre filtreleme"
   );
   const [selectedStock, setSelectedStock] = useState(
-    "Stok durumuna göre filtreleme"
+    "Stoğa göre filtreleme"
   );
   const [selectedAll, setSelectedAll] = useState("Toplu Islemler")
   const [anyFilterSelected, setAnyFilterSelected] = useState(false);
   //Filtre temizleme fonksiyonu
   const handleClearFilters = () => {
     setSelectedCategory("Ders Seçin");
-    setSelectedProductType("Ürün tipine göre filtreleme");
-    setSelectedStock("Stok durumuna göre filtreleme");
+    setSelectedProductType("Ürüne göre filtreleme");
+    setSelectedStock("Stoğa göre filtreleme");
     setAnyFilterSelected(false)
   };
 
@@ -66,12 +66,12 @@ function ProductsFilter({
         (item) => item.category.subCategory === selectedCategory
       );
     }
-    if (selectedProductType !== "Ürün tipine göre filtreleme") {
+    if (selectedProductType !== "Ürüne göre filtreleme") {
       filteredProducts = filteredProducts.filter(
         (item) => item.category.mainCategory === selectedProductType
       );
     }
-    if (selectedStock !== "Stok durumuna göre filtreleme") {
+    if (selectedStock !== "Stoğa göre filtreleme") {
       if (selectedStock === "Stokta Olanlar") {
         filteredProducts = filteredProducts.filter(
           (item) => item.stokCount > 0
@@ -95,7 +95,7 @@ function ProductsFilter({
 
   // Toplu filtreleme bitiş
 
-
+  console.log("selectedProd", selectedProducts.length);
  
 
   //aktif pasif yapma
@@ -134,7 +134,7 @@ function ProductsFilter({
               <option value={false}>Aktif Olmayan Ürünler</option>
             </select>
             <select
-              className="p-2 cursor-pointer shadow-2xl border rounded-md text-CustomGray md:w-32 w-full "
+              className={`p-2 cursor-pointer shadow-2xl border rounded-md text-CustomGray md:w-32 w-full ${selectedProducts.length === 0 ? "pointer-events-none opacity-50":""}`}
               name=""
               id=""
               onChange={handleIsActive}
@@ -148,7 +148,7 @@ function ProductsFilter({
             </select>
           </div>
 
-          <div className="flex flex-wrap md:flex-nowrap gap-2 items-center  text-sm">
+          <div className="flex flex-wrap md:flex-nowrap gap-2 items-center text-sm">
             <select
               className={`p-2 cursor-pointer shadow-2xl border rounded-md text-CustomGray md:w-30  w-full ${selectedCategory !== "Ders Seçin" && "bg-NavyBlue text-white font-semibold"}`}
               name=""
@@ -169,14 +169,14 @@ function ProductsFilter({
             </select>
            
             <select
-            className={`p-2  cursor-pointer shadow-2xl border rounded-md text-CustomGray md:w-44 w-full  ${selectedProductType !== "Ürün tipine göre filtreleme" && "bg-NavyBlue text-white font-semibold"}`}
+            className={`p-2  cursor-pointer shadow-2xl border rounded-md text-CustomGray md:w-48 w-full   ${selectedProductType !== "Ürüne göre filtreleme" && "bg-NavyBlue text-white font-semibold"}`}
               name=""
               id=""
               onChange={handleProductType}
               value={selectedProductType}
             >
-              <option hidden>Ürün tipine göre filtreleme</option>
-              <option>Ürün tipine göre filtreleme</option>
+              <option hidden>Ürüne göre filtreleme</option>
+              <option>Ürüne göre filtreleme</option>
               {mainCategory.map((product, index) => (
                 <option key={index} value={product}>
                   {product}
@@ -184,20 +184,20 @@ function ProductsFilter({
               ))}
             </select>
             <select
-            className={`p-2 cursor-pointer shadow-2xl border rounded-md text-CustomGray md:w-48 w-full  ${selectedStock !== "Stok durumuna göre filtreleme" && "bg-NavyBlue text-white font-semibold"}`}
+            className={`p-2 cursor-pointer shadow-2xl border rounded-md text-CustomGray md:w-48 w-full  ${selectedStock !== "Stoğa göre filtreleme" && "bg-NavyBlue text-white font-semibold"}`}
               name=""
               id=""
               onChange={handleStock}
               value={selectedStock}
             >
-              <option hidden>Stok durumuna göre filtreleme</option>
-              <option>Stok durumuna göre filtreleme</option>
+              <option hidden>Stoğa göre filtreleme</option>
+              <option>Stoğa göre filtreleme</option>
               <option>Stokta Olanlar</option>
               <option>Stokta Olmayanlar</option>
             </select>
          <button
-              className={`p-1 cursor-pointer font-[500] border text-NavyBlue  rounded-md  mt-2 mb-3 text-sm
-                          ${anyFilterSelected ?"border-NavyBlue hover:bg-NavyBlue hover:text-white" : "text-NavyBlue border-gray-400 cursor-not-allowed"}
+              className={`p-[6px]  font-[500] border text-NavyBlue  rounded-md   text-sm whitespace-nowrap
+                          ${anyFilterSelected ?"border-NavyBlue cursor-pointer hover:bg-NavyBlue hover:text-white" :  "  text-NavyBlue opacity-50 border-gray-400 cursor-not-allowed"}
               `}
               onClick={handleClearFilters}
             >
