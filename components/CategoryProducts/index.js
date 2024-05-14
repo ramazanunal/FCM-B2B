@@ -10,6 +10,7 @@ import { FaCheck, FaPlus } from "react-icons/fa";
 function CategoryProducts({ selectedCategory }) {
   const [hoveredIndex, setHoveredIndex] = useState(null);
   const [cartItems, setCartItems] = useState([]);
+  const [updatingItems, setUpdatingItems] = useState(false);
 
   useEffect(() => {
     const storedCartItems = JSON.parse(localStorage.getItem("cartItems")) || [];
@@ -27,39 +28,47 @@ function CategoryProducts({ selectedCategory }) {
   const isItemInCart = (productId) => {
     return cartItems.some((item) => item.id === productId);
   };
-
   const addToCart = (product, quantity) => {
-    let updatedCartItems = [...cartItems];
-    const existingItemIndex = updatedCartItems.findIndex(
-      (item) => item.id === product.id
-    );
+    setUpdatingItems({ ...updatingItems, [product.id]: true }); // Set updatingItems to true for the corresponding product
 
-    if (existingItemIndex !== -1) {
-      // Ürün sepette zaten var, sadece miktarını artır
-      updatedCartItems[existingItemIndex].quantity += quantity;
-    } else {
-      // Ürün sepette yok, yeni ürün olarak ekle
-      const newItem = { ...product, quantity };
-      updatedCartItems.push(newItem);
-    }
+    setTimeout(() => {
+      let updatedCartItems = [...cartItems];
+      const existingItemIndex = updatedCartItems.findIndex(
+        (item) => item.id === product.id
+      );
 
-    // Local storage güncelle
-    localStorage.setItem("cartItems", JSON.stringify(updatedCartItems));
-    setCartItems(updatedCartItems);
+      if (existingItemIndex !== -1) {
+        // Ürün sepette zaten var, sadece miktarını artır
+        updatedCartItems[existingItemIndex].quantity += quantity;
+      } else {
+        // Ürün sepette yok, yeni ürün olarak ekle
+        const newItem = { ...product, quantity };
+        updatedCartItems.push(newItem);
+      }
 
-    // Sepet güncellendiğinde event dispatch et
-    const event = new Event("cartChange");
-    window.dispatchEvent(event);
+      // Local storage güncelle
+      localStorage.setItem("cartItems", JSON.stringify(updatedCartItems));
+      setCartItems(updatedCartItems);
 
-    toast.success("Ürün sepete eklendi", {
-      position: "top-right",
-      autoClose: 2000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-    });
+      // Sepet güncellendiğinde event dispatch et
+      const event = new Event("cartChange");
+      window.dispatchEvent(event);
+
+      // updatingItems'i false olarak ayarla, işlem tamamlandı
+      setUpdatingItems({ ...updatingItems, [product.id]: false });
+    }, 3000);
+
+    setTimeout(() => {
+      toast.success("Ürün sepete eklendi", {
+        position: "top-right",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+    }, 3000);
   };
 
   return (
@@ -146,15 +155,31 @@ function CategoryProducts({ selectedCategory }) {
 
                                 <button
                                   type="submit"
-                                  className="flex flex-row items-center justify-center gap-2 ml-3 text-white font-bold hover:scale-105 transition-all transform seasy-im-out duration-500 cursor-pointer bg-LightBlue/75 pl-3 pr-11 py-2 rounded-full relative"
+                                  className="flex flex-row items-center justify-center gap-2 ml-3 text-white font-bold hover:scale-105 transition-all transform seasy-im-out duration-500 cursor-pointer bg-LightBlue/75 pl-3 pr-11 py-2 rounded-full relative w-[160px] h-[40px]"
                                 >
-                                  Sepete Ekle
-                                  <span className="absolute -top-1 -right-2 text-white bg-gradient-to-r from-sky-600 to-cyan-700 p-3 border-4 border-white rounded-full transition duration-300 ease-in-out transform hover:scale-110">
+                                  {updatingItems[product.id] ? (
+                                    <div className="flex flex-row items-center justify-center gap-1 ">
+                                      <div className="h-2 w-2 rounded-full animate-pulse bg-blue-900"></div>
+                                      <div className="h-2 w-2 rounded-full animate-pulse bg-blue-900"></div>
+                                      <div className="h-2 w-2 rounded-full animate-pulse bg-blue-900"></div>
+                                    </div>
+                                  ) : (
+                                    "Sepete Ekle"
+                                  )}
+                                  <span
+                                    className={`absolute -top-1 -right-2 text-white bg-gradient-to-r from-sky-600 to-cyan-700 p-3 border-4 border-white rounded-full transition-all duration-500 ease-out transform`}
+                                  >
                                     {isItemInCart(product.id) ? (
-                                      <FaCheck />
+                                      <FaCheck
+                                        className={`transition-all duration-1000 ease-out transform ${
+                                          isItemInCart(product.id)
+                                            ? "scale-100"
+                                            : "scale-0"
+                                        }`}
+                                      />
                                     ) : (
                                       <FaPlus />
-                                    )}{" "}
+                                    )}
                                   </span>
                                 </button>
                               </div>
