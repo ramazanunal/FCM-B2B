@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useState, useEffect } from "react";
 import ProductCard from "@/components/ProductCard";
 import headerStore from "@/utils/headerStore";
 import { toast, ToastContainer } from "react-toastify";
@@ -10,6 +10,8 @@ import Link from "next/link";
 function SubProductsList({ params }) {
   const subMenuProductsId = parseInt(params.id);
   const { header } = headerStore();
+  const foundProducts = findProductsById(subMenuProductsId);
+  const [cartItems, setCartItems] = useState([]);
 
   const findProductsById = (id) => {
     let products = [];
@@ -23,7 +25,14 @@ function SubProductsList({ params }) {
     return products;
   };
 
-  const foundProducts = findProductsById(subMenuProductsId);
+  useEffect(() => {
+    const storedCartItems = JSON.parse(localStorage.getItem("cartItems")) || [];
+    setCartItems(storedCartItems);
+  }, []);
+
+  const isItemInCart = (productId) => {
+    return cartItems.some((item) => item.id === productId);
+  };
 
   const calculateDiscountedPrice = (price, discount) => {
     if (discount && discount > 0) {
@@ -34,20 +43,25 @@ function SubProductsList({ params }) {
   };
 
   const addToCart = (product, quantity) => {
-    let cartItems = JSON.parse(localStorage.getItem("cartItems")) || [];
-    const existingItemIndex = cartItems.findIndex(
+    let updatedCartItems = [...cartItems];
+    const existingItemIndex = updatedCartItems.findIndex(
       (item) => item.id === product.id
     );
 
     if (existingItemIndex !== -1) {
-      cartItems[existingItemIndex].quantity += quantity;
+      // Ürün sepette zaten var, sadece miktarını artır
+      updatedCartItems[existingItemIndex].quantity += quantity;
     } else {
+      // Ürün sepette yok, yeni ürün olarak ekle
       const newItem = { ...product, quantity };
-      cartItems.push(newItem);
+      updatedCartItems.push(newItem);
     }
 
-    localStorage.setItem("cartItems", JSON.stringify(cartItems));
+    // Local storage güncelle
+    localStorage.setItem("cartItems", JSON.stringify(updatedCartItems));
+    setCartItems(updatedCartItems);
 
+    // Sepet güncellendiğinde event dispatch et
     const event = new Event("cartChange");
     window.dispatchEvent(event);
 
@@ -107,6 +121,7 @@ function SubProductsList({ params }) {
             product={product}
             calculateDiscountedPrice={calculateDiscountedPrice}
             addToCart={addToCart}
+            isItemInCart={isItemInCart}
           />
         ))}
       </div>

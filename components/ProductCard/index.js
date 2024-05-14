@@ -1,11 +1,17 @@
-"use client"
+"use client";
 import React from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { Formik, Form, Field } from "formik";
 import * as Yup from "yup";
+import { FaCheck, FaPlus } from "react-icons/fa";
 
-const ProductCard = ({ product, calculateDiscountedPrice, addToCart }) => {
+const ProductCard = ({
+  product,
+  calculateDiscountedPrice,
+  addToCart,
+  isItemInCart,
+}) => {
   return (
     <div
       key={product.id}
@@ -84,15 +90,20 @@ const ProductCard = ({ product, calculateDiscountedPrice, addToCart }) => {
                           />
                           <button
                             type="submit"
-                            className="ml-3 text-LightBlue font-bold hover:scale-105 transition-all transform seasy-im-out duration-500 cursor-pointer"
+                            className="flex flex-row items-center justify-center gap-2 ml-3 text-white font-bold hover:scale-105 transition-all transform seasy-im-out duration-500 cursor-pointer bg-LightBlue/75 pl-3 pr-11 py-2 rounded-full relative"
                           >
                             Sepete Ekle
+                            <span className="absolute -top-1 -right-2 text-white bg-gradient-to-r from-sky-600 to-cyan-700 p-3 border-4 border-white rounded-full transition duration-300 ease-in-out transform hover:scale-110">
+                              {isItemInCart(product.id) ? (
+                                <FaCheck />
+                              ) : (
+                                <FaPlus />
+                              )}{" "}
+                            </span>
                           </button>
                         </div>
                         {errors.quantity && touched.quantity && (
-                          <div className="text-red-500">
-                            {errors.quantity}
-                          </div>
+                          <div className="text-red-500">{errors.quantity}</div>
                         )}
                       </div>
                     </Form>
