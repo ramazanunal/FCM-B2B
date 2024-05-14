@@ -195,7 +195,7 @@ const OrderList = () => {
         <div className="flex items-center gap-2 ">
           <p className="text-CustomGray">{filteredOrders.length} öge</p>
           <div
-            className={`border-2 rounded-sm text-[18px]  md:p-3 p-1${
+            className={`border-2 rounded-sm text-[18px]  md:p-3 p-1 ${
               page === 0
                 ? "cursor-not-allowed text-gray-300"
                 : "cursor-pointer hover:bg-gray-200 duration-300 hover:border-NavyBlue hover:rounded-xl"
@@ -206,7 +206,7 @@ const OrderList = () => {
           </div>
 
           <div
-            className={`border-2 rounded-sm text-[18px] md:p-3 p-1${
+            className={`border-2 rounded-sm text-[18px] md:p-3 p-1 ${
               page === 0
                 ? " cursor-not-allowed text-gray-300"
                 : "cursor-pointer hover:bg-gray-200 duration-300 hover:border-NavyBlue hover:rounded-xl"
@@ -220,7 +220,7 @@ const OrderList = () => {
           <span>/ {Math.ceil(filteredOrders.length / rowsPerPage)}</span>
 
           <div
-            className={`border-2 rounded-sm text-[18px] md:p-3 p-1${
+            className={`border-2 rounded-sm text-[18px] md:p-3 p-1 ${
               (page + 1) * rowsPerPage >= filteredOrders.length
                 ? " cursor-not-allowed text-gray-300"
                 : "cursor-pointer hover:bg-gray-200 duration-300 hover:border-NavyBlue hover:rounded-xl"
@@ -231,7 +231,7 @@ const OrderList = () => {
           </div>
 
           <div
-            className={`border-2 rounded-sm text-[18px] md:p-3 p-1${
+            className={`border-2 rounded-sm text-[18px] md:p-3 p-1 ${
               (page + 1) * rowsPerPage >= filteredOrders.length
                 ? "cursor-not-allowed text-gray-300 "
                 : "cursor-pointer hover:bg-gray-200 duration-300 hover:border-NavyBlue hover:rounded-xl"
