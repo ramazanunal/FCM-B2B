@@ -8,10 +8,6 @@ import { GoArrowRight } from "react-icons/go";
 import Link from "next/link";
 
 function SubProductsList({ params }) {
-  const subMenuProductsId = parseInt(params.id);
-  const { header } = headerStore();
-  const foundProducts = findProductsById(subMenuProductsId);
-  const [cartItems, setCartItems] = useState([]);
 
   const findProductsById = (id) => {
     let products = [];
@@ -24,6 +20,13 @@ function SubProductsList({ params }) {
     });
     return products;
   };
+  
+  const subMenuProductsId = parseInt(params.id);
+  const { header } = headerStore();
+  const foundProducts = findProductsById(subMenuProductsId);
+  const [cartItems, setCartItems] = useState([]);
+
+  
 
   useEffect(() => {
     const storedCartItems = JSON.parse(localStorage.getItem("cartItems")) || [];
@@ -114,7 +117,7 @@ function SubProductsList({ params }) {
           <p>{subMenuText}</p>
         </div>
       </div>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 justify-center sm:mx-[35px] mb-[30px] px-[15px]">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:px-[120px] gap-4 justify-center sm:mx-[35px] mb-[30px] px-[15px]">
         {foundProducts.map((product, index) => (
           <ProductCard
             key={product.id}
