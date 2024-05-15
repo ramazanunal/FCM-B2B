@@ -93,7 +93,7 @@ const OrderListTable = ({ orders }) => {
                   {order.status}
                 </div>
               </td>
-              <td className="px-6 py-4 whitespace-nowrap">{order.total}</td>
+              <td className="px-6 py-4 whitespace-nowrap">{order.total}₺</td>
               <td className="px-6 py-4 whitespace-nowrap">{order.actions}</td>
             </tr>
           ))}
