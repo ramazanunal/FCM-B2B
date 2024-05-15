@@ -21,6 +21,18 @@ const currentYear = currentDate.getFullYear();
 const formattedDate = `${currentDay} ${months[currentMonth - 1]} ${currentYear}`;
 
 
+
+// Statü listesi
+export const statuses = [
+  "Beklemede",
+  "Hazırlanıyor",
+  "Ödeme bekleniyor",
+  "Tamamlandı",
+  "İptal edildi",
+  "Başarısız",
+  "Kargoya Verildi",
+];
+
 export const orders = [
   {
     id: 1,
@@ -28,7 +40,7 @@ export const orders = [
     orderNumber: "F36458",
     invoiceNumber: "INV456",
     date: formattedDate,
-    status: "Tamamlandı",
+    status: statuses[3],
     total: 100,
    
   },
@@ -38,7 +50,7 @@ export const orders = [
     orderNumber: "F36451",
     invoiceNumber: "INV457",
     date: formattedDate,
-    status: "Beklemede",
+    status: statuses[0],
     total: 80,
    
   },
@@ -48,7 +60,7 @@ export const orders = [
     orderNumber: "F36454",
     invoiceNumber: "INV457",
     date: formattedDate,
-    status: "Başarısız",
+    status:statuses[5],
     total: 50,
    
   },
@@ -58,7 +70,7 @@ export const orders = [
     orderNumber: "F36478",
     invoiceNumber: "INV457",
     date: formattedDate,
-    status: "İptal edildi",
+    status: statuses[4],
     total:75,
     
   },
@@ -68,7 +80,7 @@ export const orders = [
     orderNumber: "F36452",
     invoiceNumber: "INV457",
     date: formattedDate,
-    status: "Ödeme bekleniyor",
+    status: statuses[2],
     total:15,
     
   },
@@ -78,7 +90,7 @@ export const orders = [
     orderNumber: "F36441",
     invoiceNumber: "INV457",
     date: formattedDate,
-    status: "Tamamlandı",
+    status: statuses[3],
     total: 66,
     
   },
@@ -88,7 +100,7 @@ export const orders = [
     orderNumber: "F36465",
     invoiceNumber: "INV457",
     date: formattedDate,
-    status: "Kargoya Verildi",
+    status:statuses[6],
     total: 25,
     
   },
@@ -98,42 +110,9 @@ export const orders = [
     orderNumber: "F3646598",
     invoiceNumber: "INV457",
     date: formattedDate,
-    status: "Hazırlanıyor",
+    status:statuses[1],
     total: 63,
     
   },
 ];
 
-// Statü listesi
-export const statuses = [
-  { name: "Tümü", count: orders.length },
-  {
-    name: "Beklemede",
-    count: orders.filter((order) => order.status === "Beklemede").length,
-  },
-  {
-    name: "Hazırlanıyor",
-    count: orders.filter((order) => order.status === "Hazırlanıyor").length,
-  },
-  {
-    name: "Ödeme bekleniyor",
-    count: orders.filter((order) => order.status === "Ödeme bekleniyor").length,
-  },
-  {
-    name: "Tamamlandı",
-    count: orders.filter((order) => order.status === "Tamamlandı").length,
-  },
-  {
-    name: "İptal edildi",
-    count: orders.filter((order) => order.status === "İptal edildi").length,
-  },
-  {
-    name: "Başarısız",
-    count: orders.filter((order) => order.status === "Başarısız").length,
-  },
-  ,
-  {
-    name: "Kargoya Verildi",
-    count: orders.filter((order) => order.status === "Kargoya Verildi").length,
-  },
-];

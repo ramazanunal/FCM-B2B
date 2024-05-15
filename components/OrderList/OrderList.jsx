@@ -79,6 +79,17 @@ const OrderList = () => {
     setSelectedStatus(status);
     filterOrders(searchValue, status, orderDate, uniqueDates);
   };
+  const [orderCounts, setOrderCounts] = useState({});
+
+// ...
+
+useEffect(() => {
+  const counts = {};
+  statuses.forEach(status => {
+    counts[status] = orders.filter(order => order.status === status).length;
+  });
+  setOrderCounts(counts);
+}, [orders]);
 
   const handleChangePage = (direction) => {
     if (direction === "prev" && page > 0) {
@@ -136,65 +147,79 @@ const OrderList = () => {
     setFilteredOrders(orders);
   };
 
-  const handleBulkAction = (e) => {
-    const action = e.target.value;
-    let newStatus = "";
-    switch (action) {
-      case "Durumu hazılanıyor olarak değiştir":
-        newStatus = "Hazırlanıyor";
-        break;
-      case "Durumu kargoya verildi olarak değiştir":
-        newStatus = "Kargoya Verildi";
-        break;
-      case "Durumu ödeme bekleniyor olarak değiştir":
-        newStatus = "Ödeme bekleniyor";
-        break;
-      case "Durumu tamamlandı olarak değiştir":
-        newStatus = "Tamamlandı";
-        break;
-      case "Durumu iptal edildi olarak değiştir":
-        newStatus = "İptal edildi";
-        break;
-      default:
-        break;
-    }
-  
-    if (newStatus) {
-      const updatedOrders = filteredOrders.map((order) => {
-        if (selectedOrders.includes(order)) {
-          return { ...order, status: newStatus };
-        }
-        return order;
-      });
-      setFilteredOrders(updatedOrders);
-      setSelectedOrders([]);
-     
-    
+ // Siparişlerin durumunu toplu olarak güncelle
+const handleBulkAction = (e) => {
+  const action = e.target.value;
+  let newStatus = "";
+  switch (action) {
+    // Durum değişikliğine göre yeni durumu belirle
+    case "Durumu hazılanıyor olarak değiştir":
+      newStatus = "Hazırlanıyor";
+      break;
+    case "Durumu kargoya verildi olarak değiştir":
+      newStatus = "Kargoya Verildi";
+      break;
+    case "Durumu ödeme bekleniyor olarak değiştir":
+      newStatus = "Ödeme bekleniyor";
+      break;
+    case "Durumu tamamlandı olarak değiştir":
+      newStatus = "Tamamlandı";
+      break;
+    case "Durumu iptal edildi olarak değiştir":
+      newStatus = "İptal edildi";
+      break;
+    default:
+      break;
+  }
 
-    
-      
-    }
-  };
-  console.log(orders);
-  console.log(selectedOrders, "ses");
+  if (newStatus) {
+    // Seçili siparişlerin durumunu değiştir
+    const updatedOrders = orders.map((order) => {
+      if (selectedOrders.includes(order)) {
+        return { ...order, status: newStatus };
+      }
+      return order;
+    });
+
+    // Güncellenmiş siparişleri "orders" dizisine yansıt
+    setFilteredOrders(updatedOrders);
+
+    setSelectedOrders([]);
+  }
+};
+
+  console.log(selectedStatus, "SelectedStatus");
+  const handleAllOrders = () => {
+    setSelectedStatus("Tümü")
+    setFilteredOrders(orders)
+  }
   return (
     <>
       {/* <div className=" text-center pt-5 pb-7 text-3xl text-NavyBlue font[600]">Siparişler</div>*/}
       <div className="justify-between flex">
         <div className="flex gap-2 text-LightBlue">
+          <span onClick={handleAllOrders} className={
+            selectedStatus === "Tümü"
+              ? "text-BaseDark cursor-pointer"
+              : "cursor-pointer"
+          }>
+          <span>Tümü</span>
+          <span>({orders.length})</span>
+          <span className="text-CustomGray ml-1">|</span>
+          </span>
           {statuses.map((status, index) => (
             <React.Fragment key={index}>
               <span
-                onClick={() => filterStatus(status.name)}
+              onClick={() => filterStatus(status)}
                 className={
-                  selectedStatus === status.name
+                  selectedStatus === status
                     ? "text-BaseDark cursor-pointer"
                     : "cursor-pointer"
                 }
               >
-                {status.name}
+                {status}
               </span>
-              <span className="text-CustomGray">({status.count})</span>
+              <span className="text-CustomGray"> ({orderCounts[status] || 0})</span>
               {index !== statuses.length - 1 && (
                 <span className="text-CustomGray">|</span>
               )}
