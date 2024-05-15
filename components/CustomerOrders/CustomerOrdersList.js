@@ -16,8 +16,11 @@ const CustomerOrdersList = () => {
   const [orderDate, setOrderDate] = useState("Tüm Tarihler");
   const [uniqueDates, setUniqueDates] = useState([]);
   const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(5);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
   const [selectAll, setSelectAll] = useState("Toplu İşlemler");
+  const [priceSortType, setPriceSortType] = useState("");
+  const [dateSortType, setDateSortType] = useState("");
+  const [anyFilterSelected, setAnyFilterSelected]=useState(false)
 
   const handleSelectAll = (e) => {
     setSelectAll(e.target.value);
@@ -87,7 +90,45 @@ const CustomerOrdersList = () => {
     page * rowsPerPage,
     page * rowsPerPage + rowsPerPage
   );
+  const sortOrders = (priceSortType, dateSortType) => {
+    let sortedOrders = [...filteredOrders];
+    if (priceSortType === "Önce en yüksek") {
+      sortedOrders.sort((a, b) => b.total - a.total);
+    } else if (priceSortType === "Önce en düşük") {
+      sortedOrders.sort((a, b) => a.total - b.total);
+    }
 
+    if (dateSortType === "Önce en yeni") {
+      sortedOrders.sort((a, b) => new Date(b.date) - new Date(a.date));
+    } else if (dateSortType === "Önce en eski") {
+      sortedOrders.sort((a, b) => new Date(a.date) - new Date(b.date));
+    }
+    setFilteredOrders(sortedOrders);
+  };
+
+  const handlePriceSortChange = (event) => {
+    const sortType = event.target.value;
+    setPriceSortType(sortType);
+    sortOrders(sortType, dateSortType);
+    setAnyFilterSelected(true)
+  };
+
+  const handleDateSortChange = (event) => {
+    const sortType = event.target.value;
+    setDateSortType(sortType);
+    sortOrders(priceSortType, sortType);
+    setAnyFilterSelected(true)
+  };
+  const handleClearFilters = () => {
+    setSearchValue("");
+    setSelectedStatus("Tümü");
+    setOrderDate("Tüm Tarihler");
+    setPriceSortType("Fiyata Göre Sırala");
+    setDateSortType("Tarihe Göre Sırala");
+    setSelectAll("Toplu İşlemler");
+    setAnyFilterSelected(false)
+    setFilteredOrders(orders);
+  };
   return (
     <>
    {/* <div className=" text-center pt-5 pb-7 text-3xl text-NavyBlue font[600]">Siparişler</div>*/}
@@ -175,14 +216,14 @@ const CustomerOrdersList = () => {
             </select>
 
          
-            <select className="" name="filterUsers">
+            <select className="" name="filterUsers" onChange={handlePriceSortChange} value={priceSortType}>
               <option hidden>Fiyata Göre Sırala</option>
               <option >Fiyata Göre Sırala</option>
               <option >Önce en yüksek</option>
               <option >Önce en düşük</option>
               
             </select>
-            <select className="" name="filterUsers">
+            <select className="" name="filterUsers"  onChange={handleDateSortChange} value={dateSortType}>
             <option hidden>Tarihe Göre Sırala</option>
             <option >Tarihe Göre Sırala</option>
             <option >Önce en yeni</option>
@@ -191,8 +232,10 @@ const CustomerOrdersList = () => {
           </select>
             {/* Filtrele Butonu */}
             <button
-              className={`p-1 cursor-pointer font-[500] border text-NavyBlue  rounded-md  hover:bg-NavyBlue hover:text-white text-sm `}
-            >
+            onClick={handleClearFilters}
+            className={`p-[6px]  font-[500] border text-NavyBlue  rounded-md   text-sm whitespace-nowrap
+            ${anyFilterSelected ?"border-NavyBlue cursor-pointer hover:bg-NavyBlue hover:text-white" :  "  text-NavyBlue opacity-50 border-gray-400 cursor-not-allowed"}
+`}            >
               Filtre Temizle
             </button>
           </div>
