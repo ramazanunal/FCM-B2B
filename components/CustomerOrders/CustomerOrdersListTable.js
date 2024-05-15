@@ -1,11 +1,15 @@
 import React, { useState } from "react";
 import { BiHide } from "react-icons/bi";
 import { RxEyeOpen } from "react-icons/rx";
+import RequestModal from "./RequestModal";
+import OrderCancellation from "./OrderCancallation";
 
 const CustomerOrdersListTable = ({ orders }) => {
   const [selectAllChecked, setSelectAllChecked] = useState(false);
   const [selectedOrderCheckboxes, setSelectedOrderCheckboxes] = useState({});
-
+  const [isOpenReqModal, setIsOpenReqModal] = useState(false)
+  const [isOpenOrderCanModal, setIsOpenOrderCanModal] = useState(false)
+  const [selectedOrder, setSelectedOrder] = useState(null);
   // statu Renkleri
   const statusColors = {
     Beklemede: "bg-[#e5e5e5] text-[#80808b]",
@@ -34,8 +38,19 @@ const CustomerOrdersListTable = ({ orders }) => {
     }));
   };
 
+  const handleOpenRequestModal = (order) => {
+    setSelectedOrder(order);
+    setIsOpenReqModal(true);
+  };
+
+  const handleOrderCancellation = (order) => {
+    setSelectedOrder(order);
+    setIsOpenOrderCanModal(true);
+  };
+
   return (
-    <div className="overflow-x-auto border">
+    <>
+     <div className="overflow-x-auto border">
       <table className="min-w-full divide-y divide-gray-200">
         <thead className="bg-NavyBlue text-white ">
           <tr>
@@ -57,7 +72,7 @@ const CustomerOrdersListTable = ({ orders }) => {
             <th className="px-6 py-3 text-left text-base font-medium">
               Toplam
             </th>
-            <th className="px-6 py-3 text-left text-base font-medium">
+            <th className="px-6 py-3 text-center text-base font-medium">
               Eylemler
             </th>
           </tr>
@@ -94,12 +109,25 @@ const CustomerOrdersListTable = ({ orders }) => {
                 </div>
               </td>
               <td className="px-6 py-4 whitespace-nowrap">{order.total}₺</td>
-              <td className="px-6 py-4 whitespace-nowrap">{order.actions}</td>
+              <td className="px-6 py-4 whitespace-nowrap ">
+              <div className="flex space-x-3 text-sm">
+              <button className="bg-blue-300 p-2 rounded-full  hover:bg-blue-400"  onClick={() => handleOpenRequestModal(order)}>Sipariş için talep oluştur</button>
+               <button className="bg-red-300 p-2 rounded-full hover:bg-red-400" onClick={() => handleOrderCancellation(order)}>Sipariş iptal talebi</button>
+            </div>
+              </td>
             </tr>
           ))}
         </tbody>
       </table>
     </div>
+    {
+      isOpenReqModal && <RequestModal isOpen={isOpenReqModal} setIsOpen={setIsOpenReqModal}  order={selectedOrder} />
+    }
+    {
+      isOpenOrderCanModal && <OrderCancellation isOpen={isOpenOrderCanModal} setIsOpen={setIsOpenOrderCanModal} order={selectedOrder}/>
+    }
+    </>
+   
   );
 };
 

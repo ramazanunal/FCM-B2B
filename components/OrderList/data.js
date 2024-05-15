@@ -30,12 +30,7 @@ export const orders = [
     date: formattedDate,
     status: "Tamamlanan",
     total: 100,
-    actions: (
-      <div className="flex space-x-3">
-          <button className="bg-yellow-300 p-2 rounded-2xl hover:bg-yellow-400">Düzenle</button>
-           <button className="bg-red-300 p-2 rounded-2xl hover:bg-red-400">Sil</button>
-        </div>
-    ),
+   
   },
   {
     id: 2,
@@ -45,12 +40,7 @@ export const orders = [
     date: formattedDate,
     status: "Beklemede",
     total: 80,
-    actions: (
-      <div className="flex space-x-3">
-      <button className="bg-yellow-300 p-2 rounded-2xl hover:bg-yellow-400">Düzenle</button>
-       <button className="bg-red-300 p-2 rounded-2xl hover:bg-red-400">Sil</button>
-    </div>
-    ),
+   
   },
   {
     id: 3,
@@ -60,12 +50,7 @@ export const orders = [
     date: formattedDate,
     status: "Başarısız olan",
     total: 50,
-    actions: (
-      <div className="flex space-x-3">
-      <button className="bg-yellow-300 p-2 rounded-2xl hover:bg-yellow-400">Düzenle</button>
-       <button className="bg-red-300 p-2 rounded-2xl hover:bg-red-400">Sil</button>
-    </div>
-    ),
+   
   },
   {
     id: 4,
@@ -75,12 +60,7 @@ export const orders = [
     date: formattedDate,
     status: "İptal edilen",
     total:75,
-    actions: (
-      <div className="flex space-x-3">
-          <button className="bg-yellow-300 p-2 rounded-2xl hover:bg-yellow-400">Düzenle</button>
-           <button className="bg-red-300 p-2 rounded-2xl hover:bg-red-400">Sil</button>
-        </div>
-    ),
+    
   },
   {
     id: 5,
@@ -90,12 +70,7 @@ export const orders = [
     date: formattedDate,
     status: "Ödeme bekleniyor",
     total:15,
-    actions: (
-      <div className="flex space-x-3">
-          <button className="bg-yellow-300 p-2 rounded-2xl hover:bg-yellow-400">Düzenle</button>
-           <button className="bg-red-300 p-2 rounded-2xl hover:bg-red-400">Sil</button>
-        </div>
-    ),
+    
   },
   {
     id: 6,
@@ -105,12 +80,7 @@ export const orders = [
     date: formattedDate,
     status: "Tamamlanan",
     total: 66,
-    actions: (
-      <div className="flex space-x-3">
-          <button className="bg-yellow-300 p-2 rounded-2xl hover:bg-yellow-400">Düzenle</button>
-           <button className="bg-red-300 p-2 rounded-2xl hover:bg-red-400">Sil</button>
-        </div>
-    ),
+    
   },
   {
     id: 7,
@@ -120,12 +90,7 @@ export const orders = [
     date: formattedDate,
     status: "Beklemede",
     total: 25,
-    actions: (
-      <div className="flex space-x-3">
-          <button className="bg-yellow-300 p-2 rounded-2xl hover:bg-yellow-400">Düzenle</button>
-           <button className="bg-red-300 p-2 rounded-2xl hover:bg-red-400">Sil</button>
-        </div>
-    ),
+    
   },
   {
     id: 8,
@@ -135,12 +100,7 @@ export const orders = [
     date: formattedDate,
     status: "Hazırlanıyor",
     total: 63,
-    actions: (
-      <div className="flex space-x-3">
-          <button className="bg-yellow-300 p-2 rounded-2xl hover:bg-yellow-400">Düzenle</button>
-           <button className="bg-red-300 p-2 rounded-2xl hover:bg-red-400">Sil</button>
-        </div>
-    ),
+    
   },
 ];
 

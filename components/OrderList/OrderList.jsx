@@ -20,7 +20,7 @@ const OrderList = () => {
   const [selectAll, setSelectAll] = useState("Toplu İşlemler");
   const [priceSortType, setPriceSortType] = useState("");
   const [dateSortType, setDateSortType] = useState("");
-  const [anyFilterSelected, setAnyFilterSelected]=useState(false)
+  const [anyFilterSelected, setAnyFilterSelected] = useState(false);
 
   const handleSelectAll = (e) => {
     setSelectAll(e.target.value);
@@ -111,14 +111,14 @@ const OrderList = () => {
     const sortType = event.target.value;
     setPriceSortType(sortType);
     sortOrders(sortType, dateSortType);
-    setAnyFilterSelected(true)
+    setAnyFilterSelected(true);
   };
 
   const handleDateSortChange = (event) => {
     const sortType = event.target.value;
     setDateSortType(sortType);
     sortOrders(priceSortType, sortType);
-    setAnyFilterSelected(true)
+    setAnyFilterSelected(true);
   };
   const handleClearFilters = () => {
     setSearchValue("");
@@ -127,12 +127,12 @@ const OrderList = () => {
     setPriceSortType("Fiyata Göre Sırala");
     setDateSortType("Tarihe Göre Sırala");
     setSelectAll("Toplu İşlemler");
-    setAnyFilterSelected(false)
+    setAnyFilterSelected(false);
     setFilteredOrders(orders);
   };
   return (
     <>
-   {/* <div className=" text-center pt-5 pb-7 text-3xl text-NavyBlue font[600]">Siparişler</div>*/}
+      {/* <div className=" text-center pt-5 pb-7 text-3xl text-NavyBlue font[600]">Siparişler</div>*/}
       <div className="justify-between flex">
         <div className="flex gap-2 text-LightBlue">
           {statuses.map((status, index) => (
@@ -225,29 +225,42 @@ const OrderList = () => {
               <option hidden>Kayıtlı Kullanıcılara göre Filtrele</option>
               <option>Kayıtlı Kullanıcılara göre Filtrele</option>
             </select>
-            <select className="" name="filterUsers"  onChange={handlePriceSortChange} value={priceSortType}>
+            <select
+              className=""
+              name="filterUsers"
+              onChange={handlePriceSortChange}
+              value={priceSortType}
+            >
               <option hidden>Fiyata Göre Sırala</option>
-              <option >Fiyata Göre Sırala</option>
-              <option >Önce en yüksek</option>
-              <option >Önce en düşük</option>
-              
+              <option>Fiyata Göre Sırala</option>
+              <option>Önce en yüksek</option>
+              <option>Önce en düşük</option>
             </select>
-            <select className="" name="filterUsers" onChange={handleDateSortChange} value={dateSortType}>
-            <option hidden>Tarihe Göre Sırala</option>
-            <option >Tarihe Göre Sırala</option>
-            <option >Önce en yeni</option>
-            <option >Önce en eski</option>
-            
-          </select>
+            <select
+              className=""
+              name="filterUsers"
+              onChange={handleDateSortChange}
+              value={dateSortType}
+            >
+              <option hidden>Tarihe Göre Sırala</option>
+              <option>Tarihe Göre Sırala</option>
+              <option>Önce en yeni</option>
+              <option>Önce en eski</option>
+            </select>
             {/* Filtrele Butonu */}
             <button
-            onClick={handleClearFilters}
-            className={`p-[6px]  font-[500] border text-NavyBlue  rounded-md   text-sm whitespace-nowrap
-            ${anyFilterSelected ?"border-NavyBlue cursor-pointer hover:bg-NavyBlue hover:text-white" :  "  text-NavyBlue opacity-50 border-gray-400 cursor-not-allowed"}
+              onClick={handleClearFilters}
+              className={`p-[6px]  font-[500] border text-NavyBlue  rounded-md   text-sm whitespace-nowrap
+            ${
+              anyFilterSelected
+                ? "border-NavyBlue cursor-pointer hover:bg-NavyBlue hover:text-white"
+                : "  text-NavyBlue opacity-50 border-gray-400 cursor-not-allowed"
+            }
 `}
             >
               Filtre Temizle
             </button>
+            
           </div>
         </div>
 
@@ -276,7 +289,9 @@ const OrderList = () => {
             <MdKeyboardArrowLeft />
           </div>
 
-          <span className="border  md:px-4 md:py-2 py-1 px-3 rounded-full bg-NavyBlue text-white">{page + 1}</span>
+          <span className="border  md:px-4 md:py-2 py-1 px-3 rounded-full bg-NavyBlue text-white">
+            {page + 1}
+          </span>
           <span>/ {Math.ceil(filteredOrders.length / rowsPerPage)}</span>
 
           <div

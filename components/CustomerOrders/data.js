@@ -28,12 +28,7 @@ export const orders = [
       date: formattedDate,
       status: "Tamamlanan",
       total: 25,
-      actions: (
-        <div className="flex space-x-3">
-          <button className="bg-blue-300 p-2 rounded-full hover:bg-blue-400">Sipariş için talep oluştur</button>
-           <button className="bg-red-300 p-2 rounded-full hover:bg-red-400">Sipariş iptal talebi</button>
-        </div>
-      ),
+      
     },
     {
       id: 2,
@@ -43,12 +38,7 @@ export const orders = [
       date: formattedDate,
       status: "Beklemede",
       total:15,
-      actions: (
-        <div className="flex space-x-3">
-          <button className="bg-blue-300 p-2 rounded-full hover:bg-blue-400">Sipariş için talep oluştur</button>
-           <button className="bg-red-300 p-2 rounded-full hover:bg-red-400">Sipariş iptal talebi</button>
-        </div>
-      ),
+     
     },
     {
       id: 3,
@@ -58,12 +48,7 @@ export const orders = [
       date: formattedDate,
       status: "Başarısız olan",
       total: 89,
-      actions: (
-        <div className="flex space-x-3">
-          <button className="bg-blue-300 p-2 rounded-full hover:bg-blue-400">Sipariş için talep oluştur</button>
-           <button className="bg-red-300 p-2 rounded-full hover:bg-red-400">Sipariş iptal talebi</button>
-        </div>
-      ),
+     
     },
     {
       id: 4,
@@ -73,12 +58,7 @@ export const orders = [
       date: formattedDate,
       status: "İptal edilen",
       total: 77,
-      actions: (
-        <div className="flex space-x-3">
-          <button className="bg-blue-300 p-2 rounded-full hover:bg-blue-400">Sipariş için talep oluştur</button>
-           <button className="bg-red-300 p-2 rounded-full hover:bg-red-400">Sipariş iptal talebi</button>
-        </div>
-      ),
+      
     },
     {
       id: 5,
@@ -88,12 +68,7 @@ export const orders = [
       date: formattedDate,
       status: "Ödeme bekleniyor",
       total: 52,
-      actions: (
-        <div className="flex space-x-3">
-          <button className="bg-blue-300 p-2 rounded-full hover:bg-blue-400">Sipariş için talep oluştur</button>
-           <button className="bg-red-300 p-2 rounded-full hover:bg-red-400">Sipariş iptal talebi</button>
-        </div>
-      ),
+    
     },
     {
       id: 6,
@@ -103,12 +78,7 @@ export const orders = [
       date: formattedDate,
       status: "Tamamlanan",
       total: 23,
-      actions: (
-        <div className="flex space-x-3">
-          <button className="bg-blue-300 p-2 rounded-full hover:bg-blue-400">Sipariş için talep oluştur</button>
-           <button className="bg-red-300 p-2 rounded-full hover:bg-red-400">Sipariş iptal talebi</button>
-        </div>
-      ),
+     
     },
     {
       id: 7,
@@ -118,12 +88,7 @@ export const orders = [
       date: formattedDate,
       status: "Beklemede",
       total: 65,
-      actions: (
-        <div className="flex space-x-3">
-        <button className="bg-blue-300 p-2 rounded-full hover:bg-blue-400">Sipariş için talep oluştur</button>
-         <button className="bg-red-300 p-2 rounded-full hover:bg-red-400">Sipariş iptal talebi</button>
-      </div>
-      ),
+      
     },
     {
       id: 8,
@@ -133,12 +98,7 @@ export const orders = [
       date: formattedDate,
       status: "Hazırlanıyor",
       total: 24,
-      actions: (
-        <div className="flex space-x-3">
-          <button className="bg-blue-300 p-2 rounded-full hover:bg-blue-400">Sipariş için talep oluştur</button>
-           <button className="bg-red-300 p-2 rounded-full hover:bg-red-400">Sipariş iptal talebi</button>
-        </div>
-      ),
+      
     },
   ];
   

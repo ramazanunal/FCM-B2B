@@ -75,8 +75,11 @@ const OrderListTable = ({ orders }) => {
                   onChange={() => handleSingleCheckboxChange(order.id)}
                 />
               </td>
-              <td className="px-6 py-4 whitespace-nowrap text-LightBlue">
+              <td className="px-6 py-4 whitespace-nowrap text-LightBlue relative group cursor-pointer ">
                 {order.orderNumber}
+                <span class="invisible group-hover:visible w-28 bg-LightBlue text-xs text-white text-center rounded-lg p-2 absolute z-10 -mt-1 ml-2">
+                  Sipariş Detayı
+                </span>
               </td>
               <td className="py-4 whitespace-nowrap flex items-center gap-3">
                 <BiHide className="hidden text-LightBlue" />
@@ -94,7 +97,16 @@ const OrderListTable = ({ orders }) => {
                 </div>
               </td>
               <td className="px-6 py-4 whitespace-nowrap">{order.total}₺</td>
-              <td className="px-6 py-4 whitespace-nowrap">{order.actions}</td>
+              <td className="px-6 py-4 whitespace-nowrap">
+                <div className="flex space-x-3">
+                  <button className="bg-yellow-300 p-2 rounded-2xl hover:bg-yellow-400">
+                    Düzenle
+                  </button>
+                  <button className="bg-red-300 p-2 rounded-2xl hover:bg-red-400">
+                    Sil
+                  </button>
+                </div>
+              </td>
             </tr>
           ))}
         </tbody>
