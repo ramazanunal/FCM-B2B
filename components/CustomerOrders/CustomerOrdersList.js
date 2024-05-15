@@ -1,6 +1,6 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import OrderListTable from "./OrderListTable";
+import CustomerOrdersListTable from "./CustomerOrdersListTable";
 import { orders, statuses } from "./data";
 import {
   MdKeyboardArrowLeft,
@@ -9,7 +9,7 @@ import {
   MdKeyboardDoubleArrowRight,
 } from "react-icons/md";
 
-const OrderList = () => {
+const CustomerOrdersList = () => {
   const [filteredOrders, setFilteredOrders] = useState(orders);
   const [searchValue, setSearchValue] = useState("");
   const [selectedStatus, setSelectedStatus] = useState("Tümü");
@@ -146,11 +146,7 @@ const OrderList = () => {
               <option hidden>Toplu İşlemler</option>
               <option>Toplu İşlemler</option>
               <option>Çöp kutusuna taşı</option>
-              <option>Durumu hazılanıyor olarak değiştir</option>
-              <option>Durumu kargoya verildi olarak değiştir</option>
-              <option>Durumu ödeme bekleniyor olarak değiştir</option>
-              <option>Durumu tamalandı olarak değiştir</option>
-              <option>Durumu iptal edildi olarak değiştir</option>
+              <option>Kargoya verildi</option>
               <option>PDF Fatura</option>
               <option>PDF Paketleme Fişi</option>
             </select>
@@ -178,11 +174,7 @@ const OrderList = () => {
               ))}
             </select>
 
-            {/* Kayıtlı Kullanıcılara Göre Filtreleme Select */}
-            <select className="" name="filterUsers">
-              <option hidden>Kayıtlı Kullanıcılara göre Filtrele</option>
-              <option>Kayıtlı Kullanıcılara göre Filtrele</option>
-            </select>
+         
             <select className="" name="filterUsers">
               <option hidden>Fiyata Göre Sırala</option>
               <option >Fiyata Göre Sırala</option>
@@ -257,9 +249,9 @@ const OrderList = () => {
           </div>
         </div>
       </div>
-      <OrderListTable orders={paginatedOrders} />
+      <CustomerOrdersListTable orders={paginatedOrders} />
     </>
   );
 };
 
-export default OrderList;
+export default CustomerOrdersList;

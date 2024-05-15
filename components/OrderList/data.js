@@ -3,113 +3,121 @@ export const orders = [
   {
     id: 1,
     userId: 1,
-    orderNumber: "Bilgisayar",
+    orderNumber: "F36458",
     invoiceNumber: "INV456",
     date: "22 Nisan 2021",
     status: "Tamamlanan",
     total: "100₺",
     actions: (
-      <div className="flex">
-        <button>Duzenle</button> <button>Sil</button>
-      </div>
+      <div className="flex space-x-3">
+          <button className="bg-yellow-300 p-2 rounded-2xl hover:bg-yellow-400">Düzenle</button>
+           <button className="bg-red-300 p-2 rounded-2xl hover:bg-red-400">Sil</button>
+        </div>
     ),
   },
   {
     id: 2,
     userId: 2,
-    orderNumber: "Telefon",
+    orderNumber: "F36451",
     invoiceNumber: "INV457",
     date: "23 Nisan 2021",
     status: "Beklemede",
     total: "80₺",
     actions: (
-      <div className="flex">
-        <button>Duzenle</button> <button>Sil</button>
-      </div>
+      <div className="flex space-x-3">
+      <button className="bg-yellow-300 p-2 rounded-2xl hover:bg-yellow-400">Düzenle</button>
+       <button className="bg-red-300 p-2 rounded-2xl hover:bg-red-400">Sil</button>
+    </div>
     ),
   },
   {
     id: 3,
     userId: 3,
-    orderNumber: "Telefon",
+    orderNumber: "F36454",
     invoiceNumber: "INV457",
     date: "23 Nisan 2024",
     status: "Başarısız olan",
     total: "80₺",
     actions: (
-      <div className="flex">
-        <button>Duzenle</button> <button>Sil</button>
-      </div>
+      <div className="flex space-x-3">
+      <button className="bg-yellow-300 p-2 rounded-2xl hover:bg-yellow-400">Düzenle</button>
+       <button className="bg-red-300 p-2 rounded-2xl hover:bg-red-400">Sil</button>
+    </div>
     ),
   },
   {
     id: 4,
     userId: 4,
-    orderNumber: "Telefon",
+    orderNumber: "F36478",
     invoiceNumber: "INV457",
     date: "23 Nisan 2024",
     status: "İptal edilen",
     total: "80₺",
     actions: (
-      <div className="flex">
-        <button>Duzenle</button> <button>Sil</button>
-      </div>
+      <div className="flex space-x-3">
+          <button className="bg-yellow-300 p-2 rounded-2xl hover:bg-yellow-400">Düzenle</button>
+           <button className="bg-red-300 p-2 rounded-2xl hover:bg-red-400">Sil</button>
+        </div>
     ),
   },
   {
     id: 5,
     userId: 5,
-    orderNumber: "Telefon",
+    orderNumber: "F36452",
     invoiceNumber: "INV457",
     date: "23 Nisan 2024",
     status: "Ödeme bekleniyor",
     total: "80₺",
     actions: (
-      <div className="flex">
-        <button>Duzenle</button> <button>Sil</button>
-      </div>
+      <div className="flex space-x-3">
+          <button className="bg-yellow-300 p-2 rounded-2xl hover:bg-yellow-400">Düzenle</button>
+           <button className="bg-red-300 p-2 rounded-2xl hover:bg-red-400">Sil</button>
+        </div>
     ),
   },
   {
     id: 6,
     userId: 6,
-    orderNumber: "Telefon",
+    orderNumber: "F36441",
     invoiceNumber: "INV457",
     date: "23 Nisan 2024",
     status: "Tamamlanan",
     total: "80₺",
     actions: (
-      <div className="flex">
-        <button>Duzenle</button> <button>Sil</button>
-      </div>
+      <div className="flex space-x-3">
+          <button className="bg-yellow-300 p-2 rounded-2xl hover:bg-yellow-400">Düzenle</button>
+           <button className="bg-red-300 p-2 rounded-2xl hover:bg-red-400">Sil</button>
+        </div>
     ),
   },
   {
     id: 7,
     userId: 7,
-    orderNumber: "Telefon",
+    orderNumber: "F36465",
     invoiceNumber: "INV457",
     date: "23 Nisan 2024",
     status: "Beklemede",
     total: "80₺",
     actions: (
-      <div className="flex">
-        <button>Duzenle</button> <button>Sil</button>
-      </div>
+      <div className="flex space-x-3">
+          <button className="bg-yellow-300 p-2 rounded-2xl hover:bg-yellow-400">Düzenle</button>
+           <button className="bg-red-300 p-2 rounded-2xl hover:bg-red-400">Sil</button>
+        </div>
     ),
   },
   {
     id: 8,
     userId: 8,
-    orderNumber: "Telefon",
+    orderNumber: "F3646598",
     invoiceNumber: "INV457",
     date: "23 Nisan 2024",
     status: "Hazırlanıyor",
     total: "80₺",
     actions: (
-      <div className="flex gap-2">
-        <button>Duzenle</button> <button>Sil</button>
-      </div>
+      <div className="flex space-x-3">
+          <button className="bg-yellow-300 p-2 rounded-2xl hover:bg-yellow-400">Düzenle</button>
+           <button className="bg-red-300 p-2 rounded-2xl hover:bg-red-400">Sil</button>
+        </div>
     ),
   },
 ];
