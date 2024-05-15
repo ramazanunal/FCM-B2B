@@ -21,6 +21,11 @@ const OrderList = () => {
   const [priceSortType, setPriceSortType] = useState("");
   const [dateSortType, setDateSortType] = useState("");
   const [anyFilterSelected, setAnyFilterSelected] = useState(false);
+  const [selectedOrders, setSelectedOrders] = useState([]);
+  
+
+
+  console.log(selectedOrders);
 
   const handleSelectAll = (e) => {
     setSelectAll(e.target.value);
@@ -51,11 +56,11 @@ const OrderList = () => {
     }
 
     filteredOrders.forEach((order) => {
-      if (order.status === "Tamamlanan") {
+      if (order.status === "Tamamlandı") {
         order.status = "Tamamlandı";
-      } else if (order.status === "İptal edilen") {
+      } else if (order.status === "İptal edildi") {
         order.status = "İptal edildi";
-      } else if (order.status === "Başarısız olan") {
+      } else if (order.status === "Başarısız") {
         order.status = "Başarısız";
       }
     });
@@ -130,6 +135,48 @@ const OrderList = () => {
     setAnyFilterSelected(false);
     setFilteredOrders(orders);
   };
+
+  const handleBulkAction = (e) => {
+    const action = e.target.value;
+    let newStatus = "";
+    switch (action) {
+      case "Durumu hazılanıyor olarak değiştir":
+        newStatus = "Hazırlanıyor";
+        break;
+      case "Durumu kargoya verildi olarak değiştir":
+        newStatus = "Kargoya Verildi";
+        break;
+      case "Durumu ödeme bekleniyor olarak değiştir":
+        newStatus = "Ödeme bekleniyor";
+        break;
+      case "Durumu tamamlandı olarak değiştir":
+        newStatus = "Tamamlandı";
+        break;
+      case "Durumu iptal edildi olarak değiştir":
+        newStatus = "İptal edildi";
+        break;
+      default:
+        break;
+    }
+  
+    if (newStatus) {
+      const updatedOrders = filteredOrders.map((order) => {
+        if (selectedOrders.includes(order)) {
+          return { ...order, status: newStatus };
+        }
+        return order;
+      });
+      setFilteredOrders(updatedOrders);
+      setSelectedOrders([]);
+     
+    
+
+    
+      
+    }
+  };
+  console.log(orders);
+  console.log(selectedOrders, "ses");
   return (
     <>
       {/* <div className=" text-center pt-5 pb-7 text-3xl text-NavyBlue font[600]">Siparişler</div>*/}
@@ -183,15 +230,15 @@ const OrderList = () => {
               }`}
               name="filterActions"
               value={selectAll}
-              onChange={handleSelectAll}
+              onChange={handleBulkAction}
             >
               <option hidden>Toplu İşlemler</option>
               <option>Toplu İşlemler</option>
               <option>Çöp kutusuna taşı</option>
               <option>Durumu hazılanıyor olarak değiştir</option>
               <option>Durumu kargoya verildi olarak değiştir</option>
-              <option>Durumu ödeme bekleniyor olarak değiştir</option>
-              <option>Durumu tamalandı olarak değiştir</option>
+              <option >Durumu ödeme bekleniyor olarak değiştir</option>
+              <option>Durumu tamamlandı olarak değiştir</option>
               <option>Durumu iptal edildi olarak değiştir</option>
               <option>PDF Fatura</option>
               <option>PDF Paketleme Fişi</option>
@@ -317,7 +364,7 @@ const OrderList = () => {
           </div>
         </div>
       </div>
-      <OrderListTable orders={paginatedOrders} />
+      <OrderListTable orders={paginatedOrders}  selectedOrders={selectedOrders} setSelectedOrders={setSelectedOrders}/>
     </>
   );
 };

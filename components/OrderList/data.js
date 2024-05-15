@@ -88,7 +88,7 @@ export const orders = [
     orderNumber: "F36465",
     invoiceNumber: "INV457",
     date: formattedDate,
-    status: "Beklemede",
+    status: "Kargoya Verildi",
     total: 25,
     
   },
@@ -120,15 +120,20 @@ export const statuses = [
     count: orders.filter((order) => order.status === "Ödeme bekleniyor").length,
   },
   {
-    name: "Tamamlanan",
-    count: orders.filter((order) => order.status === "Tamamlanan").length,
+    name: "Tamamlandı",
+    count: orders.filter((order) => order.status === "Tamamlandı").length,
   },
   {
-    name: "İptal edilen",
-    count: orders.filter((order) => order.status === "İptal edilen").length,
+    name: "İptal edildi",
+    count: orders.filter((order) => order.status === "İptal edildi").length,
   },
   {
-    name: "Başarısız olan",
-    count: orders.filter((order) => order.status === "Başarısız olan").length,
+    name: "Başarısız",
+    count: orders.filter((order) => order.status === "Başarısız").length,
+  },
+  ,
+  {
+    name: "Kargoya Verildi",
+    count: orders.filter((order) => order.status === "Kargoya Verildi").length,
   },
 ];
