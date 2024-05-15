@@ -28,7 +28,7 @@ export const orders = [
     orderNumber: "F36458",
     invoiceNumber: "INV456",
     date: formattedDate,
-    status: "Tamamlanan",
+    status: "Tamamlandı",
     total: 100,
    
   },
@@ -48,7 +48,7 @@ export const orders = [
     orderNumber: "F36454",
     invoiceNumber: "INV457",
     date: formattedDate,
-    status: "Başarısız olan",
+    status: "Başarısız",
     total: 50,
    
   },
@@ -58,7 +58,7 @@ export const orders = [
     orderNumber: "F36478",
     invoiceNumber: "INV457",
     date: formattedDate,
-    status: "İptal edilen",
+    status: "İptal edildi",
     total:75,
     
   },
@@ -78,7 +78,7 @@ export const orders = [
     orderNumber: "F36441",
     invoiceNumber: "INV457",
     date: formattedDate,
-    status: "Tamamlanan",
+    status: "Tamamlandı",
     total: 66,
     
   },
