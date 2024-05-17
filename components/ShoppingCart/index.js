@@ -5,25 +5,19 @@ import Image from "next/image";
 import { TbShoppingCartX } from "react-icons/tb";
 import Link from "next/link";
 import categoryStore from "@/utils/categoryStore";
-import OrderInformation from "../OrderInformation";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { MdDeleteForever } from "react-icons/md";
 import { IoMdImages } from "react-icons/io";
 import { BsThreeDotsVertical } from "react-icons/bs";
-import { FaChevronDown, FaCheck } from "react-icons/fa";
-import { GiCancel } from "react-icons/gi";
-
+import { GiCancel, GiWallet } from "react-icons/gi";
+import { FaCcMastercard, FaCheck } from "react-icons/fa";
 import { RiShoppingCartLine } from "react-icons/ri";
 import { RxUpdate } from "react-icons/rx";
-const ShoppingCart = () => {
-  const [updating, setUpdating] = useState(false);
-  const [updatingItems, setUpdatingItems] = useState({});
-  const [confirmDelete, setConfirmDelete] = useState(false);
-  const [itemToDelete, setItemToDelete] = useState(null);
-  const [selectedPaying, setSelectedPaying] = useState("Ödeme Yöntemi Seçin");
-  const [showPayingOptions, setShowPayingOptions] = useState(false);
+import { FaMoneyBillTransfer } from "react-icons/fa6";
+import OrderInformation from "../OrderInformation";
 
+const ShoppingCart = () => {
   const initialCartItems = () => {
     if (typeof window !== "undefined") {
       const storedCartItems = localStorage.getItem("cartItems");
@@ -31,8 +25,11 @@ const ShoppingCart = () => {
     }
     return [];
   };
-
   const [cartItems, setCartItems] = useState(initialCartItems);
+  const [updating, setUpdating] = useState(false);
+  const [updatingItems, setUpdatingItems] = useState({});
+  const [confirmDelete, setConfirmDelete] = useState(false);
+  const [itemToDelete, setItemToDelete] = useState(null);
 
   const handleQuantityChange = (itemId, newQuantity) => {
     setUpdating(true); // Güncelleme başladığında true
@@ -137,11 +134,13 @@ const ShoppingCart = () => {
   //sepet tutarı
   const totalAmountAfterDiscount = totalPrice - totalDiscount;
 
-  // ödeme yöntemi için fonksiyon
-  const handlePayingOptionClick = (shipping) => {
-    setSelectedPaying(shipping);
-    setShowPayingOptions(false);
-  };
+  //ödeme yöntemi
+  const [selectedMethod, setSelectedMethod] = useState(null);
+  const paymentMethods = [
+    { id: 1, icon: "FaMoneyBillTransfer" },
+    { id: 2, icon: "FaCcMastercard" },
+    { id: 3, icon: "GiWallet" },
+  ];
   return (
     <div
       id="shoppingcart"
@@ -255,15 +254,15 @@ const ShoppingCart = () => {
                               className="text-center w-12 h-10 border rounded-md border-slate-200 hover:border-CustomGray transition duration-500 ease-in-out transform outline-none"
                             />
                             <button
-                              className="hidden sm:flex items-center justify-center bg-slate-200 font-semibold py-2 px-4 rounded-md sm:ml-[24px] hover:scale-105 transition-all duration-500 transform ease-in-out hover:bg-slate-300 w-[101px] h-[40px]"
+                              className="hidden sm:flex items-center justify-center bg-LightBlue/75 font-semibold py-2 px-4 rounded-md sm:ml-[24px] hover:scale-105 transition-all duration-700 transform ease-in-out hover:bg-LightBlue text-white w-[101px] h-[40px]"
                               type="submit"
                               disabled={updating}
                             >
                               {updatingItems[item.id] ? (
                                 <div className="flex flex-row items-center justify-center gap-1 ">
-                                  <div className="h-2 w-2 rounded-full animate-pulse bg-LightBlue"></div>
-                                  <div className="h-2 w-2 rounded-full animate-pulse bg-LightBlue"></div>
-                                  <div className="h-2 w-2 rounded-full animate-pulse bg-LightBlue"></div>
+                                  <div className="h-2 w-2 rounded-full animate-pulse bg-DarkBlue"></div>
+                                  <div className="h-2 w-2 rounded-full animate-pulse bg-DarkBlue"></div>
+                                  <div className="h-2 w-2 rounded-full animate-pulse bg-DarkBlue"></div>
                                 </div>
                               ) : (
                                 "Güncelle"
@@ -281,7 +280,7 @@ const ShoppingCart = () => {
                                   <div className="h-1 w-1 rounded-full animate-pulse bg-LightBlue"></div>
                                 </div>
                               ) : (
-                                <RxUpdate className="w-4 h-4 text-LightBlue"/>
+                                <RxUpdate className="w-4 h-4 text-LightBlue" />
                               )}
                             </button>
                           </Form>
@@ -302,6 +301,9 @@ const ShoppingCart = () => {
               ))}
             </tbody>
           </table>
+          <div >
+            <OrderInformation/>
+          </div>
           <div className="flex items-center justify-end">
             {" "}
             <h1 className="text-[20px] md:text-[32px] font-bold text-CustomGray mt-12 flex items-center justify-center pr-32">
@@ -310,47 +312,40 @@ const ShoppingCart = () => {
           </div>
           <div className="flex flex-col items-center sm:items-end">
             <div className="flex flex-col items-center justify-center bg-slate-100 w-[350px] sm:w-[450px] rounded-2xl shadow-lg mt-5 p-10">
-              <div className="bg-white rounded-full">
-                <div className="address-selector relative text-CustomGray text-[14px]  rounded-full flex">
-                  <div
-                    className="input-container flex flex-row items-center justify-between  border-2 border-indigo-300 hover:border-2 hover:border-indigo-500 transition-all duration-500 transform ease-in-out rounded-full w-[270px] "
-                    onClick={() => setShowPayingOptions(!showPayingOptions)}
-                  >
-                    <input
-                      type="text "
-                      className="px-5 py-3 w-[150px] text-gray-600 font-medium rounded-full outline-none"
-                      value={selectedPaying}
-                      readOnly
-                    />
-                    <span className="px-5 py-2 ">
-                      <FaChevronDown className="hover:scale-110  transition duration-500 ease-in-out transform hover:text-LightBlue" />
-                    </span>
-                  </div>
-                  {showPayingOptions && (
-                    <div className="options absolute top-12 rounded-3xl flex flex-col border-2 border-slate-200 shadow-lg w-[270px] z-20 bg-white  ">
-                      {["Kredi Kartı", "Cari Hesap", "Havale"].map(
-                        (paying, index) => (
-                          <div
-                            key={index}
-                            className={`option cursor-pointer px-5 py-2 transition duration-500 ease-in-out transform outline-none flex justify-between items-center hover:text-LightBlue rounded-3xl ${
-                              selectedPaying === paying ? "bg-slate-100" : ""
-                            }`}
-                            onClick={() => handlePayingOptionClick(paying)}
-                          >
-                            <div className="flex flex-col  font-medium py-2 ">
-                              <span>{paying}</span>
-                            </div>
-                            {selectedPaying === paying && (
-                              <FaCheck className="text-LightBlue" />
-                            )}
-                          </div>
-                        )
+              <div className="border-b border-slate-200 mb-8">
+                <h1 className="text-[20px] md:text-[22px] font-bold text-CustomGray mt-12 flex items-start px-4">
+                  Ödeme Yöntemi
+                </h1>
+                <div className="flex flex-wrap gap-4 px-4 pb-8 pt-4">
+                  {paymentMethods.map((method) => (
+                    <div
+                      key={method.id}
+                      onClick={() => setSelectedMethod(method.id)}
+                      className={`relative cursor-pointer p-2 border-2 rounded-lg transition-all duration-500 ease-in-out transform hover:scale-105 hover:border-LightBlue 
+        ${
+          selectedMethod === method.id ? "border-LightBlue" : "border-gray-300"
+        }`}
+                    >
+                      {method.icon === "FaMoneyBillTransfer" && (
+                        <FaMoneyBillTransfer className="w-16 h-16" />
+                      )}
+                      {method.icon === "FaCcMastercard" && (
+                        <FaCcMastercard className="w-16 h-16" />
+                      )}
+                      {method.icon === "GiWallet" && (
+                        <GiWallet className="w-16 h-16" />
+                      )}
+                      {selectedMethod === method.id && (
+                        <div className="absolute -top-2 -right-2 bg-LightBlue text-white rounded-full p-1">
+                          <FaCheck />
+                        </div>
                       )}
                     </div>
-                  )}
+                  ))}
                 </div>
               </div>
-              <div className="flex justify-center sm:justify-end my-12 text-[14px]">
+
+              <div className="flex justify-center sm:justify-end mb-12 text-[14px]">
                 <div className="flex flex-col gap-3">
                   <div className="flex flex-row gap-12 border-b border-slate-200 py-4">
                     <p className="w-[100px] flex justify-start font-bold text-CustomGray">
@@ -376,21 +371,11 @@ const ShoppingCart = () => {
                       <span className="">₺0,00 </span>
                     </p>
                   </div>
-                  <div className="flex flex-row gap-12 border-t border-slate-200 py-4">
-                    <p className="w-[100px] flex justify-start font-extrabold text-CustomGray">
-                      <span className="">Toplam</span>
-                    </p>
-                    <p className="w-[100px] flex justify-end font-extrabold text-CustomGray">
-                      <span className="">
-                        ₺{totalAmountAfterDiscount.toFixed(2)}
-                      </span>
-                    </p>
-                  </div>
                 </div>
               </div>
-              <div className="flex flex-row gap-12 text-[18px] mb-12">
+              <div className="flex flex-row gap-12 text-[22px] mb-12">
                 <p className="w-[150px] flex justify-start font-extrabold text-CustomGray">
-                  <span className="">Genel Toplam</span>
+                  <span className="">Toplam</span>
                 </p>
                 <p className="w-[100px] flex justify-end font-extrabold text-CustomGray">
                   <span className="">
@@ -399,15 +384,13 @@ const ShoppingCart = () => {
                 </p>
               </div>
               <div className="flex flex-row items-center justify-center gap-5">
-                <div>
+                <div className="group">
                   <button
                     type="submit"
-                    className="flex flex-row items-center justify-center gap-2 ml-3 text-white font-bold hover:scale-105 transition-all transform seasy-im-out duration-500 cursor-pointer bg-gradient-to-r from-indigo-400 to-blue-700 pl-3 pr-11 py-2 rounded-full relative w-[250px] h-[58px] text-[18px]"
+                    className="flex flex-row items-center justify-center gap-2 ml-3 text-white font-bold hover:scale-105 transition-all transform ease-out duration-500 cursor-pointer bg-gradient-to-r from-LightBlue to-sky-700 pl-3 pr-11 py-2 rounded-full relative w-[250px] h-[58px] text-[18px]"
                   >
                     Sipariş Ver
-                    <span
-                      className={`absolute -top-1 -right-2 text-white bg-gradient-to-r from-indigo-600 to-blue-700 p-4 border-4 border-white rounded-full hover:scale-105 transition-all duration-500 ease-out transform`}
-                    >
+                    <span className="absolute -top-1 -right-2 text-white bg-gradient-to-r from-sky-700 to-LightBlue p-4 border-4 border-white rounded-full transition-all duration-500 ease-out transform group-hover:scale-110">
                       <RiShoppingCartLine className="w-6 h-6" />
                     </span>
                   </button>
@@ -428,17 +411,17 @@ const ShoppingCart = () => {
               <GiCancel className="fill-BasketRed w-12 h-12" />
             </span>
             <p className="text-lg font-semibold my-4 text-center text-CustomGray">
-              Silmek istediğinizden emin misiniz? 
+              Silmek istediğinizden emin misiniz?
             </p>
             <div className="flex justify-center items-center gap-12">
               <button
-                className="px-6 py-2 mr-2 bg-gray-300 text-gray-800 rounded-full hover:bg-gray-400 transition duration-500 ease-in-out transform hover:scale-105"
+                className="px-6 py-3 mr-2 bg-gray-300 text-gray-800 rounded-full hover:bg-gray-400 transition duration-500 ease-in-out transform hover:scale-105"
                 onClick={cancelDelete}
               >
                 Hayır
               </button>
               <button
-                className="px-6 py-2 bg-blue-500 text-white rounded-full hover:bg-blue-600 transition duration-500 ease-in-out transform hover:scale-105"
+                className="px-6 py-3 bg-blue-500 text-white rounded-full hover:bg-blue-600 transition duration-500 ease-in-out transform hover:scale-105"
                 onClick={confirmDeleteItem}
               >
                 Evet
