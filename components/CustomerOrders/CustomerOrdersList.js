@@ -18,8 +18,8 @@ const CustomerOrdersList = () => {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [selectAll, setSelectAll] = useState("Toplu İşlemler");
-  const [priceSortType, setPriceSortType] = useState("");
-  const [dateSortType, setDateSortType] = useState("");
+  const [priceSortType, setPriceSortType] = useState("Fiyata Göre Sırala");
+  const [dateSortType, setDateSortType] = useState("Tarihe Göre Sırala");
   const [anyFilterSelected, setAnyFilterSelected]=useState(false)
 
   const handleSelectAll = (e) => {
@@ -216,15 +216,15 @@ const CustomerOrdersList = () => {
             </select>
 
          
-            <select className="" name="filterUsers" onChange={handlePriceSortChange} value={priceSortType}>
+            <select   className={`${priceSortType === "Fiyata Göre Sırala" ?"": "bg-NavyBlue text-white" }`} name="filterUsers" onChange={handlePriceSortChange} value={priceSortType}>
               <option hidden>Fiyata Göre Sırala</option>
               <option >Fiyata Göre Sırala</option>
               <option >Önce en yüksek</option>
               <option >Önce en düşük</option>
               
             </select>
-            <select className="" name="filterUsers"  onChange={handleDateSortChange} value={dateSortType}>
-            <option hidden>Tarihe Göre Sırala</option>
+            <select   className={`${dateSortType === "Tarihe Göre Sırala" ?"": "bg-NavyBlue text-white" }`} name="filterUsers"  onChange={handleDateSortChange} value={dateSortType}>
+     
             <option >Tarihe Göre Sırala</option>
             <option >Önce en yeni</option>
             <option >Önce en eski</option>
