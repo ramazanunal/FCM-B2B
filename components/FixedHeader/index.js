@@ -68,10 +68,10 @@ const FixedHeader = ({ header, cartItemCount }) => {
                   href={mainMenuItem.href}
                 >
                   <span
-                    className="w-[53px] h-[53px] flex items-center justify-center
-                    text-CustomGray/75 hover:text-LightBlue hover:animate-bounce transition duration-300 ease-in-out transform cursor-pointer"
+                    className="w-[60px] h-[60px] flex items-center justify-center
+                    text-CustomGray/75 hover:text-LightBlue  hover:scale-105 transition-all duration-500 ease-in-out transform cursor-pointer"
                   >
-                    {mainMenuItem.icon}
+                    <span className="w-[40px] h-[40px]">{mainMenuItem.icon}</span>
                   </span>
                 </Link>
                 {mainMenuItem.subMenus && mainMenuItem.subMenus.length > 0 && (
@@ -88,7 +88,7 @@ const FixedHeader = ({ header, cartItemCount }) => {
                           key={subMenu.id}
                           className="mx-[20px] py-[11px] text-[15px] font-bold leading-[14px] cursor-pointer hover:text-HoverGray transition duration-300 ease-in-out transform text-left"
                         >
-                          <Link href={subMenu.href}>{subMenu.text}</Link>
+                            <Link href={`/urun-kategori/${subMenu.id}`}>{subMenu.text}</Link>
                         </li>
                       ))}
                     </ul>

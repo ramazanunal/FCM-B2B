@@ -1,4 +1,4 @@
-import create from 'zustand';
+import { create } from 'zustand'
 
 const sliderStore = create((set) => ({
   images: [
@@ -10,13 +10,13 @@ const sliderStore = create((set) => ({
     },
     {
       id: 2,
-      src: 'https://caliskanari.com/wp-content/uploads/2016/10/2.png.webp',
+      src: 'https://caliskanari.com/wp-content/uploads/2016/10/2.png',
       alt: '2',
       title: '2',
     },
     {
       id: 3,
-      src: 'https://caliskanari.com/wp-content/uploads/2016/10/3.png.webp',
+      src: 'https://caliskanari.com/wp-content/uploads/2016/10/3.png',
       alt: '3',
       title: '3',
     },

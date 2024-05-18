@@ -5,9 +5,17 @@ import Image from "next/image";
 import Link from "next/link";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { FaCheck, FaPlus } from "react-icons/fa";
 
 function CategoryProducts({ selectedCategory }) {
   const [hoveredIndex, setHoveredIndex] = useState(null);
+  const [cartItems, setCartItems] = useState([]);
+  const [updatingItems, setUpdatingItems] = useState(false);
+
+  useEffect(() => {
+    const storedCartItems = JSON.parse(localStorage.getItem("cartItems")) || [];
+    setCartItems(storedCartItems);
+  }, []);
 
   const calculateDiscountedPrice = (price, discount) => {
     if (discount && discount > 0) {
@@ -17,44 +25,54 @@ function CategoryProducts({ selectedCategory }) {
     return price;
   };
 
+  const isItemInCart = (productId) => {
+    return cartItems.some((item) => item.id === productId);
+  };
   const addToCart = (product, quantity) => {
-    // Sepetteki ürünleri kontrol et
-    let cartItems = JSON.parse(localStorage.getItem("cartItems")) || [];
-    const existingItemIndex = cartItems.findIndex((item) => item.id === product.id);
+    setUpdatingItems({ ...updatingItems, [product.id]: true }); // Set updatingItems to true for the corresponding product
 
-    if (existingItemIndex !== -1) {
+    setTimeout(() => {
+      let updatedCartItems = [...cartItems];
+      const existingItemIndex = updatedCartItems.findIndex(
+        (item) => item.id === product.id
+      );
+
+      if (existingItemIndex !== -1) {
         // Ürün sepette zaten var, sadece miktarını artır
-        cartItems[existingItemIndex].quantity += quantity;
-    } else {
+        updatedCartItems[existingItemIndex].quantity += quantity;
+      } else {
         // Ürün sepette yok, yeni ürün olarak ekle
         const newItem = { ...product, quantity };
-        cartItems.push(newItem);
-    }
+        updatedCartItems.push(newItem);
+      }
 
-    // Local storage güncelle
-    localStorage.setItem("cartItems", JSON.stringify(cartItems));
-    console.log("Sepete eklenen ürün:", product);
+      // Local storage güncelle
+      localStorage.setItem("cartItems", JSON.stringify(updatedCartItems));
+      setCartItems(updatedCartItems);
 
-    // Sepet güncellendiğinde event dispatch et
-    const event = new Event("cartChange");
-    window.dispatchEvent(event);
+      // Sepet güncellendiğinde event dispatch et
+      const event = new Event("cartChange");
+      window.dispatchEvent(event);
 
-    toast.success("Ürün sepete eklendi", {
+      // updatingItems'i false olarak ayarla, işlem tamamlandı
+      setUpdatingItems({ ...updatingItems, [product.id]: false });
+    }, 3000);
+
+    setTimeout(() => {
+      toast.success("Ürün sepete eklendi", {
         position: "top-right",
-        autoClose: 2000, 
+        autoClose: 2000,
         hideProgressBar: false,
         closeOnClick: true,
         pauseOnHover: true,
         draggable: true,
         progress: undefined,
-    });
-};
-
-
-
+      });
+    }, 3000);
+  };
 
   return (
-    <div className="bg-white w-[382px] md:w-[750px] lg:w-[970px] xl:w-[1188px] pt-[60px] pb-[80px] ">
+    <div className="bg-white w-[382px] md:w-[750px] lg:w-[970px] xl:w-[1188px] pt-[60px]  ">
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 justify-center sm:mx-[35px] mb-[30px] px-[15px]">
         {selectedCategory.products.map((product, index) => (
           <div
@@ -82,7 +100,11 @@ function CategoryProducts({ selectedCategory }) {
             </div>
 
             <div className="w-3/5 sm:w-full flex flex-col  justify-between">
-              <div className={`text-left md:pt-[15px] min-h-12 md:min-h-20 ${product.discount ? 'mr-12 sm:mr-0' : ''}`}>
+              <div
+                className={`text-left md:pt-[15px] min-h-12 md:min-h-20 ${
+                  product.discount ? "mr-12 sm:mr-0" : ""
+                }`}
+              >
                 <Link
                   href={product.link}
                   className="font-bold text-[14px] md:text-[16px] text-CustomGray leading-tight"
@@ -130,12 +152,41 @@ function CategoryProducts({ selectedCategory }) {
                                   name="quantity"
                                   className="text-center pr-2 sm:pr-0 w-14 md:w-16 h-8 border-2 border-LightBlue hover:border-CustomGray  hover:text-CustomGray transition duration-300 ease-in-out transform outline-none rounded-md  text-LightBlue "
                                 />
-                                <button type="submit" className="ml-3 text-LightBlue font-bold hover:scale-105 transition-all transform seasy-im-out duration-500 cursor-pointer">
-                                  Sepete Ekle
+
+                                <button
+                                  type="submit"
+                                  className="flex flex-row items-center justify-center gap-2 ml-3 text-white font-bold hover:scale-105 transition-all transform seasy-im-out duration-500 cursor-pointer bg-LightBlue/75 pl-3 pr-11 py-2 rounded-full relative w-[160px] h-[40px]"
+                                >
+                                  {updatingItems[product.id] ? (
+                                    <div className="flex flex-row items-center justify-center gap-1 ">
+                                      <div className="h-2 w-2 rounded-full animate-pulse bg-blue-900"></div>
+                                      <div className="h-2 w-2 rounded-full animate-pulse bg-blue-900"></div>
+                                      <div className="h-2 w-2 rounded-full animate-pulse bg-blue-900"></div>
+                                    </div>
+                                  ) : (
+                                    "Sepete Ekle"
+                                  )}
+                                  <span
+                                    className={`absolute -top-1 -right-2 text-white bg-gradient-to-r from-sky-600 to-cyan-700 p-3 border-4 border-white rounded-full transition-all duration-500 ease-out transform`}
+                                  >
+                                    {isItemInCart(product.id) ? (
+                                      <FaCheck
+                                        className={`transition-all duration-1000 ease-out transform ${
+                                          isItemInCart(product.id)
+                                            ? "scale-100"
+                                            : "scale-0"
+                                        }`}
+                                      />
+                                    ) : (
+                                      <FaPlus />
+                                    )}
+                                  </span>
                                 </button>
                               </div>
                               {errors.quantity && touched.quantity && (
-                                <div className="text-red-500">{errors.quantity}</div>
+                                <div className="text-red-500">
+                                  {errors.quantity}
+                                </div>
                               )}
                             </div>
                           </Form>

@@ -22,7 +22,7 @@ function HomeCategories() {
 
 
   return (
-    <div className="bg-white w-[1188px] pt-[60px] pb-[80px] ">
+    <div className="bg-white w-[1188px] pt-[60px]  ">
       <div className="flex items-center justify-center mx-[35px] mb-[22px] lg:mb-[22px] px-[15px]">
         <div className="h-[60px] lg:h-[0px]">
           <button
