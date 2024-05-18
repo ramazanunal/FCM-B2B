@@ -301,99 +301,103 @@ const ShoppingCart = () => {
               ))}
             </tbody>
           </table>
-          <div >
-            <OrderInformation/>
-          </div>
-          <div className="flex items-center justify-end">
-            {" "}
-            <h1 className="text-[20px] md:text-[32px] font-bold text-CustomGray mt-12 flex items-center justify-center pr-32">
-              Sipariş Özeti
-            </h1>
-          </div>
-          <div className="flex flex-col items-center sm:items-end">
-            <div className="flex flex-col items-center justify-center bg-slate-100 w-[350px] sm:w-[450px] rounded-2xl shadow-lg mt-5 p-10">
-              <div className="border-b border-slate-200 mb-8">
-                <h1 className="text-[20px] md:text-[22px] font-bold text-CustomGray mt-12 flex items-start px-4">
-                  Ödeme Yöntemi
-                </h1>
-                <div className="flex flex-wrap gap-4 px-4 pb-8 pt-4">
-                  {paymentMethods.map((method) => (
-                    <div
-                      key={method.id}
-                      onClick={() => setSelectedMethod(method.id)}
-                      className={`relative cursor-pointer p-2 border-2 rounded-lg transition-all duration-500 ease-in-out transform hover:scale-105 hover:border-LightBlue 
+          <div className="flex flex-col lg:flex-row my-24">
+            <div className="w-full lg:w-1/2 ">
+              <OrderInformation />
+            </div>
+            <div className="w-full lg:w-1/2 mt-12 lg:mt-0">
+              <div className="flex flex-col items-center ">
+                <div className="flex flex-col items-center justify-center bg-slate-100 w-[350px] sm:w-[450px] rounded-2xl shadow-lg p-10">
+                  <div className="flex items-center justify-end">
+                    {" "}
+                    <h1 className="text-[20px] md:text-[32px] font-bold text-CustomGray flex items-center justify-center ">
+                      Sipariş Özeti
+                    </h1>
+                  </div>
+                  <div className="border-b border-slate-200 mb-8">
+                    <h1 className="text-[18px] md:text-[20px] font-bold text-CustomGray mt-6 flex items-start px-4">
+                      Ödeme Yöntemi
+                    </h1>
+                    <div className="flex flex-wrap gap-4 px-4 pb-8 pt-4">
+                      {paymentMethods.map((method) => (
+                        <div
+                          key={method.id}
+                          onClick={() => setSelectedMethod(method.id)}
+                          className={`relative cursor-pointer p-2 border-2 rounded-lg transition-all duration-500 ease-in-out transform hover:scale-105 hover:border-LightBlue 
         ${
           selectedMethod === method.id ? "border-LightBlue" : "border-gray-300"
         }`}
-                    >
-                      {method.icon === "FaMoneyBillTransfer" && (
-                        <FaMoneyBillTransfer className="w-16 h-16" />
-                      )}
-                      {method.icon === "FaCcMastercard" && (
-                        <FaCcMastercard className="w-16 h-16" />
-                      )}
-                      {method.icon === "GiWallet" && (
-                        <GiWallet className="w-16 h-16" />
-                      )}
-                      {selectedMethod === method.id && (
-                        <div className="absolute -top-2 -right-2 bg-LightBlue text-white rounded-full p-1">
-                          <FaCheck />
+                        >
+                          {method.icon === "FaMoneyBillTransfer" && (
+                            <FaMoneyBillTransfer className="w-12 md:w-16 h-12 md:h-16" />
+                          )}
+                          {method.icon === "FaCcMastercard" && (
+                            <FaCcMastercard className="w-12 md:w-16 h-12 md:h-16" />
+                          )}
+                          {method.icon === "GiWallet" && (
+                            <GiWallet className="w-12 md:w-16 h-12 md:h-16" />
+                          )}
+                          {selectedMethod === method.id && (
+                            <div className="absolute -top-2 -right-2 bg-LightBlue text-white rounded-full p-1">
+                              <FaCheck />
+                            </div>
+                          )}
                         </div>
-                      )}
+                      ))}
                     </div>
-                  ))}
-                </div>
-              </div>
+                  </div>
 
-              <div className="flex justify-center sm:justify-end mb-12 text-[14px]">
-                <div className="flex flex-col gap-3">
-                  <div className="flex flex-row gap-12 border-b border-slate-200 py-4">
-                    <p className="w-[100px] flex justify-start font-bold text-CustomGray">
-                      <span className="">Ara Toplam</span>
+                  <div className="flex justify-center sm:justify-end mb-12 text-[16px]">
+                    <div className="flex flex-col gap-3">
+                      <div className="flex flex-row gap-12 border-b border-slate-200 py-4">
+                        <p className="w-[100px] flex justify-start font-bold text-CustomGray">
+                          <span className="">Ara Toplam</span>
+                        </p>
+                        <p className="w-[100px] flex justify-end font-bold text-CustomGray">
+                          <span className="">₺{totalPrice.toFixed(2)} </span>
+                        </p>
+                      </div>
+                      <div className="flex flex-row gap-12">
+                        <p className="w-[100px] flex justify-start font-medium text-slate-400">
+                          <span className="">İndirim</span>
+                        </p>
+                        <p className="w-[100px] flex justify-end font-medium text-slate-400">
+                          <span className="">₺{totalDiscount.toFixed(2)}</span>
+                        </p>
+                      </div>
+                      <div className="flex flex-row gap-12 ">
+                        <p className="w-[100px] flex justify-start font-medium text-slate-400">
+                          <span className="">KDV</span>
+                        </p>
+                        <p className="w-[100px] flex justify-end font-medium text-slate-400">
+                          <span className="">₺0,00 </span>
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="flex flex-row gap-12 text-[24px] mb-12">
+                    <p className="w-[150px] flex justify-start font-extrabold text-CustomGray">
+                      <span className="">Toplam</span>
                     </p>
-                    <p className="w-[100px] flex justify-end font-bold text-CustomGray">
-                      <span className="">₺{totalPrice.toFixed(2)} </span>
+                    <p className="w-[100px] flex justify-end font-extrabold text-CustomGray">
+                      <span className="">
+                        ₺{totalAmountAfterDiscount.toFixed(2)}
+                      </span>
                     </p>
                   </div>
-                  <div className="flex flex-row gap-12">
-                    <p className="w-[100px] flex justify-start font-medium text-slate-400">
-                      <span className="">İndirim</span>
-                    </p>
-                    <p className="w-[100px] flex justify-end font-medium text-slate-400">
-                      <span className="">₺{totalDiscount.toFixed(2)}</span>
-                    </p>
+                  <div className="flex flex-row items-center justify-center gap-5">
+                    <div className="group">
+                      <button
+                        type="submit"
+                        className="flex flex-row items-center justify-center gap-2 ml-3 text-white font-bold hover:scale-105 transition-all transform ease-out duration-500 cursor-pointer bg-gradient-to-r from-LightBlue to-sky-700 pl-3 pr-11 py-2 rounded-full relative w-[250px] h-[58px] text-[18px]"
+                      >
+                        Sipariş Ver
+                        <span className="absolute -top-1 -right-2 text-white bg-gradient-to-r from-sky-700 to-LightBlue p-4 border-4 border-white rounded-full transition-all duration-500 ease-out transform group-hover:scale-110">
+                          <RiShoppingCartLine className="w-6 h-6" />
+                        </span>
+                      </button>
+                    </div>
                   </div>
-                  <div className="flex flex-row gap-12 ">
-                    <p className="w-[100px] flex justify-start font-medium text-slate-400">
-                      <span className="">KDV</span>
-                    </p>
-                    <p className="w-[100px] flex justify-end font-medium text-slate-400">
-                      <span className="">₺0,00 </span>
-                    </p>
-                  </div>
-                </div>
-              </div>
-              <div className="flex flex-row gap-12 text-[22px] mb-12">
-                <p className="w-[150px] flex justify-start font-extrabold text-CustomGray">
-                  <span className="">Toplam</span>
-                </p>
-                <p className="w-[100px] flex justify-end font-extrabold text-CustomGray">
-                  <span className="">
-                    ₺{totalAmountAfterDiscount.toFixed(2)}
-                  </span>
-                </p>
-              </div>
-              <div className="flex flex-row items-center justify-center gap-5">
-                <div className="group">
-                  <button
-                    type="submit"
-                    className="flex flex-row items-center justify-center gap-2 ml-3 text-white font-bold hover:scale-105 transition-all transform ease-out duration-500 cursor-pointer bg-gradient-to-r from-LightBlue to-sky-700 pl-3 pr-11 py-2 rounded-full relative w-[250px] h-[58px] text-[18px]"
-                  >
-                    Sipariş Ver
-                    <span className="absolute -top-1 -right-2 text-white bg-gradient-to-r from-sky-700 to-LightBlue p-4 border-4 border-white rounded-full transition-all duration-500 ease-out transform group-hover:scale-110">
-                      <RiShoppingCartLine className="w-6 h-6" />
-                    </span>
-                  </button>
                 </div>
               </div>
             </div>
