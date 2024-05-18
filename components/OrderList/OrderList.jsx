@@ -227,19 +227,15 @@ const handleBulkAction = (e) => {
           ))}
         </div>
         <div className="flex">
-          <form action="" className="flex gap-2">
+          <form action="" className="flex gap-2 w-72 ">
             <input
               value={searchValue}
               onChange={handleSearchChange}
               type="text"
-              className="p-2 border rounded-md"
+              className="p-2 border  rounded-md w-full"
+              placeholder="Sipariş ara"
             />
-            <button
-              className="p-1 border border-LightBlue text-sm rounded-md"
-              type="submit"
-            >
-              Siparişleri Ara
-            </button>
+           
           </form>
         </div>
       </div>

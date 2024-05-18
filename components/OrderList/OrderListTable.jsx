@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { BiHide } from "react-icons/bi";
 import { RxEyeOpen } from "react-icons/rx";
+import { FaPencilAlt } from "react-icons/fa";
+import { FaTrashAlt } from "react-icons/fa";
+
 
 const OrderListTable = ({ orders,setSelectedOrders,selectedOrders }) => {
 
@@ -106,11 +109,11 @@ const OrderListTable = ({ orders,setSelectedOrders,selectedOrders }) => {
               <td className="px-6 py-4 whitespace-nowrap">{order.total}₺</td>
               <td className="px-6 py-4 whitespace-nowrap">
                 <div className="flex space-x-3">
-                  <button className="bg-yellow-300 p-2 rounded-2xl hover:bg-yellow-400">
-                    Düzenle
+                  <button className="bg-[#f8dda5] p-2 flex items-center space-x-3 rounded-lg hover:bg-[#efc777]">
+                    <span>Düzenle</span> <FaPencilAlt/>
                   </button>
-                  <button className="bg-red-300 p-2 rounded-2xl hover:bg-red-400">
-                    Sil
+                  <button className="bg-red-400 p-2 text-white rounded-lg hover:bg-red-500">
+                    <FaTrashAlt/>
                   </button>
                 </div>
               </td>
