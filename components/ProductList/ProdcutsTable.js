@@ -164,6 +164,12 @@ function ProdcutsTable({currentProducts,setSelectedProducts,selectedProducts}) {
           >
             Ürünü Son Güncelleme Tarihi
           </th>
+          <th
+          scope="col"
+          className="px-6 py-3 text-left text-base font-medium "
+        >
+          Ürün Durumu
+        </th>
         </tr>
       </thead>
       <tbody className="bg-white divide-y divide-gray-200">
@@ -178,7 +184,7 @@ function ProdcutsTable({currentProducts,setSelectedProducts,selectedProducts}) {
             onChange={() => handleProductSelect(product)} // Her bir ürünün onay kutusunu seçim işleyicisiyle bağla
           />
         </td>
-            <td className="px-6 py-4 whitespace-nowrap" onClick={() => {handleOpenModal(product)}}>
+            <td className="px-6 py-4 whitespace-nowrap cursor-pointer" onClick={() => {handleOpenModal(product)}}>
              <img src= {product.imgPath} className='w-20' alt="" />
             </td>
            
@@ -194,13 +200,16 @@ function ProdcutsTable({currentProducts,setSelectedProducts,selectedProducts}) {
             <td className="px-6 py-4 whitespace-nowrap text-BaseDark">₺{product.price}</td>
             <td className="px-6 py-4 whitespace-nowrap text-BaseDark">{product?.category?.subCategory}</td>
             <td className="px-6 py-4 whitespace-nowrap text-BaseDark">{product?.category?.mainCategory}</td>
-            <td className="px-6 py-4 whitespace-nowrap space-x-10 text-BaseDark">
+            <td className="px-6  text-center py-4 whitespace-nowrap space-x-10 text-BaseDark">
             <span>{product?.date?.lastUpdateDate}</span>
-            <span>
+           
+            </td>
+            <td >
+         
             {product?.stokCount <= 0 && 
               <span className="p-2  rounded-xl text-sm bg-red-400 text-white">Satışa uygun değil</span>
             }
-            </span>
+
             </td>
           </tr>
         ))}
