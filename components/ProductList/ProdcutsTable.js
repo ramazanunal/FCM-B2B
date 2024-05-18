@@ -5,6 +5,9 @@ import { FaCaretDown } from "react-icons/fa";
 import { FaCaretUp } from "react-icons/fa";
 import ProductModal from './ProductModal';
 import Link from 'next/link';
+import { IoIosCloseCircle } from "react-icons/io";
+import { FaCheckCircle } from "react-icons/fa";
+
 
 
 
@@ -14,7 +17,7 @@ function ProdcutsTable({currentProducts,setSelectedProducts,selectedProducts}) {
   const [sortedColumn, setSortedColumn] = useState(null);
   const [isOpenModal, setIsOpenModal] = useState(false)
   const [productImage, setProductImage] = useState(null)
-
+ const [selectAll, setSelectAll] = useState(false);
 
   const handleOpenModal = (product) => {
     setIsOpenModal(true)
@@ -30,7 +33,7 @@ function ProdcutsTable({currentProducts,setSelectedProducts,selectedProducts}) {
       setSortOrder('asc');
     }
   };
- const [selectAll, setSelectAll] = useState(false);
+
  
   useEffect(() => {
     // Tüm ürünler seçiliyse, seçili ürünleri güncelle
@@ -66,29 +69,35 @@ function ProdcutsTable({currentProducts,setSelectedProducts,selectedProducts}) {
     sortedProducts = [...currentProducts].sort((a, b) => {
       const nameA = a.name.toUpperCase();
       const nameB = b.name.toUpperCase();
-
       let comparison = 0;
-      if (nameA > nameB) {
-        comparison = 1;
-      } else if (nameA < nameB) {
-        comparison = -1;
-      }
-
+      if (nameA > nameB) comparison = 1;
+      else if (nameA < nameB) comparison = -1;
       return sortOrder === 'desc' ? comparison * -1 : comparison;
     });
   } else if (sortedColumn === 'price') {
     sortedProducts = [...currentProducts].sort((a, b) => {
       const priceA = a.price;
       const priceB = b.price;
-
       let comparison = 0;
-      if (priceA > priceB) {
-        comparison = 1;
-      } else if (priceA < priceB) {
-        comparison = -1;
-      }
-
+      if (priceA > priceB) comparison = 1;
+      else if (priceA < priceB) comparison = -1;
       return sortOrder === 'desc' ? comparison * -1 : comparison;
+    });
+  } else if (sortedColumn === 'stokCount') {
+    sortedProducts = [...currentProducts].sort((a, b) => {
+      const stokCountA = a.stokCount;
+      const stokCountB = b.stokCount;
+      let comparison = 0;
+      if (stokCountA > stokCountB) comparison = 1;
+      else if (stokCountA < stokCountB) comparison = -1;
+      return sortOrder === 'desc' ? comparison * -1 : comparison;
+    });
+    
+  }else if (sortedColumn === 'lastUpdateDate') {
+    sortedProducts.sort((a, b) => {
+      const dateA = new Date(a.date.lastUpdateDate);
+      const dateB = new Date(b.date.lastUpdateDate);
+      return sortOrder === 'desc' ? dateB - dateA : dateA - dateB;
     });
   }
 
@@ -124,18 +133,27 @@ function ProdcutsTable({currentProducts,setSelectedProducts,selectedProducts}) {
           <th
             scope="col"
             className="px-6 py-3 text-left text-base font-medium  "
+            
           >
             Stok Kodu
           </th>
           <th
             scope="col"
-            className="px-6 py-3 text-left text-base font-medium  "
+            className="px-6 py-3 text-left text-base font-medium cursor-pointer  "
+            onClick={() => handleSort('stokCount')}
           >
-            Stok Sayısı
+            <span className='flex items-center'>
+            <span>Stok Sayısı</span>
+            {sortedColumn === 'stokCount' ? (
+              <span>
+                {sortOrder === 'asc' ? <FaCaretUp /> : <FaCaretDown />}
+              </span>
+            ) : <PiCaretUpDownFill />}
+            </span>
           </th>
           <th
             scope="col"
-            className="px-6 flex items-center cursor-pointer py-3 text-left text-base font-medium "
+            className="px-6 flex items-center cursor-pointer py-3 text-left text-base font-medium  "
             onClick={() => handleSort('price')}
           >
             Fiyat
@@ -161,8 +179,14 @@ function ProdcutsTable({currentProducts,setSelectedProducts,selectedProducts}) {
           <th
             scope="col"
             className="px-6 py-3 text-left text-base font-medium "
+            onClick={() => handleSort('lastUpdateDate')}
           >
-            Ürünü Son Güncelleme Tarihi
+          <span className='flex items-center'>
+          <span>Ürünü Son Güncelleme Tarihi</span>
+          {sortedColumn === 'lastUpdateDate' ? (
+            <span>{sortOrder === 'asc' ? <FaCaretUp /> : <FaCaretDown />}</span>
+          ) : <PiCaretUpDownFill />}
+        </span>
           </th>
           <th
           scope="col"
@@ -204,10 +228,11 @@ function ProdcutsTable({currentProducts,setSelectedProducts,selectedProducts}) {
             <span>{product?.date?.lastUpdateDate}</span>
            
             </td>
-            <td >
+            <td className=' p-2'>
          
-            {product?.stokCount <= 0 && 
-              <span className="p-2  rounded-xl text-sm bg-red-400 text-white">Satışa uygun değil</span>
+            {product?.stokCount <= 0 ?
+              <span className="p-2  flex items-center space-x-1   rounded-xl text-sm bg-red-400 text-white"> <IoIosCloseCircle className='text-xl'/><span>Satışa uygun değil</span> </span> :
+              <span className="p-2  flex items-center justify-center space-x-1   rounded-xl text-sm bg-green-400 text-white"> <FaCheckCircle className='text-xl'/><span>Satışa uygun </span> </span>
             }
 
             </td>

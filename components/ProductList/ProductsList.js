@@ -92,21 +92,16 @@ function ProductList() {
             </React.Fragment>
           ))}
         </div>
-        <div className="flex ">
+        <div className="flex w-72  ">
           <form action="" className="flex gap-2 ">
             <input
               type="text"
-              className="p-2 border rounded-md "
-              placeholder="Search.."
+              className="p-2 border rounded-md  w-72"
+              placeholder="Ürün Ara..."
               value={searchTerm}
               onChange={handleSearch}
             />
-            <button
-              className="p-2 border text-xs md:text-base  border-LightBlue rounded-md text-black"
-              type="submit"
-            >
-              Ürün Ara
-            </button>
+         
           </form>
         </div>
       </div>

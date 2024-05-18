@@ -16,7 +16,26 @@ export const subCategory=[
     "Matematik",
     "Türkçe"
 ]
-
+const months = [
+    "Ocak",
+    "Şubat",
+    "Mart",
+    "Nisan",
+    "Mayıs",
+    "Haziran",
+    "Temmuz",
+    "Ağustos",
+    "Eylül",
+    "Ekim",
+    "Kasım",
+    "Aralık"
+  ];
+  const currentDate = new Date();
+  const currentDay = currentDate.getDate();
+  const currentMonth = currentDate.getMonth() + 1; // JavaScript'te aylar 0'dan başlar, bu yüzden +1 ekliyoruz
+  const currentYear = currentDate.getFullYear();
+  
+  const formattedDate = `${currentDay} ${months[currentMonth - 1]} ${currentYear}`;
 export const products = [
   
       {
@@ -35,7 +54,7 @@ export const products = [
         price:45.00,
         date:{
             productAdditionDate:"20 Nisan 2024",
-            lastUpdateDate:"24 Nisan 2024"
+            lastUpdateDate:formattedDate
         }  ,
         published:true,   
         writer:"Emrah Eskibağcı",
@@ -67,7 +86,7 @@ export const products = [
         price:35.00,
         date:{
             productAdditionDate:"22 Nisan 2024",
-            lastUpdateDate:"21 Nisan 2024"
+            lastUpdateDate:formattedDate
         },
         published:true,
         writer:"Emrah Eskibağcı",
@@ -101,7 +120,7 @@ export const products = [
         price:75.00,
         date:{
             productAdditionDate:"20 Nisan 2024",
-            lastUpdateDate:"24 Nisan 2024"
+            lastUpdateDate:formattedDate
         }    ,
         published:false, 
         writer:"Emrah Eskibağcı" ,
@@ -135,7 +154,7 @@ export const products = [
         price:75.00,
         date:{
             productAdditionDate:"20 Nisan 2024",
-            lastUpdateDate:"24 Nisan 2024"
+            lastUpdateDate:formattedDate
         }   ,
         published:false,   
         writer:"Emrah Eskibağcı",
@@ -169,7 +188,7 @@ export const products = [
         price:75.00,
         date:{
             productAdditionDate:"20 Nisan 2024",
-            lastUpdateDate:"24 Nisan 2024"
+            lastUpdateDate:formattedDate
         }    ,
         published:false,  
         writer:"Emrah Eskibağcı",
@@ -203,7 +222,7 @@ export const products = [
         price:75.00,
         date:{
             productAdditionDate:"20 Nisan 2024",
-            lastUpdateDate:"24 Nisan 2024"
+            lastUpdateDate:formattedDate
         }  ,
         published:true,   
         writer:"Emrah Eskibağcı" ,
@@ -237,7 +256,7 @@ export const products = [
         price:85.00,
         date:{
             productAdditionDate:"20 Nisan 2024",
-            lastUpdateDate:"24 Nisan 2024"
+            lastUpdateDate:formattedDate
         }  ,
         published:true,    
         writer:"Emrah Eskibağcı",
@@ -271,7 +290,7 @@ export const products = [
         price:95.00,
         date:{
             productAdditionDate:"20 Nisan 2024",
-            lastUpdateDate:"24 Nisan 2024"
+            lastUpdateDate:formattedDate
         }       ,
         published:true,
         writer:"Emrah Eskibağcı",
@@ -305,7 +324,7 @@ export const products = [
         price:105.00,
         date:{
             productAdditionDate:"20 Nisan 2024",
-            lastUpdateDate:"24 Nisan 2024"
+            lastUpdateDate:formattedDate
         }      ,
         published:true, 
         writer:"Emrah Eskibağcı",
@@ -339,7 +358,7 @@ export const products = [
         price:85.00,
         date:{
             productAdditionDate:"20 Nisan 2024",
-            lastUpdateDate:"24 Nisan 2024"
+            lastUpdateDate:formattedDate
         }       ,
         published:true,
         writer:"Emrah Eskibağcı",
@@ -373,7 +392,7 @@ export const products = [
         price:55.00,
         date:{
             productAdditionDate:"20 Nisan 2024",
-            lastUpdateDate:"24 Nisan 2024"
+            lastUpdateDate:formattedDate
         }     ,
         published:true,  
         writer:"Emrah Eskibağcı",
@@ -407,7 +426,7 @@ export const products = [
         price:85.00,
         date:{
             productAdditionDate:"20 Nisan 2024",
-            lastUpdateDate:"24 Nisan 2024"
+            lastUpdateDate:formattedDate
         }       ,
         published:true,
         writer:"Emrah Eskibağcı",
@@ -441,7 +460,7 @@ export const products = [
         price:85.00,
         date:{
             productAdditionDate:"20 Nisan 2024",
-            lastUpdateDate:"24 Nisan 2024"
+            lastUpdateDate:formattedDate
         }       ,
         published:true,
         writer:"Emrah Eskibağcı",
@@ -475,7 +494,7 @@ export const products = [
         price:75.00,
         date:{
             productAdditionDate:"20 Nisan 2024",
-            lastUpdateDate:"24 Nisan 2024"
+            lastUpdateDate:formattedDate
         }      ,
         published:true, 
         writer:"Emrah Eskibağcı",
@@ -509,7 +528,7 @@ export const products = [
         price:95.00,
         date:{
             productAdditionDate:"20 Nisan 2024",
-            lastUpdateDate:"24 Nisan 2024"
+            lastUpdateDate:formattedDate
         }       ,
         published:true,
         writer:"Emrah Eskibağcı",
