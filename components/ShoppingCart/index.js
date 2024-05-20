@@ -10,12 +10,10 @@ import "react-toastify/dist/ReactToastify.css";
 import { MdDeleteForever } from "react-icons/md";
 import { IoMdImages } from "react-icons/io";
 import { BsThreeDotsVertical } from "react-icons/bs";
-import { GiCancel, GiWallet } from "react-icons/gi";
-import { FaCcMastercard, FaCheck } from "react-icons/fa";
+import { GiCancel } from "react-icons/gi";
 import { RiShoppingCartLine } from "react-icons/ri";
 import { RxUpdate } from "react-icons/rx";
-import { FaMoneyBillTransfer } from "react-icons/fa6";
-import OrderInformation from "../OrderInformation";
+import { AiOutlinePlus, AiOutlineMinus } from "react-icons/ai";
 
 const ShoppingCart = () => {
   const initialCartItems = () => {
@@ -32,19 +30,28 @@ const ShoppingCart = () => {
   const [itemToDelete, setItemToDelete] = useState(null);
 
   const handleQuantityChange = (itemId, newQuantity) => {
-    setUpdating(true); // Güncelleme başladığında true
+    // Sepetteki ürünleri alma 
+    const product = cartItems.find((item) => item.id === itemId);
+    if (!product) {
+      return;
+    }
+    // Yeni miktarın mevcut stoktan fazla olup olmadığını kontrol etme
+    if (newQuantity > product.stock) {
+      toast.error(`Stok miktarını aşıyorsunuz (${product.stock} adet var)`);
+      return;
+    }
+
+    setUpdating(true);// Güncelleme başladığında true
     setUpdatingItems({ ...updatingItems, [itemId]: true });
 
     setTimeout(() => {
       setUpdating(false); // 5 saniye sonra false
       setUpdatingItems({ ...updatingItems, [itemId]: false });
+
       // Ürün miktarını güncelleme işlemi
-      const updatedCartItems = cartItems.map((item) => {
-        if (item.id === itemId) {
-          return { ...item, quantity: newQuantity };
-        }
-        return item;
-      });
+      const updatedCartItems = cartItems.map((item) =>
+        item.id === itemId ? { ...item, quantity: newQuantity } : item
+      );
 
       // Güncellenmiş sepeti state'e ve Local Storage'a kaydetme
       setCartItems(updatedCartItems);
@@ -57,6 +64,7 @@ const ShoppingCart = () => {
       }
     }, 5000);
   };
+
 
   const initiateDelete = (itemId) => {
     setItemToDelete(itemId);
@@ -135,12 +143,13 @@ const ShoppingCart = () => {
   const totalAmountAfterDiscount = totalPrice - totalDiscount;
 
   //ödeme yöntemi
-  const [selectedMethod, setSelectedMethod] = useState(null);
-  const paymentMethods = [
-    { id: 1, icon: "FaMoneyBillTransfer" },
-    { id: 2, icon: "FaCcMastercard" },
-    { id: 3, icon: "GiWallet" },
-  ];
+  // const [selectedMethod, setSelectedMethod] = useState(null);
+  // const paymentMethods = [
+  //   { id: 1, icon: "FaMoneyBillTransfer" },
+  //   { id: 2, icon: "FaCcMastercard" },
+  //   { id: 3, icon: "GiWallet" },
+  // ];
+  
   return (
     <div
       id="shoppingcart"
@@ -235,25 +244,49 @@ const ShoppingCart = () => {
                   </td>
                   <td className=" px-2 sm:px-5 py-3 ">
                     <span className="flex items-center justify-center">
-                      <Formik
-                        key={JSON.stringify(item)}
-                        initialValues={{ quantity: item.quantity }}
-                        onSubmit={(values, { resetForm }) => {
-                          handleQuantityChange(item.id, values.quantity);
-                          resetForm();
-                        }}
-                      >
-                        {({ values, handleChange }) => (
-                          <Form className="flex flex-row gap-2 sm:gap-0 items-center ">
-                            <Field
-                              type="number"
-                              name="quantity"
-                              min="1"
-                              value={values.quantity}
-                              onChange={handleChange}
-                              className="text-center w-12 h-10 border rounded-md border-slate-200 hover:border-CustomGray transition duration-500 ease-in-out transform outline-none"
-                            />
-                            <button
+                    <Formik
+                      initialValues={{ quantity: item.quantity }}
+                      onSubmit={({ quantity }) => handleQuantityChange(item.id, quantity)}
+                    >
+                      {({ values, handleChange }) => (
+                        <Form className="flex items-center">
+                          <button
+                            type="button"
+                            onClick={() => {
+                              const newValue = values.quantity - 1;
+                              if (newValue >= 1) {
+                                handleChange({ target: { name: "quantity", value: newValue } });
+                              }
+                            }}
+                            className="text-2xl text-LightBlue"
+                            disabled={updatingItems[item.id]}
+                          >
+                            <AiOutlineMinus />
+                          </button>
+                          <Field
+                            type="number"
+                            name="quantity"
+                            value={values.quantity}
+                            min={1}
+                            max={item.stock}
+                            onChange={handleChange}
+                            className="w-12 text-center border rounded-md border-slate-200 hover:border-LightBlue transition duration-500 ease-in-out transform outline-none"
+                            disabled={updatingItems[item.id]}
+                          />
+                          <button
+                            type="button"
+                            onClick={() => {
+                              const newValue = values.quantity + 1;
+                              if (newValue <= item.stock) {
+                                handleChange({ target: { name: "quantity", value: newValue } });
+                              }
+                            }}
+                            className="text-2xl text-LightBlue"
+                            disabled={updatingItems[item.id]}
+                          >
+                            <AiOutlinePlus />
+                          </button>
+                          <button
                               className="hidden sm:flex items-center justify-center bg-LightBlue/75 font-semibold py-2 px-4 rounded-md sm:ml-[24px] hover:scale-105 transition-all duration-700 transform ease-in-out hover:bg-LightBlue text-white w-[101px] h-[40px]"
                               type="submit"
                               disabled={updating}
@@ -283,9 +316,9 @@ const ShoppingCart = () => {
                                 <RxUpdate className="w-4 h-4 text-LightBlue" />
                               )}
                             </button>
-                          </Form>
-                        )}
-                      </Formik>
+                        </Form>
+                      )}
+                    </Formik>
                     </span>
                   </td>
 
@@ -301,10 +334,10 @@ const ShoppingCart = () => {
               ))}
             </tbody>
           </table>
-          <div className="flex flex-col lg:flex-row my-24">
-            <div className="w-full lg:w-1/2 ">
+          <div className="flex items-center justify-center my-24">
+            {/* <div className="w-full lg:w-1/2 ">
               <OrderInformation />
-            </div>
+            </div> */}
             <div className="w-full lg:w-1/2 mt-12 lg:mt-0">
               <div className="flex flex-col items-center ">
                 <div className="flex flex-col items-center justify-center bg-slate-100 w-[350px] sm:w-[450px] rounded-2xl shadow-lg p-10">
@@ -315,7 +348,7 @@ const ShoppingCart = () => {
                     </h1>
                   </div>
                   <div className="border-b border-slate-200 mb-8">
-                    <h1 className="text-[18px] md:text-[20px] font-bold text-CustomGray mt-6 flex items-start px-4">
+                    {/* <h1 className="text-[18px] md:text-[20px] font-bold text-CustomGray mt-6 flex items-start px-4">
                       Ödeme Yöntemi
                     </h1>
                     <div className="flex flex-wrap gap-4 px-4 pb-8 pt-4">
@@ -344,7 +377,7 @@ const ShoppingCart = () => {
                           )}
                         </div>
                       ))}
-                    </div>
+                    </div> */}
                   </div>
 
                   <div className="flex justify-center sm:justify-end mb-12 text-[16px]">
