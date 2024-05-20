@@ -1,6 +1,6 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import OrderListTable from "./OrderListTable";
+import CustomerOrdersListTable from "./CustomerOrdersListTable";
 import { orders, statuses } from "./data";
 import {
   MdKeyboardArrowLeft,
@@ -9,7 +9,7 @@ import {
   MdKeyboardDoubleArrowRight,
 } from "react-icons/md";
 
-const OrderList = () => {
+const CustomerOrdersList = () => {
   const [filteredOrders, setFilteredOrders] = useState(orders);
   const [searchValue, setSearchValue] = useState("");
   const [selectedStatus, setSelectedStatus] = useState("Tümü");
@@ -20,12 +20,7 @@ const OrderList = () => {
   const [selectAll, setSelectAll] = useState("Toplu İşlemler");
   const [priceSortType, setPriceSortType] = useState("Fiyata Göre Sırala");
   const [dateSortType, setDateSortType] = useState("Tarihe Göre Sırala");
-  const [anyFilterSelected, setAnyFilterSelected] = useState(false);
-  const [selectedOrders, setSelectedOrders] = useState([]);
-  
-
-
-  console.log(selectedOrders);
+  const [anyFilterSelected, setAnyFilterSelected]=useState(false)
 
   const handleSelectAll = (e) => {
     setSelectAll(e.target.value);
@@ -56,11 +51,11 @@ const OrderList = () => {
     }
 
     filteredOrders.forEach((order) => {
-      if (order.status === "Tamamlandı") {
+      if (order.status === "Tamamlanan") {
         order.status = "Tamamlandı";
-      } else if (order.status === "İptal edildi") {
+      } else if (order.status === "İptal edilen") {
         order.status = "İptal edildi";
-      } else if (order.status === "Başarısız") {
+      } else if (order.status === "Başarısız olan") {
         order.status = "Başarısız";
       }
     });
@@ -79,17 +74,6 @@ const OrderList = () => {
     setSelectedStatus(status);
     filterOrders(searchValue, status, orderDate, uniqueDates);
   };
-  const [orderCounts, setOrderCounts] = useState({});
-
-// ...
-
-useEffect(() => {
-  const counts = {};
-  statuses.forEach(status => {
-    counts[status] = orders.filter(order => order.status === status).length;
-  });
-  setOrderCounts(counts);
-}, [orders]);
 
   const handleChangePage = (direction) => {
     if (direction === "prev" && page > 0) {
@@ -106,7 +90,6 @@ useEffect(() => {
     page * rowsPerPage,
     page * rowsPerPage + rowsPerPage
   );
-
   const sortOrders = (priceSortType, dateSortType) => {
     let sortedOrders = [...filteredOrders];
     if (priceSortType === "Önce en yüksek") {
@@ -127,14 +110,14 @@ useEffect(() => {
     const sortType = event.target.value;
     setPriceSortType(sortType);
     sortOrders(sortType, dateSortType);
-    setAnyFilterSelected(true);
+    setAnyFilterSelected(true)
   };
 
   const handleDateSortChange = (event) => {
     const sortType = event.target.value;
     setDateSortType(sortType);
     sortOrders(priceSortType, sortType);
-    setAnyFilterSelected(true);
+    setAnyFilterSelected(true)
   };
   const handleClearFilters = () => {
     setSearchValue("");
@@ -143,83 +126,27 @@ useEffect(() => {
     setPriceSortType("Fiyata Göre Sırala");
     setDateSortType("Tarihe Göre Sırala");
     setSelectAll("Toplu İşlemler");
-    setAnyFilterSelected(false);
+    setAnyFilterSelected(false)
     setFilteredOrders(orders);
   };
-
- // Siparişlerin durumunu toplu olarak güncelle
-const handleBulkAction = (e) => {
-  const action = e.target.value;
-  let newStatus = "";
-  switch (action) {
-    // Durum değişikliğine göre yeni durumu belirle
-    case "Durumu hazılanıyor olarak değiştir":
-      newStatus = "Hazırlanıyor";
-      break;
-    case "Durumu kargoya verildi olarak değiştir":
-      newStatus = "Kargoya Verildi";
-      break;
-    case "Durumu ödeme bekleniyor olarak değiştir":
-      newStatus = "Ödeme bekleniyor";
-      break;
-    case "Durumu tamamlandı olarak değiştir":
-      newStatus = "Tamamlandı";
-      break;
-    case "Durumu iptal edildi olarak değiştir":
-      newStatus = "İptal edildi";
-      break;
-    default:
-      break;
-  }
-
-  if (newStatus) {
-    // Seçili siparişlerin durumunu değiştir
-    const updatedOrders = orders.map((order) => {
-      if (selectedOrders.includes(order)) {
-        return { ...order, status: newStatus };
-      }
-      return order;
-    });
-
-    // Güncellenmiş siparişleri "orders" dizisine yansıt
-    setFilteredOrders(updatedOrders);
-
-    setSelectedOrders([]);
-  }
-};
-
-  console.log(selectedStatus, "SelectedStatus");
-  const handleAllOrders = () => {
-    setSelectedStatus("Tümü")
-    setFilteredOrders(orders)
-  }
   return (
     <>
-      {/* <div className=" text-center pt-5 pb-7 text-3xl text-NavyBlue font[600]">Siparişler</div>*/}
+   {/* <div className=" text-center pt-5 pb-7 text-3xl text-NavyBlue font[600]">Siparişler</div>*/}
       <div className="justify-between flex">
         <div className="flex gap-2 text-LightBlue">
-          <span onClick={handleAllOrders} className={
-            selectedStatus === "Tümü"
-              ? "text-BaseDark cursor-pointer"
-              : "cursor-pointer"
-          }>
-          <span>Tümü</span>
-          <span>({orders.length})</span>
-          <span className="text-CustomGray ml-1">|</span>
-          </span>
           {statuses.map((status, index) => (
             <React.Fragment key={index}>
               <span
-              onClick={() => filterStatus(status)}
+                onClick={() => filterStatus(status.name)}
                 className={
-                  selectedStatus === status
+                  selectedStatus === status.name
                     ? "text-BaseDark cursor-pointer"
                     : "cursor-pointer"
                 }
               >
-                {status}
+                {status.name}
               </span>
-              <span className="text-CustomGray"> ({orderCounts[status] || 0})</span>
+              <span className="text-CustomGray">({status.count})</span>
               {index !== statuses.length - 1 && (
                 <span className="text-CustomGray">|</span>
               )}
@@ -255,16 +182,12 @@ const handleBulkAction = (e) => {
               }`}
               name="filterActions"
               value={selectAll}
-              onChange={handleBulkAction}
+              onChange={handleSelectAll}
             >
               <option hidden>Toplu İşlemler</option>
               <option>Toplu İşlemler</option>
               <option>Çöp kutusuna taşı</option>
-              <option>Durumu hazılanıyor olarak değiştir</option>
-              <option>Durumu kargoya verildi olarak değiştir</option>
-              <option >Durumu ödeme bekleniyor olarak değiştir</option>
-              <option>Durumu tamamlandı olarak değiştir</option>
-              <option>Durumu iptal edildi olarak değiştir</option>
+              <option>Kargoya verildi</option>
               <option>PDF Fatura</option>
               <option>PDF Paketleme Fişi</option>
             </select>
@@ -292,46 +215,29 @@ const handleBulkAction = (e) => {
               ))}
             </select>
 
-            {/* Kayıtlı Kullanıcılara Göre Filtreleme Select */}
-            <select className="" name="filterUsers">
-              <option hidden>Kayıtlı Kullanıcılara göre Filtrele</option>
-              <option>Kayıtlı Kullanıcılara göre Filtrele</option>
-            </select>
-            <select
-              className={`${priceSortType === "Fiyata Göre Sırala" ?"": "bg-NavyBlue text-white" }`}
-              name="filterUsers"
-              onChange={handlePriceSortChange}
-              value={priceSortType}
-            >
+         
+            <select   className={`${priceSortType === "Fiyata Göre Sırala" ?"": "bg-NavyBlue text-white" }`} name="filterUsers" onChange={handlePriceSortChange} value={priceSortType}>
               <option hidden>Fiyata Göre Sırala</option>
-             
-              <option>Önce en yüksek</option>
-              <option>Önce en düşük</option>
+              <option >Fiyata Göre Sırala</option>
+              <option >Önce en yüksek</option>
+              <option >Önce en düşük</option>
+              
             </select>
-            <select
-            className={`${dateSortType === "Tarihe Göre Sırala" ?"": "bg-NavyBlue text-white" }`}
-              name="filterUsers"
-              onChange={handleDateSortChange}
-              value={dateSortType}
-            >
-              <option hidden>Tarihe Göre Sırala</option>
-              <option>Önce en yeni</option>
-              <option>Önce en eski</option>
-            </select>
+            <select   className={`${dateSortType === "Tarihe Göre Sırala" ?"": "bg-NavyBlue text-white" }`} name="filterUsers"  onChange={handleDateSortChange} value={dateSortType}>
+     
+            <option >Tarihe Göre Sırala</option>
+            <option >Önce en yeni</option>
+            <option >Önce en eski</option>
+            
+          </select>
             {/* Filtrele Butonu */}
             <button
-              onClick={handleClearFilters}
-              className={`p-[6px]  font-[500] border text-NavyBlue  rounded-md   text-sm whitespace-nowrap
-            ${
-              anyFilterSelected
-                ? "border-NavyBlue cursor-pointer hover:bg-NavyBlue hover:text-white"
-                : "  text-NavyBlue opacity-50 border-gray-400 cursor-not-allowed"
-            }
-`}
-            >
+            onClick={handleClearFilters}
+            className={`p-[6px]  font-[500] border text-NavyBlue  rounded-md   text-sm whitespace-nowrap
+            ${anyFilterSelected ?"border-NavyBlue cursor-pointer hover:bg-NavyBlue hover:text-white" :  "  text-NavyBlue opacity-50 border-gray-400 cursor-not-allowed"}
+`}            >
               Filtre Temizle
             </button>
-            
           </div>
         </div>
 
@@ -360,9 +266,7 @@ const handleBulkAction = (e) => {
             <MdKeyboardArrowLeft />
           </div>
 
-          <span className="border  md:px-4 md:py-2 py-1 px-3 rounded-full bg-NavyBlue text-white">
-            {page + 1}
-          </span>
+          <span className="border  md:px-4 md:py-2 py-1 px-3 rounded-full bg-NavyBlue text-white">{page + 1}</span>
           <span>/ {Math.ceil(filteredOrders.length / rowsPerPage)}</span>
 
           <div
@@ -388,9 +292,9 @@ const handleBulkAction = (e) => {
           </div>
         </div>
       </div>
-      <OrderListTable orders={paginatedOrders}  selectedOrders={selectedOrders} setSelectedOrders={setSelectedOrders}/>
+      <CustomerOrdersListTable orders={paginatedOrders} />
     </>
   );
 };
 
-export default OrderList;
+export default CustomerOrdersList;
