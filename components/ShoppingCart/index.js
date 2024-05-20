@@ -149,7 +149,7 @@ const ShoppingCart = () => {
   //   { id: 2, icon: "FaCcMastercard" },
   //   { id: 3, icon: "GiWallet" },
   // ];
-  
+
   return (
     <div
       id="shoppingcart"
@@ -181,14 +181,14 @@ const ShoppingCart = () => {
                   <IoMdImages className="w-6 h-6" />
                 </th>
                 <th className="px-5 py-3">
-                  <p className="flex jutify-start">Ürün Adı</p>
+                  <p className="flex items-center justify-center">Ürün Adı</p>
                 </th>
                 <th className="px-5 py-3 hidden lg:table-cell">Birim</th>
                 <th className=" px-5 py-3 hidden lg:table-cell">İsk.</th>
                 <th className=" px-5 py-3">Net</th>
                 <th className=" px-5 py-3 hidden lg:table-cell">Stok</th>
                 <th className=" px-5 py-3">
-                  <p className="flex justify-center sm:jutify-start">Adet</p>
+                  <p className="flex justify-center ">Adet</p>
                 </th>
                 <th className=" px-5 py-3">
                   <BsThreeDotsVertical className="w-5 h-5" />
@@ -250,6 +250,7 @@ const ShoppingCart = () => {
                     >
                       {({ values, handleChange }) => (
                         <Form className="flex items-center">
+                          <div className="border border-CustomGray/25 rounded-full py-2 px-3 flex flex-row items-center justify-center">
                           <button
                             type="button"
                             onClick={() => {
@@ -258,19 +259,18 @@ const ShoppingCart = () => {
                                 handleChange({ target: { name: "quantity", value: newValue } });
                               }
                             }}
-                            className="text-2xl text-LightBlue"
+                            className="text-xl text-LightBlue hover:scale-110 transition duration-500 ease-in-out transform "
                             disabled={updatingItems[item.id]}
                           >
                             <AiOutlineMinus />
                           </button>
                           <Field
-                            type="number"
                             name="quantity"
                             value={values.quantity}
                             min={1}
                             max={item.stock}
                             onChange={handleChange}
-                            className="w-12 text-center border rounded-md border-slate-200 hover:border-LightBlue transition duration-500 ease-in-out transform outline-none"
+                            className="w-12 p-1 text-center outline-none"
                             disabled={updatingItems[item.id]}
                           />
                           <button
@@ -281,11 +281,12 @@ const ShoppingCart = () => {
                                 handleChange({ target: { name: "quantity", value: newValue } });
                               }
                             }}
-                            className="text-2xl text-LightBlue"
+                            className="text-xl text-LightBlue hover:scale-110 transition duration-500 ease-in-out transform "
                             disabled={updatingItems[item.id]}
                           >
                             <AiOutlinePlus />
                           </button>
+                          </div>
                           <button
                               className="hidden sm:flex items-center justify-center bg-LightBlue/75 font-semibold py-2 px-4 rounded-md sm:ml-[24px] hover:scale-105 transition-all duration-700 transform ease-in-out hover:bg-LightBlue text-white w-[101px] h-[40px]"
                               type="submit"
@@ -334,7 +335,7 @@ const ShoppingCart = () => {
               ))}
             </tbody>
           </table>
-          <div className="flex items-center justify-center my-24">
+          <div className="flex items-center justify-center mt-24">
             {/* <div className="w-full lg:w-1/2 ">
               <OrderInformation />
             </div> */}

@@ -28,15 +28,15 @@ function CategoryProducts({ selectedCategory }) {
   const isItemInCart = (productId) => {
     return cartItems.some((item) => item.id === productId);
   };
-  const addToCart = (product, quantity) => {
-    setUpdatingItems({ ...updatingItems, [product.id]: true }); // Set updatingItems to true for the corresponding product
 
-    setTimeout(() => {
+  const addToCart = (product, quantity) => {
+    setUpdatingItems({ ...updatingItems, [product.id]: true }); 
+      setTimeout(() => {
       let updatedCartItems = [...cartItems];
       const existingItemIndex = updatedCartItems.findIndex(
         (item) => item.id === product.id
       );
-
+  
       if (existingItemIndex !== -1) {
         // Ürün sepette zaten var, sadece miktarını artır
         updatedCartItems[existingItemIndex].quantity += quantity;
@@ -45,31 +45,47 @@ function CategoryProducts({ selectedCategory }) {
         const newItem = { ...product, quantity };
         updatedCartItems.push(newItem);
       }
-
-      // Local storage güncelle
-      localStorage.setItem("cartItems", JSON.stringify(updatedCartItems));
-      setCartItems(updatedCartItems);
-
-      // Sepet güncellendiğinde event dispatch et
-      const event = new Event("cartChange");
-      window.dispatchEvent(event);
-
-      // updatingItems'i false olarak ayarla, işlem tamamlandı
-      setUpdatingItems({ ...updatingItems, [product.id]: false });
-    }, 3000);
-
-    setTimeout(() => {
-      toast.success("Ürün sepete eklendi", {
-        position: "top-right",
-        autoClose: 2000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-      });
+  
+      // Stok kontrolü
+      if (product.stock >= updatedCartItems[existingItemIndex]?.quantity) {
+        // Stok yeterli ise devam et
+        // Local storage güncelle
+        localStorage.setItem("cartItems", JSON.stringify(updatedCartItems));
+        setCartItems(updatedCartItems);
+  
+        // Sepet güncellendiğinde event dispatch et
+        const event = new Event("cartChange");
+        window.dispatchEvent(event);
+  
+        // updatingItems'i false olarak ayarla, işlem tamamlandı
+        setUpdatingItems({ ...updatingItems, [product.id]: false });
+  
+        toast.success("Ürün sepete eklendi", {
+          position: "top-right",
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+      } else {
+        // Stok yetersiz ise hata mesajı göster
+        toast.error(`Stok yetersiz. Mevcut stok: ${product.stock}`, {
+          position: "top-right",
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+  
+        setUpdatingItems({ ...updatingItems, [product.id]: false });
+      }
     }, 3000);
   };
+  
 
   return (
     <div className="bg-white w-[382px] md:w-[750px] lg:w-[970px] xl:w-[1188px] pt-[60px]  ">
