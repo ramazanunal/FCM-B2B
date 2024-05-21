@@ -4,7 +4,7 @@ import Banner from '@/components/Banner';
 
 export default function HomeLayout({ children}) {
   return (
-    <div className=" flex w-full h-full flex-col items-center bg-[url('https://caliskanari.com/wp-content/uploads/2018/10/clothes-2049536750.jpg.webp')] bg-no-repeat bg-[#6bcdec]">
+    <div className=" flex w-screen lg:w-full h-full flex-col items-center bg-[url('https://caliskanari.com/wp-content/uploads/2018/10/clothes-2049536750.jpg.webp')] bg-no-repeat bg-[#6bcdec]">
       <div className='bg-white'>
         <Header />
       </div>

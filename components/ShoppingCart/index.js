@@ -10,12 +10,10 @@ import "react-toastify/dist/ReactToastify.css";
 import { MdDeleteForever } from "react-icons/md";
 import { IoMdImages } from "react-icons/io";
 import { BsThreeDotsVertical } from "react-icons/bs";
-import { GiCancel, GiWallet } from "react-icons/gi";
-import { FaCcMastercard, FaCheck } from "react-icons/fa";
+import { GiCancel } from "react-icons/gi";
 import { RiShoppingCartLine } from "react-icons/ri";
 import { RxUpdate } from "react-icons/rx";
-import { FaMoneyBillTransfer } from "react-icons/fa6";
-import OrderInformation from "../OrderInformation";
+import { AiOutlinePlus, AiOutlineMinus } from "react-icons/ai";
 
 const ShoppingCart = () => {
   const initialCartItems = () => {
@@ -32,19 +30,28 @@ const ShoppingCart = () => {
   const [itemToDelete, setItemToDelete] = useState(null);
 
   const handleQuantityChange = (itemId, newQuantity) => {
+    // Sepetteki ürünleri alma
+    const product = cartItems.find((item) => item.id === itemId);
+    if (!product) {
+      return;
+    }
+    // Yeni miktarın mevcut stoktan fazla olup olmadığını kontrol etme
+    if (newQuantity > product.stock) {
+      toast.error(`Stok miktarını aşıyorsunuz (${product.stock} adet var)`);
+      return;
+    }
+
     setUpdating(true); // Güncelleme başladığında true
     setUpdatingItems({ ...updatingItems, [itemId]: true });
 
     setTimeout(() => {
       setUpdating(false); // 5 saniye sonra false
       setUpdatingItems({ ...updatingItems, [itemId]: false });
+
       // Ürün miktarını güncelleme işlemi
-      const updatedCartItems = cartItems.map((item) => {
-        if (item.id === itemId) {
-          return { ...item, quantity: newQuantity };
-        }
-        return item;
-      });
+      const updatedCartItems = cartItems.map((item) =>
+        item.id === itemId ? { ...item, quantity: newQuantity } : item
+      );
 
       // Güncellenmiş sepeti state'e ve Local Storage'a kaydetme
       setCartItems(updatedCartItems);
@@ -135,12 +142,13 @@ const ShoppingCart = () => {
   const totalAmountAfterDiscount = totalPrice - totalDiscount;
 
   //ödeme yöntemi
-  const [selectedMethod, setSelectedMethod] = useState(null);
-  const paymentMethods = [
-    { id: 1, icon: "FaMoneyBillTransfer" },
-    { id: 2, icon: "FaCcMastercard" },
-    { id: 3, icon: "GiWallet" },
-  ];
+  // const [selectedMethod, setSelectedMethod] = useState(null);
+  // const paymentMethods = [
+  //   { id: 1, icon: "FaMoneyBillTransfer" },
+  //   { id: 2, icon: "FaCcMastercard" },
+  //   { id: 3, icon: "GiWallet" },
+  // ];
+
   return (
     <div
       id="shoppingcart"
@@ -168,21 +176,25 @@ const ShoppingCart = () => {
           <table className=" px-5 py-3 text-[12px] md:text-[14px] lg:text-[16px] mx-auto sm:mx-0  shadow-lg rounded-md">
             <thead className=" px-5 py-3 bg-DarkBlue text-white tracking-wide ">
               <tr>
-                <th className="px-5 py-3 flex items-center justify-center">
-                  <IoMdImages className="w-6 h-6" />
+                <th className="px-5 py-3 ">
+                  <span className="flex items-center justify-center">
+                    <IoMdImages className="w-6 h-6 " />
+                  </span>
                 </th>
                 <th className="px-5 py-3">
-                  <p className="flex jutify-start">Ürün Adı</p>
+                  <p className="flex items-center justify-center">Ürün Adı</p>
                 </th>
                 <th className="px-5 py-3 hidden lg:table-cell">Birim</th>
                 <th className=" px-5 py-3 hidden lg:table-cell">İsk.</th>
                 <th className=" px-5 py-3">Net</th>
                 <th className=" px-5 py-3 hidden lg:table-cell">Stok</th>
                 <th className=" px-5 py-3">
-                  <p className="flex justify-center sm:jutify-start">Adet</p>
+                  <p className="flex justify-center ">Adet</p>
                 </th>
-                <th className=" px-5 py-3">
-                  <BsThreeDotsVertical className="w-5 h-5" />
+                <th className="px-3 sm:px-5 py-3">
+                  <span className="flex items-center justify-center">
+                    <BsThreeDotsVertical className="w-5 h-5" />
+                  </span>
                 </th>
               </tr>
             </thead>
@@ -236,27 +248,71 @@ const ShoppingCart = () => {
                   <td className=" px-2 sm:px-5 py-3 ">
                     <span className="flex items-center justify-center">
                       <Formik
-                        key={JSON.stringify(item)}
                         initialValues={{ quantity: item.quantity }}
-                        onSubmit={(values, { resetForm }) => {
-                          handleQuantityChange(item.id, values.quantity);
-                          resetForm();
-                        }}
+                        onSubmit={({ quantity }) =>
+                          handleQuantityChange(item.id, quantity)
+                        }
                       >
                         {({ values, handleChange }) => (
-                          <Form className="flex flex-row gap-2 sm:gap-0 items-center ">
-                            <Field
-                              type="number"
-                              name="quantity"
-                              min="1"
-                              value={values.quantity}
-                              onChange={handleChange}
-                              className="text-center w-12 h-10 border rounded-md border-slate-200 hover:border-CustomGray transition duration-500 ease-in-out transform outline-none"
-                            />
+                          <Form className="flex items-center">
+                            <div className="border border-CustomGray/25 rounded-full py-2 px-2 flex flex-row items-center justify-center">
+                              <button
+                                type="button"
+                                onClick={() => {
+                                  const newValue = values.quantity - 1;
+                                  if (newValue >= 1) {
+                                    handleChange({
+                                      target: {
+                                        name: "quantity",
+                                        value: newValue,
+                                      },
+                                    });
+                                  }
+                                }}
+                                className="text-sm sm:text-xl text-LightBlue hover:scale-110 transition duration-500 ease-in-out transform"
+                                disabled={updatingItems[item.id]}
+                              >
+                                <AiOutlineMinus />
+                              </button>
+                              <Field
+                                name="quantity"
+                                value={values.quantity}
+                                min={1}
+                                max={item.stock}
+                                onChange={handleChange}
+                                className="w-6 sm:w-12 p-1 text-center outline-none"
+                                disabled={updatingItems[item.id]}
+                              />
+                              <button
+                                type="button"
+                                onClick={() => {
+                                  const newValue = values.quantity + 1;
+                                  if (newValue <= item.stock) {
+                                    handleChange({
+                                      target: {
+                                        name: "quantity",
+                                        value: newValue,
+                                      },
+                                    });
+                                  }
+                                }}
+                                className="text-sm sm:text-xl text-LightBlue hover:scale-110 transition duration-500 ease-in-out transform"
+                                disabled={updatingItems[item.id]}
+                              >
+                                <AiOutlinePlus />
+                              </button>
+                            </div>
                             <button
-                              className="hidden sm:flex items-center justify-center bg-LightBlue/75 font-semibold py-2 px-4 rounded-md sm:ml-[24px] hover:scale-105 transition-all duration-700 transform ease-in-out hover:bg-LightBlue text-white w-[101px] h-[40px]"
+                              className={`${
+                                values.quantity !== item.quantity
+                                  ? "bg-LightBlue text-white hover:scale-105 transition-all duration-700 transform ease-in-out hover:bg-LightBlue"
+                                  : "bg-CustomGray  text-white cursor-not-allowed"
+                              } px-4 ml-2 py-2 rounded-md sm:ml-[24px] w-[101px] h-[40px]`}
                               type="submit"
-                              disabled={updating}
+                              disabled={
+                                updatingItems[item.id] ||
+                                values.quantity === item.quantity
+                              }
                             >
                               {updatingItems[item.id] ? (
                                 <div className="flex flex-row items-center justify-center gap-1 ">
@@ -269,7 +325,7 @@ const ShoppingCart = () => {
                               )}
                             </button>
                             <button
-                              className="flex sm:hidden items-center justify-center w-[20px]"
+                              className="flex sm:hidden items-center justify-center w-[20px] ml-2"
                               type="submit"
                               disabled={updating}
                             >
@@ -301,10 +357,10 @@ const ShoppingCart = () => {
               ))}
             </tbody>
           </table>
-          <div className="flex flex-col lg:flex-row my-24">
-            <div className="w-full lg:w-1/2 ">
+          <div className="flex items-center justify-center mt-24">
+            {/* <div className="w-full lg:w-1/2 ">
               <OrderInformation />
-            </div>
+            </div> */}
             <div className="w-full lg:w-1/2 mt-12 lg:mt-0">
               <div className="flex flex-col items-center ">
                 <div className="flex flex-col items-center justify-center bg-slate-100 w-[350px] sm:w-[450px] rounded-2xl shadow-lg p-10">
@@ -315,7 +371,7 @@ const ShoppingCart = () => {
                     </h1>
                   </div>
                   <div className="border-b border-slate-200 mb-8">
-                    <h1 className="text-[18px] md:text-[20px] font-bold text-CustomGray mt-6 flex items-start px-4">
+                    {/* <h1 className="text-[18px] md:text-[20px] font-bold text-CustomGray mt-6 flex items-start px-4">
                       Ödeme Yöntemi
                     </h1>
                     <div className="flex flex-wrap gap-4 px-4 pb-8 pt-4">
@@ -344,7 +400,7 @@ const ShoppingCart = () => {
                           )}
                         </div>
                       ))}
-                    </div>
+                    </div> */}
                   </div>
 
                   <div className="flex justify-center sm:justify-end mb-12 text-[16px]">
