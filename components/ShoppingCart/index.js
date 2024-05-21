@@ -30,7 +30,7 @@ const ShoppingCart = () => {
   const [itemToDelete, setItemToDelete] = useState(null);
 
   const handleQuantityChange = (itemId, newQuantity) => {
-    // Sepetteki ürünleri alma 
+    // Sepetteki ürünleri alma
     const product = cartItems.find((item) => item.id === itemId);
     if (!product) {
       return;
@@ -41,7 +41,7 @@ const ShoppingCart = () => {
       return;
     }
 
-    setUpdating(true);// Güncelleme başladığında true
+    setUpdating(true); // Güncelleme başladığında true
     setUpdatingItems({ ...updatingItems, [itemId]: true });
 
     setTimeout(() => {
@@ -64,7 +64,6 @@ const ShoppingCart = () => {
       }
     }, 5000);
   };
-
 
   const initiateDelete = (itemId) => {
     setItemToDelete(itemId);
@@ -177,8 +176,10 @@ const ShoppingCart = () => {
           <table className=" px-5 py-3 text-[12px] md:text-[14px] lg:text-[16px] mx-auto sm:mx-0  shadow-lg rounded-md">
             <thead className=" px-5 py-3 bg-DarkBlue text-white tracking-wide ">
               <tr>
-                <th className="px-5 py-3 flex items-center justify-center">
-                  <IoMdImages className="w-6 h-6" />
+                <th className="px-5 py-3 ">
+                  <span className="flex items-center justify-center">
+                    <IoMdImages className="w-6 h-6 " />
+                  </span>
                 </th>
                 <th className="px-5 py-3">
                   <p className="flex items-center justify-center">Ürün Adı</p>
@@ -190,8 +191,10 @@ const ShoppingCart = () => {
                 <th className=" px-5 py-3">
                   <p className="flex justify-center ">Adet</p>
                 </th>
-                <th className=" px-5 py-3">
-                  <BsThreeDotsVertical className="w-5 h-5" />
+                <th className="px-3 sm:px-5 py-3">
+                  <span className="flex items-center justify-center">
+                    <BsThreeDotsVertical className="w-5 h-5" />
+                  </span>
                 </th>
               </tr>
             </thead>
@@ -244,53 +247,72 @@ const ShoppingCart = () => {
                   </td>
                   <td className=" px-2 sm:px-5 py-3 ">
                     <span className="flex items-center justify-center">
-                    <Formik
-                      initialValues={{ quantity: item.quantity }}
-                      onSubmit={({ quantity }) => handleQuantityChange(item.id, quantity)}
-                    >
-                      {({ values, handleChange }) => (
-                        <Form className="flex items-center">
-                          <div className="border border-CustomGray/25 rounded-full py-2 px-3 flex flex-row items-center justify-center">
-                          <button
-                            type="button"
-                            onClick={() => {
-                              const newValue = values.quantity - 1;
-                              if (newValue >= 1) {
-                                handleChange({ target: { name: "quantity", value: newValue } });
-                              }
-                            }}
-                            className=" text-sm sm:text-xl text-LightBlue hover:scale-110 transition duration-500 ease-in-out transform "
-                            disabled={updatingItems[item.id]}
-                          >
-                            <AiOutlineMinus />
-                          </button>
-                          <Field
-                            name="quantity"
-                            value={values.quantity}
-                            min={1}
-                            max={item.stock}
-                            onChange={handleChange}
-                            className="w-6 sm:w-12 p-1 text-center outline-none"
-                            disabled={updatingItems[item.id]}
-                          />
-                          <button
-                            type="button"
-                            onClick={() => {
-                              const newValue = values.quantity + 1;
-                              if (newValue <= item.stock) {
-                                handleChange({ target: { name: "quantity", value: newValue } });
-                              }
-                            }}
-                            className="text-sm sm:text-xl text-LightBlue hover:scale-110 transition duration-500 ease-in-out transform "
-                            disabled={updatingItems[item.id]}
-                          >
-                            <AiOutlinePlus />
-                          </button>
-                          </div>
-                          <button
-                              className="hidden sm:flex items-center justify-center bg-LightBlue/75 font-semibold py-2 px-4 rounded-md sm:ml-[24px] hover:scale-105 transition-all duration-700 transform ease-in-out hover:bg-LightBlue text-white w-[101px] h-[40px]"
+                      <Formik
+                        initialValues={{ quantity: item.quantity }}
+                        onSubmit={({ quantity }) =>
+                          handleQuantityChange(item.id, quantity)
+                        }
+                      >
+                        {({ values, handleChange }) => (
+                          <Form className="flex items-center">
+                            <div className="border border-CustomGray/25 rounded-full py-2 px-2 flex flex-row items-center justify-center">
+                              <button
+                                type="button"
+                                onClick={() => {
+                                  const newValue = values.quantity - 1;
+                                  if (newValue >= 1) {
+                                    handleChange({
+                                      target: {
+                                        name: "quantity",
+                                        value: newValue,
+                                      },
+                                    });
+                                  }
+                                }}
+                                className="text-sm sm:text-xl text-LightBlue hover:scale-110 transition duration-500 ease-in-out transform"
+                                disabled={updatingItems[item.id]}
+                              >
+                                <AiOutlineMinus />
+                              </button>
+                              <Field
+                                name="quantity"
+                                value={values.quantity}
+                                min={1}
+                                max={item.stock}
+                                onChange={handleChange}
+                                className="w-6 sm:w-12 p-1 text-center outline-none"
+                                disabled={updatingItems[item.id]}
+                              />
+                              <button
+                                type="button"
+                                onClick={() => {
+                                  const newValue = values.quantity + 1;
+                                  if (newValue <= item.stock) {
+                                    handleChange({
+                                      target: {
+                                        name: "quantity",
+                                        value: newValue,
+                                      },
+                                    });
+                                  }
+                                }}
+                                className="text-sm sm:text-xl text-LightBlue hover:scale-110 transition duration-500 ease-in-out transform"
+                                disabled={updatingItems[item.id]}
+                              >
+                                <AiOutlinePlus />
+                              </button>
+                            </div>
+                            <button
+                              className={`${
+                                values.quantity !== item.quantity
+                                  ? "bg-LightBlue text-white hover:scale-105 transition-all duration-700 transform ease-in-out hover:bg-LightBlue"
+                                  : "bg-CustomGray  text-white cursor-not-allowed"
+                              } px-4 ml-2 py-2 rounded-md sm:ml-[24px] w-[101px] h-[40px]`}
                               type="submit"
-                              disabled={updating}
+                              disabled={
+                                updatingItems[item.id] ||
+                                values.quantity === item.quantity
+                              }
                             >
                               {updatingItems[item.id] ? (
                                 <div className="flex flex-row items-center justify-center gap-1 ">
@@ -303,7 +325,7 @@ const ShoppingCart = () => {
                               )}
                             </button>
                             <button
-                              className="flex sm:hidden items-center justify-center w-[20px] ml-2 "
+                              className="flex sm:hidden items-center justify-center w-[20px] ml-2"
                               type="submit"
                               disabled={updating}
                             >
@@ -317,9 +339,9 @@ const ShoppingCart = () => {
                                 <RxUpdate className="w-4 h-4 text-LightBlue" />
                               )}
                             </button>
-                        </Form>
-                      )}
-                    </Formik>
+                          </Form>
+                        )}
+                      </Formik>
                     </span>
                   </td>
 
