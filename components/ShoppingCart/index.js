@@ -259,7 +259,7 @@ const ShoppingCart = () => {
                                 handleChange({ target: { name: "quantity", value: newValue } });
                               }
                             }}
-                            className="text-xl text-LightBlue hover:scale-110 transition duration-500 ease-in-out transform "
+                            className=" text-sm sm:text-xl text-LightBlue hover:scale-110 transition duration-500 ease-in-out transform "
                             disabled={updatingItems[item.id]}
                           >
                             <AiOutlineMinus />
@@ -270,7 +270,7 @@ const ShoppingCart = () => {
                             min={1}
                             max={item.stock}
                             onChange={handleChange}
-                            className="w-12 p-1 text-center outline-none"
+                            className="w-6 sm:w-12 p-1 text-center outline-none"
                             disabled={updatingItems[item.id]}
                           />
                           <button
@@ -281,7 +281,7 @@ const ShoppingCart = () => {
                                 handleChange({ target: { name: "quantity", value: newValue } });
                               }
                             }}
-                            className="text-xl text-LightBlue hover:scale-110 transition duration-500 ease-in-out transform "
+                            className="text-sm sm:text-xl text-LightBlue hover:scale-110 transition duration-500 ease-in-out transform "
                             disabled={updatingItems[item.id]}
                           >
                             <AiOutlinePlus />
@@ -303,7 +303,7 @@ const ShoppingCart = () => {
                               )}
                             </button>
                             <button
-                              className="flex sm:hidden items-center justify-center w-[20px]"
+                              className="flex sm:hidden items-center justify-center w-[20px] ml-2 "
                               type="submit"
                               disabled={updating}
                             >
