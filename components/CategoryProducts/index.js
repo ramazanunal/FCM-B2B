@@ -5,12 +5,12 @@ import Image from "next/image";
 import Link from "next/link";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { FaCheck, FaPlus } from "react-icons/fa";
+import { FaCheck, FaMinus, FaPlus } from "react-icons/fa";
 
 function CategoryProducts({ selectedCategory }) {
   const [hoveredIndex, setHoveredIndex] = useState(null);
   const [cartItems, setCartItems] = useState([]);
-  const [updatingItems, setUpdatingItems] = useState(false);
+  const [updatingItems, setUpdatingItems] = useState({});
 
   useEffect(() => {
     const storedCartItems = JSON.parse(localStorage.getItem("cartItems")) || [];
@@ -36,7 +36,24 @@ function CategoryProducts({ selectedCategory }) {
       const existingItemIndex = updatedCartItems.findIndex(
         (item) => item.id === product.id
       );
-  
+
+      const existingQuantity = existingItemIndex !== -1 ? updatedCartItems[existingItemIndex].quantity : 0;
+      const totalQuantity = existingQuantity + quantity;
+
+      if (totalQuantity > product.stock) {
+        toast.error(`En fazla ${product.stock} adet ekleyebilirsiniz`, {
+          position: "top-right",
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+        setUpdatingItems({ ...updatingItems, [product.id]: false });
+        return;
+      }
+
       if (existingItemIndex !== -1) {
         // Ürün sepette zaten var, sadece miktarını artır
         updatedCartItems[existingItemIndex].quantity += quantity;
@@ -45,55 +62,37 @@ function CategoryProducts({ selectedCategory }) {
         const newItem = { ...product, quantity };
         updatedCartItems.push(newItem);
       }
-  
-      // Stok kontrolü
-      if (product.stock >= updatedCartItems[existingItemIndex]?.quantity) {
-        // Stok yeterli ise devam et
-        // Local storage güncelle
-        localStorage.setItem("cartItems", JSON.stringify(updatedCartItems));
-        setCartItems(updatedCartItems);
-  
-        // Sepet güncellendiğinde event dispatch et
-        const event = new Event("cartChange");
-        window.dispatchEvent(event);
-  
-        // updatingItems'i false olarak ayarla, işlem tamamlandı
-        setUpdatingItems({ ...updatingItems, [product.id]: false });
-  
-        toast.success("Ürün sepete eklendi", {
-          position: "top-right",
-          autoClose: 2000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-        });
-      } else {
-        // Stok yetersiz ise hata mesajı göster
-        toast.error(`Stok yetersiz. Mevcut stok: ${product.stock}`, {
-          position: "top-right",
-          autoClose: 2000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-        });
-  
-        setUpdatingItems({ ...updatingItems, [product.id]: false });
-      }
+
+      // Local storage güncelle
+      localStorage.setItem("cartItems", JSON.stringify(updatedCartItems));
+      setCartItems(updatedCartItems);
+
+      // Sepet güncellendiğinde event dispatch et
+      const event = new Event("cartChange");
+      window.dispatchEvent(event);
+
+      // updatingItems'i false olarak ayarla, işlem tamamlandı
+      setUpdatingItems({ ...updatingItems, [product.id]: false });
+
+      toast.success("Ürün sepete eklendi", {
+        position: "top-right",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
     }, 3000);
   };
-  
 
   return (
-    <div className="bg-white w-[382px] md:w-[750px] lg:w-[970px] xl:w-[1188px] pt-[60px]  ">
+    <div className="bg-white w-screen md:w-[750px] lg:w-[970px] xl:w-[1188px] pt-[60px]  ">
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 justify-center sm:mx-[35px] mb-[30px] px-[15px]">
         {selectedCategory.products.map((product, index) => (
           <div
             key={product.id}
-            className="relative p-[10px] sm:p-[25px] border border-ProductsBorder rounded-md shadow-sm transition duration-300 ease-in-out transform hover:shadow-[0_0_20px_rgba(0,0,0,0.1)] overflow-hidden flex flex-row sm:flex-col  items-center sm:justify-center "
+            className="relative p-[10px] sm:p-[20px] border border-ProductsBorder rounded-md shadow-sm transition duration-300 ease-in-out transform hover:shadow-[0_0_20px_rgba(0,0,0,0.1)] overflow-hidden flex flex-row sm:flex-col  items-center sm:justify-center "
             onMouseEnter={() => setHoveredIndex(index)}
             onMouseLeave={() => setHoveredIndex(null)}
           >
@@ -104,7 +103,7 @@ function CategoryProducts({ selectedCategory }) {
               </p>
             )}
             <div className="w-2/5 sm:w-full mr-[10px] sm:mr-0">
-              <Link href={product.link}>
+              <Link href={product.link} className="flex items-center justify-center">
                 <Image
                   src={product.imagesrc}
                   alt={product.name}
@@ -146,32 +145,56 @@ function CategoryProducts({ selectedCategory }) {
                   </p>
                 ) : (
                   <>
-                    <div className="flex justify-center items-center mt-[20px]">
+                    <div className="flex  mt-[20px]">
                       <Formik
                         initialValues={{ quantity: 1 }}
                         validationSchema={Yup.object({
                           quantity: Yup.number()
                             .min(1, "En az 1 adet girebilirsiniz")
+                            .max(product.stock, `En fazla ${product.stock} adet girebilirsiniz`)
                             .required("Bir miktar girin"),
                         })}
                         onSubmit={(values) => {
                           addToCart(product, values.quantity);
                         }}
                       >
-                        {({ errors, touched }) => (
+                        {({ errors, touched, values, setFieldValue }) => (
                           <Form>
                             <div className="flex flex-col items-center justify-center text-LightBlue ">
                               <div className="flex flex-row items-center justify-center ">
+                               <div className="flex flex-row rounded-full ">
+                               <button
+                                  type="button"
+                                  onClick={() => {
+                                    const currentValue = values.quantity;
+                                    const newValue = currentValue > 1 ? currentValue - 1 : 1;
+                                    setFieldValue("quantity", newValue);
+                                  }}
+                                  className=" text-sm sm:text-md text-LightBlue hover:scale-110 transition duration-500 ease-in-out transform "
+                                >
+                                  <FaMinus />
+                                </button>
                                 <Field
-                                  type="number"
                                   min="1"
+                                  max={product.stock}
                                   name="quantity"
-                                  className="text-center pr-2 sm:pr-0 w-14 md:w-16 h-8 border-2 border-LightBlue hover:border-CustomGray  hover:text-CustomGray transition duration-300 ease-in-out transform outline-none rounded-md  text-LightBlue "
+                                  className="w-6  text-center outline-none text-CustomGray"
                                 />
-
+                                <button
+                                  type="button"
+                                  onClick={() => {
+                                    const currentValue = values.quantity;
+                                    const newValue = currentValue < product.stock ? currentValue + 1 : product.stock;
+                                    setFieldValue("quantity", newValue);
+                                  }}
+                                  className=" text-sm sm:text-md text-LightBlue hover:scale-110 transition duration-500 ease-in-out transform "
+                                >
+                                  <FaPlus />
+                                </button>
+                               </div>
                                 <button
                                   type="submit"
-                                  className="flex flex-row items-center justify-center gap-2 ml-3 text-white font-bold hover:scale-105 transition-all transform seasy-im-out duration-500 cursor-pointer bg-LightBlue/75 pl-3 pr-11 py-2 rounded-full relative w-[160px] h-[40px]"
+                                  className="flex flex-row items-center justify-center gap-2 ml-2 sm:ml-4 lg:ml-2 text-white font-bold hover:scale-105 transition-all transform easy-in-out duration-500 cursor-pointer bg-LightBlue/75 pl-2 pr-9  py-2 rounded-full relative w-[130px] sm:w-[160px] h-[40px] text-[13px] sm:text-[15px]"
                                 >
                                   {updatingItems[product.id] ? (
                                     <div className="flex flex-row items-center justify-center gap-1 ">
