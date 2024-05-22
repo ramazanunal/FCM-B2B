@@ -172,8 +172,8 @@ const ShoppingCart = () => {
           </Link>
         </div>
       ) : (
-        <div className="px-5 sm:px-0">
-          <table className=" px-5 py-3 text-[12px] md:text-[14px] lg:text-[16px] mx-auto sm:mx-0  shadow-lg rounded-md">
+        <div className="px-5 sm:px-0 ">
+          <table className="w-screen lg:w-[1188px] px-5 py-3 text-[12px] md:text-[14px] lg:text-[16px] mx-auto sm:mx-0  shadow-lg rounded-md">
             <thead className=" px-5 py-3 bg-DarkBlue text-white tracking-wide ">
               <tr>
                 <th className="px-5 py-3 ">
@@ -186,7 +186,8 @@ const ShoppingCart = () => {
                 </th>
                 <th className="px-5 py-3 hidden lg:table-cell">Birim</th>
                 <th className=" px-5 py-3 hidden lg:table-cell">İsk.</th>
-                <th className=" px-5 py-3">Net</th>
+                <th className=" px-5 py-3 hidden lg:table-cell w-32">Birim Net</th>
+                <th className=" px-5 py-3 w-32 sm:w-40">Toplam Tutar</th>
                 <th className=" px-5 py-3 hidden lg:table-cell">Stok</th>
                 <th className=" px-5 py-3">
                   <p className="flex justify-center ">Adet</p>
@@ -199,8 +200,8 @@ const ShoppingCart = () => {
               </tr>
             </thead>
             <tbody>
-              {uniqueCartItems.map((item) => (
-                <tr key={item.id} className="shadow-sm">
+              {uniqueCartItems.map((item, index) => (
+                <tr key={index} className="shadow-sm">
                   <td className=" px-2 sm:px-5 py-5  ">
                     <div className="flex flex-col sm:flex-row items-center text-center">
                       <Image
@@ -215,7 +216,7 @@ const ShoppingCart = () => {
                     <div className="flex flex-col sm:flex-row items-center ">
                       <Link
                         href={item.link}
-                        className="w-[70px] sm:w-full text-LightBlue font-medium"
+                        className="w-[70px] sm:w-full text-LightBlue font-medium flex text-center"
                       >
                         {item.name}
                       </Link>
@@ -231,14 +232,25 @@ const ShoppingCart = () => {
                       {item.discount ? `%${item.discount},00` : "%0"}
                     </span>
                   </td>
-                  <td className=" px-2 sm:px-5 py-3 ">
-                    <span className="flex items-center justify-center">
+                  <td className=" px-5 py-3 hidden lg:table-cell">
+                    <p className="w-full flex items-center justify-center">
                       ₺
                       {calculateDiscountedPrice(
-                        item.price.replace(",", "."),
+                        parseFloat(item.price.replace(",", ".")),
                         item.discount
                       )}{" "}
-                    </span>
+                    </p>
+                  </td>
+                  <td className=" px-5 py-3">
+                    <p className="w-full flex items-center justify-center">
+                      ₺
+                      {(
+                        calculateDiscountedPrice(
+                          parseFloat(item.price.replace(",", ".")),
+                          item.discount
+                        ) * item.quantity
+                      ).toFixed(2)}{" "}
+                    </p>
                   </td>
                   <td className=" px-5 py-3  hidden lg:table-cell">
                     <span className="flex items-center justify-center ">
@@ -306,8 +318,8 @@ const ShoppingCart = () => {
                               className={`${
                                 values.quantity !== item.quantity
                                   ? "bg-LightBlue text-white hover:scale-105 transition-all duration-700 transform ease-in-out hover:bg-LightBlue"
-                                  : "bg-CustomGray  text-white cursor-not-allowed"
-                              } px-4 ml-2 py-2 rounded-md sm:ml-[24px] w-[101px] h-[40px]`}
+                                  : "bg-gray-300  text-white cursor-not-allowed"
+                              } px-4 ml-2 py-2 rounded-md sm:ml-[24px] w-[101px] h-[40px] hidden sm:flex items-center justify-center`}
                               type="submit"
                               disabled={
                                 updatingItems[item.id] ||
@@ -336,7 +348,13 @@ const ShoppingCart = () => {
                                   <div className="h-1 w-1 rounded-full animate-pulse bg-LightBlue"></div>
                                 </div>
                               ) : (
-                                <RxUpdate className="w-4 h-4 text-LightBlue" />
+                                <RxUpdate
+                                  className={`${
+                                    values.quantity !== item.quantity
+                                      ? "text-LightBlue hover:scale-105 transition-all duration-700 transform ease-in-out hover:text-LightBlue"
+                                      : "text-gray-300  cursor-not-allowed"
+                                  } w-4 h-4 `}
+                                />
                               )}
                             </button>
                           </Form>
