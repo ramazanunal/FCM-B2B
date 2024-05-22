@@ -180,17 +180,31 @@ function CategoryProducts({ selectedCategory }) {
                                   name="quantity"
                                   className="w-6  text-center outline-none text-CustomGray"
                                 />
-                                <button
-                                  type="button"
-                                  onClick={() => {
-                                    const currentValue = values.quantity;
-                                    const newValue = currentValue < product.stock ? currentValue + 1 : product.stock;
-                                    setFieldValue("quantity", newValue);
-                                  }}
-                                  className=" text-sm sm:text-md text-LightBlue hover:scale-110 transition duration-500 ease-in-out transform "
-                                >
-                                  <FaPlus />
-                                </button>
+                                 <button
+                                    type="button"
+                                    onClick={() => {
+                                      const currentValue = values.quantity;
+                                      const newValue = currentValue < product.stock ? currentValue + 1 : product.stock;
+                                      setFieldValue("quantity", newValue);
+                                      if (newValue === product.stock) {
+                                        toast.error("Bu üründen daha fazla eklenemez. Sınırlı stok.", {
+                                          position: "top-right",
+                                          autoClose: 2000,
+                                          hideProgressBar: false,
+                                          closeOnClick: true,
+                                          pauseOnHover: true,
+                                          draggable: true,
+                                          progress: undefined,
+                                        });
+                                      }
+                                    }}
+                                    className={`text-sm sm:text-md ${
+                                      values.quantity >= product.stock ? "text-gray-400 cursor-not-allowed" : "text-LightBlue hover:scale-110"
+                                    } transition duration-500 ease-in-out transform`}
+                                    disabled={values.quantity >= product.stock}
+                                  >
+                                    <FaPlus />
+                                  </button>
                                </div>
                                 <button
                                   type="submit"
