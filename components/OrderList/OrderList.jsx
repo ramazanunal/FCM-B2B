@@ -22,19 +22,20 @@ const OrderList = () => {
   const [dateSortType, setDateSortType] = useState("Tarihe Göre Sırala");
   const [anyFilterSelected, setAnyFilterSelected] = useState(false);
   const [selectedOrders, setSelectedOrders] = useState([]);
-  
-
-
-  console.log(selectedOrders);
-
-  const handleSelectAll = (e) => {
-    setSelectAll(e.target.value);
-  };
+  const [orderCounts, setOrderCounts] = useState({});
 
   useEffect(() => {
     const dates = [...new Set(filteredOrders.map((order) => order.date))];
     setUniqueDates(dates);
   }, [filteredOrders]);
+
+  useEffect(() => {
+    const counts = {};
+    statuses.forEach((status) => {
+      counts[status] = orders.filter((order) => order.status === status).length;
+    });
+    setOrderCounts(counts);
+  }, [orders]);
 
   const filterOrders = (searchValue, status, date) => {
     let filteredOrders = orders;
@@ -67,29 +68,16 @@ const OrderList = () => {
     setFilteredOrders(filteredOrders);
   };
 
-  // Arama
   const handleSearchChange = (event) => {
     const { value } = event.target;
     setSearchValue(value);
     filterOrders(value, selectedStatus, orderDate);
   };
 
-  // status fiiltresi  degisikligini yonetiyor
   const filterStatus = (status) => {
     setSelectedStatus(status);
     filterOrders(searchValue, status, orderDate, uniqueDates);
   };
-  const [orderCounts, setOrderCounts] = useState({});
-
-// ...
-
-useEffect(() => {
-  const counts = {};
-  statuses.forEach(status => {
-    counts[status] = orders.filter(order => order.status === status).length;
-  });
-  setOrderCounts(counts);
-}, [orders]);
 
   const handleChangePage = (direction) => {
     if (direction === "prev" && page > 0) {
@@ -136,6 +124,7 @@ useEffect(() => {
     sortOrders(priceSortType, sortType);
     setAnyFilterSelected(true);
   };
+
   const handleClearFilters = () => {
     setSearchValue("");
     setSelectedStatus("Tümü");
@@ -147,82 +136,66 @@ useEffect(() => {
     setFilteredOrders(orders);
   };
 
- // Siparişlerin durumunu toplu olarak güncelle
-const handleBulkAction = (e) => {
-  const action = e.target.value;
-  let newStatus = "";
-  switch (action) {
-    // Durum değişikliğine göre yeni durumu belirle
-    case "Durumu hazılanıyor olarak değiştir":
-      newStatus = "Hazırlanıyor";
-      break;
-    case "Durumu kargoya verildi olarak değiştir":
-      newStatus = "Kargoya Verildi";
-      break;
-    case "Durumu ödeme bekleniyor olarak değiştir":
-      newStatus = "Ödeme bekleniyor";
-      break;
-    case "Durumu tamamlandı olarak değiştir":
-      newStatus = "Tamamlandı";
-      break;
-    case "Durumu iptal edildi olarak değiştir":
-      newStatus = "İptal edildi";
-      break;
-    default:
-      break;
-  }
+  const handleSelectAll = (e) => {
+    setSelectAll(e.target.value);
+  };
 
-  if (newStatus) {
-    // Seçili siparişlerin durumunu değiştir
-    const updatedOrders = orders.map((order) => {
-      if (selectedOrders.includes(order)) {
-        return { ...order, status: newStatus };
-      }
-      return order;
-    });
+  const handleBulkUpdate = () => {
+    let newStatus = "";
+    switch (selectAll) {
+      case "Hazırlanıyor":
+        newStatus = "Hazırlanıyor";
+        break;
+      case "Kargoya verildi":
+        newStatus = "Kargoya Verildi";
+        break;
+      case "Ödeme bekleniyor":
+        newStatus = "Ödeme bekleniyor";
+        break;
+      case "Tamamlandı":
+        newStatus = "Tamamlandı";
+        break;
+      case "İptal edildi":
+        newStatus = "İptal edildi";
+        break;
+      default:
+        break;
+    }
 
-    // Güncellenmiş siparişleri "orders" dizisine yansıt
-    setFilteredOrders(updatedOrders);
+    if (newStatus) {
+      const updatedOrders = orders.map((order) => {
+        if (selectedOrders.includes(order)) {
+          return { ...order, status: newStatus };
+        }
+        return order;
+      });
 
-    setSelectedOrders([]);
-  }
-};
+      setFilteredOrders(updatedOrders);
+      setSelectedOrders([]);
+    }
+  };
 
-  console.log(selectedStatus, "SelectedStatus");
   const handleAllOrders = () => {
-    setSelectedStatus("Tümü")
-    setFilteredOrders(orders)
-  }
+    setSelectedStatus("Tümü");
+    setFilteredOrders(orders);
+  };
+
   return (
     <>
-      {/* <div className=" text-center pt-5 pb-7 text-3xl text-NavyBlue font[600]">Siparişler</div>*/}
       <div className="justify-between flex">
         <div className="flex gap-2 text-LightBlue">
-          <span onClick={handleAllOrders} className={
-            selectedStatus === "Tümü"
-              ? "text-BaseDark cursor-pointer"
-              : "cursor-pointer"
-          }>
-          <span>Tümü</span>
-          <span>({orders.length})</span>
-          <span className="text-CustomGray ml-1">|</span>
+          <span onClick={handleAllOrders} className={selectedStatus === "Tümü" ? "text-BaseDark cursor-pointer" : "cursor-pointer"}>
+            <span>Tümü</span>
+            <span>({orders.length})</span>
+            <span className="text-CustomGray ml-1">|</span>
           </span>
           {statuses.map((status, index) => (
             <React.Fragment key={index}>
-              <span
-              onClick={() => filterStatus(status)}
-                className={
-                  selectedStatus === status
-                    ? "text-BaseDark cursor-pointer"
-                    : "cursor-pointer"
-                }
-              >
+              <span onClick={() => filterStatus(status)} className={selectedStatus === status ? "text-BaseDark cursor-pointer" : "cursor-pointer"}>
                 {status}
               </span>
               <span className="text-CustomGray"> ({orderCounts[status] || 0})</span>
-              {index !== statuses.length - 1 && (
-                <span className="text-CustomGray">|</span>
-              )}
+              {index !== statuses.length - 1 && <span className="text-CustomGray">|</span>}
             </React.Fragment>
           ))}
         </div>
@@ -235,43 +208,37 @@ const handleBulkAction = (e) => {
               className="p-2 border  rounded-md w-full"
               placeholder="Sipariş ara"
             />
-           
           </form>
         </div>
       </div>
       <div className="flex justify-between items-center py-3">
         <div className="flex gap-4">
-          {/* Filtreleme Seçenekleri */}
-          <div className="flex gap-2">
-            {/* Toplu İşlemler Select */}
-
+          <div className="flex gap-2 mr-6">
             <select
-              className={`p-1 border rounded-md text-CustomGray w-52 ${
-                selectAll !== "Toplu İşlemler" ? "bg-NavyBlue text-white" : ""
-              }`}
+              className={`p-1 border rounded-md text-CustomGray w-36 ${selectAll !== "Toplu İşlemler" ? "bg-NavyBlue text-white" : ""}`}
               name="filterActions"
               value={selectAll}
-              onChange={handleBulkAction}
+              onChange={handleSelectAll}
             >
               <option hidden>Toplu İşlemler</option>
               <option>Toplu İşlemler</option>
-              <option>Çöp kutusuna taşı</option>
-              <option>Durumu hazılanıyor olarak değiştir</option>
-              <option>Durumu kargoya verildi olarak değiştir</option>
-              <option >Durumu ödeme bekleniyor olarak değiştir</option>
-              <option>Durumu tamamlandı olarak değiştir</option>
-              <option>Durumu iptal edildi olarak değiştir</option>
-              <option>PDF Fatura</option>
-              <option>PDF Paketleme Fişi</option>
+              <option>Hazırlanıyor</option>
+              <option>Kargoya verildi</option>
+              <option>Ödeme bekleniyor</option>
+              <option>Tamamlandı</option>
+              <option>İptal edildi</option>
             </select>
+            <button
+              onClick={handleBulkUpdate}
+              className={`px-1  text-NavyBlue border text-sm border-NavyBlue rounded-md ${selectAll === "Toplu İşlemler" ? "opacity-50 cursor-not-allowed" : "hover:bg-NavyBlue hover:text-white"}`}
+              disabled={selectAll === "Toplu İşlemler"}
+            >
+              Uygula
+            </button>
           </div>
-
           <div className="flex gap-2">
-            {/* Tarihler Select */}
             <select
-              className={`p-1 border rounded-md text-BaseDark w-54 font-medium ${
-                orderDate !== "Tüm Tarihler" ? "bg-NavyBlue text-white" : ""
-              }`}
+              className={`p-1 border rounded-md text-BaseDark w-32 font-medium ${orderDate !== "Tüm Tarihler" ? "bg-NavyBlue text-white" : ""}`}
               name="filterDates"
               onChange={(e) => {
                 const selectedDate = e.target.value;
@@ -288,24 +255,22 @@ const handleBulkAction = (e) => {
               ))}
             </select>
 
-            {/* Kayıtlı Kullanıcılara Göre Filtreleme Select */}
             <select className="" name="filterUsers">
               <option hidden>Kayıtlı Kullanıcılara göre Filtrele</option>
               <option>Kayıtlı Kullanıcılara göre Filtrele</option>
             </select>
             <select
-              className={`${priceSortType === "Fiyata Göre Sırala" ?"": "bg-NavyBlue text-white" }`}
+              className={`${priceSortType === "Fiyata Göre Sırala" ? "" : "bg-NavyBlue text-white"}`}
               name="filterUsers"
               onChange={handlePriceSortChange}
               value={priceSortType}
             >
               <option hidden>Fiyata Göre Sırala</option>
-             
               <option>Önce en yüksek</option>
               <option>Önce en düşük</option>
             </select>
             <select
-            className={`${dateSortType === "Tarihe Göre Sırala" ?"": "bg-NavyBlue text-white" }`}
+              className={`${dateSortType === "Tarihe Göre Sırala" ? "" : "bg-NavyBlue text-white"}`}
               name="filterUsers"
               onChange={handleDateSortChange}
               value={dateSortType}
@@ -314,77 +279,45 @@ const handleBulkAction = (e) => {
               <option>Önce en yeni</option>
               <option>Önce en eski</option>
             </select>
-            {/* Filtrele Butonu */}
             <button
               onClick={handleClearFilters}
-              className={`p-[6px]  font-[500] border text-NavyBlue  rounded-md   text-sm whitespace-nowrap
-            ${
-              anyFilterSelected
-                ? "border-NavyBlue cursor-pointer hover:bg-NavyBlue hover:text-white"
-                : "  text-NavyBlue opacity-50 border-gray-400 cursor-not-allowed"
-            }
-`}
+              className={`p-[6px]  font-[500] border text-NavyBlue  rounded-md text-sm whitespace-nowrap ${anyFilterSelected ? "border-NavyBlue cursor-pointer hover:bg-NavyBlue hover:text-white" : "text-NavyBlue opacity-50 border-gray-400 cursor-not-allowed"}`}
             >
               Filtre Temizle
             </button>
-            
           </div>
         </div>
-
-        {/* Sıralama ve Sayfalama */}
         <div className="flex items-center gap-2 ">
           <p className="text-CustomGray">{filteredOrders.length} öge</p>
           <div
-            className={`border-2 rounded-sm text-[18px]  md:p-3 p-1 ${
-              page === 0
-                ? "cursor-not-allowed text-gray-300"
-                : "cursor-pointer hover:bg-gray-200 duration-300 hover:border-NavyBlue hover:rounded-xl"
-            }`}
+            className={`border-2 rounded-sm text-[18px] md:p-3 p-1 ${page === 0 ? "cursor-not-allowed text-gray-300" : "cursor-pointer hover:bg-gray-200 duration-300 hover:border-NavyBlue hover:rounded-xl"}`}
             onClick={() => handleChangePage("prev")}
           >
             <MdKeyboardDoubleArrowLeft />
           </div>
-
           <div
-            className={`border-2 rounded-sm text-[18px] md:p-3 p-1 ${
-              page === 0
-                ? " cursor-not-allowed text-gray-300"
-                : "cursor-pointer hover:bg-gray-200 duration-300 hover:border-NavyBlue hover:rounded-xl"
-            }`}
+            className={`border-2 rounded-sm text-[18px] md:p-3 p-1 ${page === 0 ? " cursor-not-allowed text-gray-300" : "cursor-pointer hover:bg-gray-200 duration-300 hover:border-NavyBlue hover:rounded-xl"}`}
             onClick={() => handleChangePage("prev")}
           >
             <MdKeyboardArrowLeft />
           </div>
-
-          <span className="border  md:px-4 md:py-2 py-1 px-3 rounded-full bg-NavyBlue text-white">
-            {page + 1}
-          </span>
+          <span className="border md:px-4 md:py-2 py-1 px-3 rounded-full bg-NavyBlue text-white">{page + 1}</span>
           <span>/ {Math.ceil(filteredOrders.length / rowsPerPage)}</span>
-
           <div
-            className={`border-2 rounded-sm text-[18px] md:p-3 p-1 ${
-              (page + 1) * rowsPerPage >= filteredOrders.length
-                ? " cursor-not-allowed text-gray-300"
-                : "cursor-pointer hover:bg-gray-200 duration-300 hover:border-NavyBlue hover:rounded-xl"
-            }`}
+            className={`border-2 rounded-sm text-[18px] md:p-3 p-1 ${(page + 1) * rowsPerPage >= filteredOrders.length ? " cursor-not-allowed text-gray-300" : "cursor-pointer hover:bg-gray-200 duration-300 hover:border-NavyBlue hover:rounded-xl"}`}
             onClick={() => handleChangePage("next")}
           >
             <MdKeyboardArrowRight />
           </div>
-
           <div
-            className={`border-2 rounded-sm text-[18px] md:p-3 p-1 ${
-              (page + 1) * rowsPerPage >= filteredOrders.length
-                ? "cursor-not-allowed text-gray-300 "
-                : "cursor-pointer hover:bg-gray-200 duration-300 hover:border-NavyBlue hover:rounded-xl"
-            }`}
+            className={`border-2 rounded-sm text-[18px] md:p-3 p-1 ${(page + 1) * rowsPerPage >= filteredOrders.length ? "cursor-not-allowed text-gray-300" : "cursor-pointer hover:bg-gray-200 duration-300 hover:border-NavyBlue hover:rounded-xl"}`}
             onClick={() => handleChangePage("next")}
           >
             <MdKeyboardDoubleArrowRight />
           </div>
         </div>
       </div>
-      <OrderListTable orders={paginatedOrders}  selectedOrders={selectedOrders} setSelectedOrders={setSelectedOrders}/>
+      <OrderListTable orders={paginatedOrders} selectedOrders={selectedOrders} setSelectedOrders={setSelectedOrders} />
     </>
   );
 };
