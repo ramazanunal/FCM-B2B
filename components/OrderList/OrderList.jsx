@@ -182,8 +182,8 @@ const OrderList = () => {
 
   return (
     <>
-      <div className="justify-between flex">
-        <div className="flex gap-2 text-LightBlue">
+      <div className="justify-between flex flex-wrap ">
+        <div className="flex  gap-2 text-LightBlue flex-wrap text-base ">
           <span onClick={handleAllOrders} className={selectedStatus === "Tümü" ? "text-BaseDark cursor-pointer" : "cursor-pointer"}>
             <span>Tümü</span>
             <span>({orders.length})</span>
@@ -211,8 +211,8 @@ const OrderList = () => {
           </form>
         </div>
       </div>
-      <div className="flex justify-between items-center py-3">
-        <div className="flex gap-4">
+      <div className="flex justify-between items-center py-3 flex-wrap">
+        <div className="flex gap-4 flex-wrap">
           <div className="flex gap-2 mr-6">
             <select
               className={`p-1 border rounded-md text-CustomGray w-36 ${selectAll !== "Toplu İşlemler" ? "bg-NavyBlue text-white" : ""}`}
@@ -236,7 +236,7 @@ const OrderList = () => {
               Uygula
             </button>
           </div>
-          <div className="flex gap-2">
+          <div className="flex gap-2 flex-wrap">
             <select
               className={`p-1 border rounded-md text-BaseDark w-32 font-medium ${orderDate !== "Tüm Tarihler" ? "bg-NavyBlue text-white" : ""}`}
               name="filterDates"
