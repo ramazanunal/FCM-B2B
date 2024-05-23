@@ -132,8 +132,8 @@ const CustomerOrdersList = () => {
   return (
     <>
    {/* <div className=" text-center pt-5 pb-7 text-3xl text-NavyBlue font[600]">Siparişler</div>*/}
-      <div className="justify-between flex">
-        <div className="flex gap-2 text-LightBlue">
+      <div className="justify-between flex flex-wrap">
+        <div className="flex gap-2 text-LightBlue flex-wrap" >
           {statuses.map((status, index) => (
             <React.Fragment key={index}>
               <span
@@ -170,8 +170,8 @@ const CustomerOrdersList = () => {
           </form>
         </div>
       </div>
-      <div className="flex justify-between items-center py-3">
-        <div className="flex gap-4">
+      <div className="flex flex-wrap justify-between items-center py-3">
+        <div className="flex gap-4 flex-wrap">
           {/* Filtreleme Seçenekleri */}
           <div className="flex gap-2">
             {/* Toplu İşlemler Select */}
@@ -193,7 +193,7 @@ const CustomerOrdersList = () => {
             </select>
           </div>
 
-          <div className="flex gap-2">
+          <div className="flex gap-2 flex-wrap">
             {/* Tarihler Select */}
             <select
               className={`p-1 border rounded-md text-BaseDark w-54 font-medium ${
