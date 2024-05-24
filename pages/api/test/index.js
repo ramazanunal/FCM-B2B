@@ -6,7 +6,7 @@ const handler = async (req, res) => {
         return res.status(200).json({message: "Method POST"})
     }
     if(req.method === "GET") {
-        const data = await getAllData('User');
+        const data = await getAllData('CARKART');
         console.log("data: ",data)
 
         return res.status(200).json({message: "Method GET", data})

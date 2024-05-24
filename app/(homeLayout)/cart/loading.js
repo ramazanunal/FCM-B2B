@@ -9,11 +9,11 @@ function CartLoading() {
         <div className="absolute w-full h-full bg-gray-900 opacity-50"></div>
         <div
           role="status"
-          class="absolute -translate-x-1/2 -translate-y-1/2 top-2/4 left-1/2 flex flex-row items-center justify-center gap-4" 
+          className="absolute -translate-x-1/2 -translate-y-1/2 top-2/4 left-1/2 flex flex-row items-center justify-center gap-4" 
         >
           <svg
             aria-hidden="true"
-            class="w-10 h-10 text-gray-200 animate-spin dark:text-gray-200 fill-blue-600"
+            className="w-10 h-10 text-gray-200 animate-spin dark:text-gray-200 fill-blue-600"
             viewBox="0 0 100 101"
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
