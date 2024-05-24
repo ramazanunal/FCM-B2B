@@ -9,21 +9,20 @@ import Link from "next/link";
 function SearchPanel({ toggleSearchPanel }) {
   const [searchResults, setSearchResults] = useState([]);
   const [searchNoResults, setSearchNoResults] = useState(false);
+  const [searchInput, setSearchInput] = useState("");
 
   const validationSchema = Yup.object().shape({
     searchinput: Yup.string().required(""),
   });
 
-  const handleSubmit = useCallback((values, { resetForm }) => {
-    const searchTerm = normalizeTurkishChars(values.searchinput.toLowerCase());
+  const handleSearch = useCallback((searchTerm) => {
+    searchTerm = normalizeTurkishChars(searchTerm.toLowerCase());
     console.log("Search Term:", searchTerm);
     const results = [];
 
     categoryStore.getState().categories.forEach((category) => {
       category.products.forEach((product) => {
-        if (
-          normalizeTurkishChars(product.name.toLowerCase()).includes(searchTerm)
-        ) {
+        if (normalizeTurkishChars(product.name.toLowerCase()).includes(searchTerm)) {
           results.push(product);
         }
       });
@@ -31,13 +30,18 @@ function SearchPanel({ toggleSearchPanel }) {
 
     setSearchResults(results);
     setSearchNoResults(true);
-    resetForm();
   }, []);
+
+  const handleInputChange = (e) => {
+    const value = e.target.value;
+    setSearchInput(value);
+    handleSearch(value);
+  };
 
   useEffect(() => {
     const initialSearchTerm = "initial search term";
-    handleSubmit({ searchinput: initialSearchTerm }, { resetForm: () => {} });
-  }, [handleSubmit]);
+    handleSearch(initialSearchTerm);
+  }, [handleSearch]);
 
   // Türkçe karakterleri normalize etmek için bir yardımcı fonksiyon
   const normalizeTurkishChars = (str) => {
@@ -59,9 +63,9 @@ function SearchPanel({ toggleSearchPanel }) {
       <Formik
         initialValues={{ searchinput: "" }}
         validationSchema={validationSchema}
-        onSubmit={handleSubmit}
+        onSubmit={(values) => handleSearch(values.searchinput)}
       >
-        {({ errors, touched }) => (
+        {({ errors, touched, setFieldValue }) => (
           <div className="bg-white w-[310px] sm:w-[400px]  flex items-center justify-center flex-col">
             <Form
               id="ajax-search"
@@ -87,6 +91,11 @@ function SearchPanel({ toggleSearchPanel }) {
                         ? "is-invalid"
                         : ""
                     }`}
+                    value={searchInput}
+                    onChange={(e) => {
+                      setFieldValue("searchinput", e.target.value);
+                      handleInputChange(e);
+                    }}
                   />
                   <button
                     type="submit"
@@ -102,7 +111,7 @@ function SearchPanel({ toggleSearchPanel }) {
             </Form>
           </div>
         )}
-      </Formik>{" "}
+      </Formik>
       <div>
         {searchResults.length > 0 && (
           <div className="w-[310px] sm:w-[400px] mt-4 overflow-y-auto max-h-80 ">
