@@ -9,15 +9,16 @@ import { FaSearch } from "react-icons/fa";
 import SearchPanel from "../SearchPanel";
 import { RiShoppingBasketFill } from "react-icons/ri";
 import useCartItemCount from "@/utils/useCartItemCount";
-
+import { CiShop } from "react-icons/ci";
 const Header = () => {
   const { header } = headerStore();
-  const [hoveredMenu, setHoveredMenu] = useState(null);
-  const [hoveredMainMenu, setHoveredMainMenu] = useState(null);
-  const [isSearchOpen, setIsSearchOpen] = useState(false);
-  const [hoveredIcon, setHoveredIcon] = useState(null);
-  const [hoveredSubMenu, setHoveredSubMenu] = useState(null);
+  const [hoveredMenu, setHoveredMenu] = useState(null); 
+  const [isSearchOpen, setIsSearchOpen] = useState(false);  
   const cartItemCount = useCartItemCount();
+  // const [hoveredMainMenu, setHoveredMainMenu] = useState(null);
+  // const [hoveredIcon, setHoveredIcon] = useState(null);
+  // const [hoveredSubMenu, setHoveredSubMenu] = useState(null);
+
 
   const toggleSearchPanel = () => {
     setIsSearchOpen(!isSearchOpen);
@@ -90,7 +91,22 @@ const Header = () => {
               className="w-[93px] md:w-[119px] h-[105px] md:h-[135px]"
             />
           </div>
-          <div className="flex flex-row hidden lg:flex pt-4" id="mainmenuitem">
+          <div className="flex flex-row hidden lg:flex pt-4 text-CustomGray">
+            <Link
+              className="flex flex-col items-center justify-center group" 
+              href="https://caliskanari.com/shop/"
+            >
+              <span className="w-[60px] h-[60px] flex items-center justify-center group-hover:scale-105 group-hover:text-LightBlue transition-all duration-1000 ease-in-out transform">
+                <CiShop className="w-[40px] h-[40px]" />
+              </span>
+              <span className="uppercase text-[12px] font-bold tracking-[1px] pb-[15px] hover:text-LightBlue transition-all duration-500 ease-in-out transform">
+                MAĞAZA
+              </span>
+            </Link>
+          </div>
+
+          {/*orta ikonlar
+           <div className="flex flex-row hidden lg:flex pt-4" id="mainmenuitem">
             <ul className="flex flex-row items-center text-center justify-center text-CustomGray hidden lg:flex ml-[8px] md:ml-[36px]">
               {header.mainMenuItems.map((mainMenuItem, index) => (
                 <li
@@ -156,7 +172,7 @@ const Header = () => {
                 </li>
               ))}
             </ul>
-          </div>
+          </div> */}
 
           <div className="flex flex-row items-center text-center justify-center text-CustomGray">
             {header.mainMenuButtons.map((mainMenuButtons) => (
