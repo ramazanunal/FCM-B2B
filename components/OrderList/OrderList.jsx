@@ -172,6 +172,7 @@ const OrderList = () => {
 
       setFilteredOrders(updatedOrders);
       setSelectedOrders([]);
+      setSelectAll("Toplu İşlemler")
     }
   };
 
@@ -215,7 +216,7 @@ const OrderList = () => {
         <div className="flex gap-4 flex-wrap">
           <div className="flex gap-2 mr-6">
             <select
-              className={`p-1 border rounded-md text-CustomGray w-36 ${selectAll !== "Toplu İşlemler" ? "bg-NavyBlue text-white" : ""}`}
+              className={`p-1 border rounded-md text-CustomGray w-36 ${selectAll !== "Toplu İşlemler" ? "bg-NavyBlue text-white" : ""} ${selectedOrders.length === 0 ?"pointer-events-none opacity-50":""}`}
               name="filterActions"
               value={selectAll}
               onChange={handleSelectAll}
