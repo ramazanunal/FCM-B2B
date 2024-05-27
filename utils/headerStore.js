@@ -65,9 +65,10 @@ const headerStore = create((set) => ({
       {
         id: 8,
         text: "Giriş / Kayıt",
-        href: "https://caliskanari.com/my-account/edit-account/",
+        href: `/auth/login`,
         subMenus: [],
-      },
+      }
+      
     ],
     mainMenuLogo: [
       {

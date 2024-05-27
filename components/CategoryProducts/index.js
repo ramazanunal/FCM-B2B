@@ -91,7 +91,7 @@ function CategoryProducts({ selectedCategory }) {
         draggable: true,
         progress: undefined,
       });
-    }, 3000);
+    }, 2000);
   };
 
   return (
