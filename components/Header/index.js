@@ -18,8 +18,8 @@ const Header = () => {
   // const [hoveredMainMenu, setHoveredMainMenu] = useState(null);
   // const [hoveredIcon, setHoveredIcon] = useState(null);
   // const [hoveredSubMenu, setHoveredSubMenu] = useState(null);
-
-
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+ 
   const toggleSearchPanel = () => {
     setIsSearchOpen(!isSearchOpen);
   };
@@ -94,7 +94,7 @@ const Header = () => {
           <div className="flex flex-row hidden lg:flex pt-4 text-CustomGray">
             <Link
               className="flex flex-col items-center justify-center group" 
-              href="https://caliskanari.com/shop/"
+                href={!isLoggedIn ? "/auth/login" : "https://caliskanari.com/shop/"}
             >
               <span className="w-[60px] h-[60px] flex items-center justify-center group-hover:scale-105 group-hover:text-LightBlue transition-all duration-1000 ease-in-out transform">
                 <CiShop className="w-[40px] h-[40px]" />
