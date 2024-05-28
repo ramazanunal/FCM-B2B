@@ -19,3 +19,11 @@ model CARKART {
   CAROZKOD3        String?
   CAROZKOD4        String?
 }
+
+model STKKART {
+  STKKOD           String     @id  
+  STKCINSI         String?    
+  STKOZKOD1        String?
+  STKOZKOD3        String? 
+}
+
