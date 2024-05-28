@@ -11,7 +11,7 @@ const headerStore = create((set) => ({
       {
         id: 1,
         text: "Anasayfa",
-        href: "https://caliskanari.com/",
+        href: "/",
         subMenus: [],
       },
       {
