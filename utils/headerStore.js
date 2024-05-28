@@ -11,7 +11,7 @@ const headerStore = create((set) => ({
       {
         id: 1,
         text: "Anasayfa",
-        href: "https://caliskanari.com/",
+        href: "/",
         subMenus: [],
       },
       {
@@ -65,9 +65,10 @@ const headerStore = create((set) => ({
       {
         id: 8,
         text: "Giriş / Kayıt",
-        href: "https://caliskanari.com/my-account/edit-account/",
+        href: `/auth/login`,
         subMenus: [],
-      },
+      }
+      
     ],
     mainMenuLogo: [
       {

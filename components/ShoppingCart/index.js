@@ -14,6 +14,7 @@ import { GiCancel } from "react-icons/gi";
 import { RiShoppingCartLine } from "react-icons/ri";
 import { RxUpdate } from "react-icons/rx";
 import { AiOutlinePlus, AiOutlineMinus } from "react-icons/ai";
+import OrderConfirmation from "../OrderConfirmation/index.";
 
 const ShoppingCart = () => {
   const initialCartItems = () => {
@@ -28,7 +29,17 @@ const ShoppingCart = () => {
   const [updatingItems, setUpdatingItems] = useState({});
   const [confirmDelete, setConfirmDelete] = useState(false);
   const [itemToDelete, setItemToDelete] = useState(null);
+  const [confirmOrder, setConfirmOrder] = useState(false);
 
+  // Function to handle order confirmation popup
+  const handleConfirmOrder = () => {
+    setConfirmOrder(true);
+  };
+
+  // Function to close order confirmation popup
+  const handleCloseOrderConfirmation = () => {
+    setConfirmOrder(false);
+  };
   const handleQuantityChange = (itemId, newQuantity) => {
     // Sepetteki ürünleri alma
     const product = cartItems.find((item) => item.id === itemId);
@@ -62,7 +73,7 @@ const ShoppingCart = () => {
       } else {
         toast.error("Ürün adediniz güncellenemedi");
       }
-    }, 5000);
+    }, 2000);
   };
 
   const initiateDelete = (itemId) => {
@@ -186,7 +197,9 @@ const ShoppingCart = () => {
                 </th>
                 <th className="px-5 py-3 hidden lg:table-cell">Birim</th>
                 <th className=" px-5 py-3 hidden lg:table-cell">İsk.</th>
-                <th className=" px-5 py-3 hidden lg:table-cell w-32">Birim Net</th>
+                <th className=" px-5 py-3 hidden lg:table-cell w-32">
+                  Birim Net
+                </th>
                 <th className=" px-5 py-3 w-32 sm:w-40">Toplam Tutar</th>
                 <th className=" px-5 py-3 hidden lg:table-cell">Stok</th>
                 <th className=" px-5 py-3">
@@ -459,10 +472,11 @@ const ShoppingCart = () => {
                       </span>
                     </p>
                   </div>
-                  <div className="flex flex-row items-center justify-center gap-5">
+                  <div className="flex flex-row items-center gap-5 mt-12 mb-8">
                     <div className="group">
                       <button
-                        type="submit"
+                        type="button"
+                        onClick={handleConfirmOrder}
                         className="flex flex-row items-center justify-center gap-2 ml-3 text-white font-bold hover:scale-105 transition-all transform ease-out duration-500 cursor-pointer bg-gradient-to-r from-LightBlue to-sky-700 pl-3 pr-11 py-2 rounded-full relative w-[250px] h-[58px] text-[18px]"
                       >
                         Sipariş Ver
@@ -508,6 +522,7 @@ const ShoppingCart = () => {
           </div>
         </div>
       )}
+  {confirmOrder && <OrderConfirmation onClose={handleCloseOrderConfirmation} />}
     </div>
   );
 };
