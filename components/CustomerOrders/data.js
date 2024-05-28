@@ -28,6 +28,39 @@ export const orders = [
       date: formattedDate,
       status: "Tamamlandı",
       total: 25,
+      products:[
+        {
+          id:1,
+          name:"Matematik Soru Bankası",
+          imgPath:"/assets/images/akildefterim.png",
+          productCount:20,
+          price:100,
+          isStock:false,
+        },{
+          id:2,
+          name:"Türkçe Soru Bankası",
+          imgPath:"/assets/images/akildefterim.png",
+          productCount:20,
+          price:100,
+          isStock:true,
+        },{
+          id:3,
+          name:"Fen Soru Bankası",
+          imgPath:"/assets/images/akildefterim.png",
+          productCount:20,
+          price:100,
+          isStock:true,
+        },
+        {
+          id:4,
+          name:"Sosyal Soru Bankası",
+          imgPath:"/assets/images/akildefterim.png",
+          productCount:20,
+          price:100,
+          isStock:true,
+        },
+  
+      ],
       
     },
     {
@@ -38,6 +71,35 @@ export const orders = [
       date: formattedDate,
       status: "Beklemede",
       total:15,
+      products:[
+        {
+          id:1,
+          name:"Matematik Soru Bankası",
+          productCount:20,
+          price:100,
+          isStock:false,
+        },{
+          id:2,
+          name:"Türkçe Soru Bankası",
+          productCount:20,
+          price:100,
+          isStock:true,
+        },{
+          id:3,
+          name:"Fen Soru Bankası",
+          productCount:20,
+          price:100,
+          isStock:true,
+        },
+        {
+          id:4,
+          name:"Sosyal Soru Bankası",
+          productCount:20,
+          price:100,
+          isStock:true,
+        },
+  
+      ],
      
     },
     {
@@ -48,6 +110,35 @@ export const orders = [
       date: formattedDate,
       status: "Başarısız",
       total: 89,
+      products:[
+        {
+          id:1,
+          name:"Matematik Soru Bankası",
+          productCount:20,
+          price:100,
+          isStock:false,
+        },{
+          id:2,
+          name:"Türkçe Soru Bankası",
+          productCount:20,
+          price:100,
+          isStock:true,
+        },{
+          id:3,
+          name:"Fen Soru Bankası",
+          productCount:20,
+          price:100,
+          isStock:true,
+        },
+        {
+          id:4,
+          name:"Sosyal Soru Bankası",
+          productCount:20,
+          price:100,
+          isStock:true,
+        },
+  
+      ],
      
     },
     {
@@ -58,6 +149,35 @@ export const orders = [
       date: formattedDate,
       status: "İptal edildi",
       total: 77,
+      products:[
+        {
+          id:1,
+          name:"Matematik Soru Bankası",
+          productCount:20,
+          price:100,
+          isStock:false,
+        },{
+          id:2,
+          name:"Türkçe Soru Bankası",
+          productCount:20,
+          price:100,
+          isStock:true,
+        },{
+          id:3,
+          name:"Fen Soru Bankası",
+          productCount:20,
+          price:100,
+          isStock:true,
+        },
+        {
+          id:4,
+          name:"Sosyal Soru Bankası",
+          productCount:20,
+          price:100,
+          isStock:true,
+        },
+  
+      ],
       
     },
     {
@@ -68,6 +188,35 @@ export const orders = [
       date: formattedDate,
       status: "Ödeme bekleniyor",
       total: 52,
+      products:[
+        {
+          id:1,
+          name:"Matematik Soru Bankası",
+          productCount:20,
+          price:100,
+          isStock:false,
+        },{
+          id:2,
+          name:"Türkçe Soru Bankası",
+          productCount:20,
+          price:100,
+          isStock:true,
+        },{
+          id:3,
+          name:"Fen Soru Bankası",
+          productCount:20,
+          price:100,
+          isStock:true,
+        },
+        {
+          id:4,
+          name:"Sosyal Soru Bankası",
+          productCount:20,
+          price:100,
+          isStock:true,
+        },
+  
+      ],
     
     },
     {
@@ -78,6 +227,35 @@ export const orders = [
       date: formattedDate,
       status: "Tamamlandı",
       total: 23,
+      products:[
+        {
+          id:1,
+          name:"Matematik Soru Bankası",
+          productCount:20,
+          price:100,
+          isStock:false,
+        },{
+          id:2,
+          name:"Türkçe Soru Bankası",
+          productCount:20,
+          price:100,
+          isStock:true,
+        },{
+          id:3,
+          name:"Fen Soru Bankası",
+          productCount:20,
+          price:100,
+          isStock:true,
+        },
+        {
+          id:4,
+          name:"Sosyal Soru Bankası",
+          productCount:20,
+          price:100,
+          isStock:true,
+        },
+  
+      ],
      
     },
     {
@@ -88,6 +266,35 @@ export const orders = [
       date: formattedDate,
       status: "Beklemede",
       total: 65,
+      products:[
+        {
+          id:1,
+          name:"Matematik Soru Bankası",
+          productCount:20,
+          price:100,
+          isStock:false,
+        },{
+          id:2,
+          name:"Türkçe Soru Bankası",
+          productCount:20,
+          price:100,
+          isStock:true,
+        },{
+          id:3,
+          name:"Fen Soru Bankası",
+          productCount:20,
+          price:100,
+          isStock:true,
+        },
+        {
+          id:4,
+          name:"Sosyal Soru Bankası",
+          productCount:20,
+          price:100,
+          isStock:true,
+        },
+  
+      ],
       
     },
     {
@@ -98,6 +305,35 @@ export const orders = [
       date: formattedDate,
       status: "Hazırlanıyor",
       total: 24,
+      products:[
+        {
+          id:1,
+          name:"Matematik Soru Bankası",
+          productCount:20,
+          price:100,
+          isStock:false,
+        },{
+          id:2,
+          name:"Türkçe Soru Bankası",
+          productCount:20,
+          price:100,
+          isStock:true,
+        },{
+          id:3,
+          name:"Fen Soru Bankası",
+          productCount:20,
+          price:100,
+          isStock:true,
+        },
+        {
+          id:4,
+          name:"Sosyal Soru Bankası",
+          productCount:20,
+          price:100,
+          isStock:true,
+        },
+  
+      ],
       
     },
   ];

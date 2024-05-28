@@ -7,12 +7,12 @@ import { IoArrowBackCircleSharp } from "react-icons/io5";
 function ProdcutDetail({ product }) {
   return (
     <div className="flex flex-col justify-center items-center">
-      <div className="grid grid-cols-3  px-14 pt-14 bg-gray-50 w-full pb-3">
+      <div className="md:grid md:grid-cols-3   px-14 pt-14 bg-gray-50 w-full pb-3">
         <div className="col-span-1 border flex justify-center items-center">
           <img src={product.imgPath} alt={product.name} />
         </div>
         <div className="col-span-2 ml-5">
-          <div className="font-bold text-3xl border-b pb-10 ">
+          <div className="font-bold text-3xl border-b md:mt-0 mt-6 pb-10 ">
             {product.name}
           </div>
           <div className="flex space-x-2 mt-8">
@@ -57,13 +57,14 @@ function ProdcutDetail({ product }) {
           </div>
         </div>
       </div>
-      <div className=" flex flex-col  w-[95%]">
-        <div className="flex m-5">
-          <h2 className="  p-4 bg-NavyBlue text-white font-[500] rounded">
-            Detaylar
-          </h2>
-        </div>
-        <div className="text-gray-500 mt-6 w-[80%] rounded-lg shadow-lg shadow-LightBlue/15 mb-6  p-8">
+      <div className="flex  w-full p-5 ">
+      <h2 className="  p-4 bg-NavyBlue text-white font-[500] rounded">
+        Detaylar
+      </h2>
+    </div>
+      <div className=" flex flex-col justify-center     w-[95%] ">
+       
+        <div className="text-gray-500   md:w-[80%] rounded-lg shadow-lg shadow-LightBlue/15 mb-6  p-5">
           <span>{product.desc}</span>
         </div>
         <div className="text-gray-700 mt-6  pl-5 text-xl flex">
@@ -71,7 +72,7 @@ function ProdcutDetail({ product }) {
             Kitabın Özellikleri
           </h4>
         </div>
-        <div className="grid grid-cols-2">
+        <div className="grid grid-cols-2 text-xs md:text-base">
           <div className="pl-10 mt-10 mb-10 space-y-2 font-[600]">
             {product?.bookDetail?.printingLang && (
               <div className="border border-l-4 border-l-LightBlue p-2 shadow-md">
@@ -104,7 +105,7 @@ function ProdcutDetail({ product }) {
               </div>
             )}
           </div>
-          <div className="mt-10 mb-10 space-y-2 text-gray-600 mr-10 ">
+          <div className="mt-10  mb-10 space-y-2 text-gray-600 mr-10 ">
             {product?.bookDetail?.printingLang && (
               <div className="border border-l-4 border-l-LightBlue p-2 shadow-md">
                 {product.bookDetail.printingLang}
