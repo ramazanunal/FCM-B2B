@@ -1,0 +1,81 @@
+"use client";
+import React, { useState, useEffect } from "react";
+import headerStore from "@/utils/headerStore";
+import Link from "next/link";
+import Image from "next/image";
+import MobileMenu from "../MobileMenu";
+import FixedHeader from "../FixedHeader";
+import { FaSearch } from "react-icons/fa";
+import SearchPanel from "../SearchPanel";
+import { RiShoppingBasketFill } from "react-icons/ri";
+import useCartItemCount from "@/utils/useCartItemCount";
+import { CiShop } from "react-icons/ci";
+const NavbarHeader = () => {
+  const { header } = headerStore();
+  const [hoveredMenu, setHoveredMenu] = useState(null); 
+  const [isSearchOpen, setIsSearchOpen] = useState(false);  
+  const cartItemCount = useCartItemCount();
+  // const [hoveredMainMenu, setHoveredMainMenu] = useState(null);
+  // const [hoveredIcon, setHoveredIcon] = useState(null);
+  // const [hoveredSubMenu, setHoveredSubMenu] = useState(null);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+ 
+  const toggleSearchPanel = () => {
+    setIsSearchOpen(!isSearchOpen);
+  };
+
+  const menuItem = [
+    {
+        title:"Ürünler",
+        link:"/products"
+    },
+    {
+        title:"Siparişler",
+        link:"/orders"
+    },
+    {
+        title:"Müşteri Siparişleri",
+        link:"/customer-orders"
+    }
+  ]
+
+
+  return (
+    <div>
+      <div className="hidden lg:flex items-center justify-between  ">
+        <div
+          id="ustmenu"
+          className="h-[45px] bg-DarkBlue   w-full"
+        >
+          <div className="px-[15px] mx-[35px] text-white">
+            <div >
+              <ul className="flex justify-center text-[14px] font-semibold ">
+                {menuItem.map((menu, index) => (
+                  <li
+                    key={menu.id}
+                    className="relative mr-[25px] leading-[45px] "
+                    onMouseEnter={() => setHoveredMenu(index)}
+                    onMouseLeave={() => setHoveredMenu(null)}
+                  >
+                    <Link
+                      className="hover:text-LightBlue transition duration-300 ease-in-out transform"
+                      href={menu.link}
+                    >
+                      {menu.title}
+                    </Link>
+                    
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    
+    
+    </div>
+  );
+};
+
+export default NavbarHeader;
