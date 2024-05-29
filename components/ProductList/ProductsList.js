@@ -90,8 +90,9 @@ function ProductList() {
                 <span className="text-CustomGray">|</span>
               )}
             </React.Fragment>
-          ))}
+          ))} 
         </div>
+        <div className="text-3xl">Ürünler</div>
         <div className="flex w-72  ">
           <form action="" className="flex gap-2 ">
             <input

@@ -64,7 +64,7 @@ const headerStore = create((set) => ({
       },
       {
         id: 8,
-        text: "Giriş / Kayıt",
+        text: "Giriş",
         href: `/auth/login`,
         subMenus: [],
       }

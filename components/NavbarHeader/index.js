@@ -10,6 +10,8 @@ import SearchPanel from "../SearchPanel";
 import { RiShoppingBasketFill } from "react-icons/ri";
 import useCartItemCount from "@/utils/useCartItemCount";
 import { CiShop } from "react-icons/ci";
+import { MdLogout } from "react-icons/md";
+
 const NavbarHeader = () => {
   const { header } = headerStore();
   const [hoveredMenu, setHoveredMenu] = useState(null); 
@@ -45,9 +47,10 @@ const NavbarHeader = () => {
       <div className="hidden lg:flex items-center justify-between  ">
         <div
           id="ustmenu"
-          className="h-[45px] bg-DarkBlue   w-full"
+          className="h-[45px] bg-DarkBlue flex justify-around items-center  w-full"
         >
-          <div className="px-[15px] mx-[35px] text-white">
+        <div>logo</div>
+          <div className="px-[15px] mx-[35px] text-white ">
             <div >
               <ul className="flex justify-center text-[14px] font-semibold ">
                 {menuItem.map((menu, index) => (
@@ -68,6 +71,18 @@ const NavbarHeader = () => {
                 ))}
               </ul>
             </div>
+          </div>
+          <div>
+                  <div className="w-8 flex items-center space-x-3">
+                    <img src="/assets/images/avatarIcon.svg" alt="avatar" />
+                    <div className="text-sm text-white flex flex-col">
+                      <span className="whitespace-nowrap"> Emrah Eskibağcı</span>
+                      <span className="text-xs">(user)</span>
+                    </div>
+                    <div className="text-white hover:text-red-500 text-2xl">
+                      <MdLogout className="cursor-pointer"/>
+                    </div>
+                  </div>
           </div>
         </div>
       </div>
