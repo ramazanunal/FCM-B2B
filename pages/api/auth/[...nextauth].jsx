@@ -3,7 +3,7 @@ import CredentialsProvider, { CredentialsConfig } from "next-auth/providers/cred
 import { postAPI } from "@/services/fetchAPI";
 
 
-let loginPageRoute = "student";
+let loginPageRoute = "partner";
 
 const authOptions = {
 
@@ -26,7 +26,13 @@ const authOptions = {
 
         if (email) {
           // yukarıda aldığımız giriş bilgilerini => [email eşleşmesi, password doğrulaması] için fonksiyonumuza gönderiyoruz.
-          const data = await postAPI(`/auth/login`, { role, email, password });
+          
+          
+          const {data} = await postAPI(`/auth/login`, { role, email, password });
+          console.log("DATA : ");
+          console.log(data);
+          
+
           if (!data || data.error || data == null) {
             if (data) {
               throw new Error(data.error);
@@ -36,29 +42,33 @@ const authOptions = {
             }
           }
 
+          if(data){
+            
+            return data;
 
+          }
 
-          const { userFromDB, success, error, status, verifyEmail } = data;
-          if (userFromDB === null || !success || userFromDB === undefined || error || !userFromDB) {
-            let error2 = new Error();
-            error2.message = error;
-            error2.status = status;
-            error2.verifyEmail = verifyEmail;
-            throw error2;
-          }
-          if (!userFromDB.role || !userFromDB.name || !userFromDB.surname || !userFromDB.email) {
-            throw new Error("Giriş işleminde bir hata oluştu.");
-          }
-          const user = {
-            role: userFromDB.role,
-            name: userFromDB.name,
-            surname: userFromDB.surname,
-            email: userFromDB.email,
-          };
+          // const { userFromDB, success, error, status, verifyEmail } = data;
+          // if (userFromDB === null || !success || userFromDB === undefined || error || !userFromDB) {
+          //   let error2 = new Error();
+          //   error2.message = error;
+          //   error2.status = status;
+          //   error2.verifyEmail = verifyEmail;
+          //   throw error2;
+          // }
+          // if (!userFromDB.role || !userFromDB.name || !userFromDB.surname || !userFromDB.email) {
+          //   throw new Error("Giriş işleminde bir hata oluştu.");
+          // }
+          // const user = {
+          //   role: userFromDB.role,
+          //   name: userFromDB.name,
+          //   surname: userFromDB.surname,
+          //   email: userFromDB.email,
+          // };
 
-          if (user) {
-            return user;
-          }
+          // if (user) {
+          //   return user;
+          // }
         }
 
         else {

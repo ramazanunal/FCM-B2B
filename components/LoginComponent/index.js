@@ -3,25 +3,64 @@ import Link from "next/link";
 import React from "react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
+import { signIn } from 'next-auth/react';
+import { useRouter } from 'next/navigation';
 
-const LoginComponent = () => {
+const LoginComponent = ({ pageRole }) => {
+
   const initialValues = {
-    username: "",
+    email: "",
     password: "",
     rememberMe: false,
   };
 
   const validationSchema = Yup.object({
-    username: Yup.string().required(
-      "Kullanıcı adı veya e-posta adresi zorunludur"
-    ),
+    email: Yup.string()
+    .required('e mail boş bırakılamaz.')
+    .email('Geçerli bir e mail adresi giriniz.'),
     password: Yup.string().required("Parola zorunludur"),
   });
 
-  const handleSubmit = (values) => {
+  const handleSubmit = async (values) => {
     console.log("Form data", values);
-    // You can add the login logic here
+    console.log("GİRİŞ İŞLEMİ BAŞLADI!");
+
+    try {
+      const result = await signIn('credentials', {
+        email: values.email,
+        password: values.password,
+        role: pageRole,
+        redirect: false,
+      });
+
+      if (!result) {
+        console.log("Bir hata oluştu. Lütfen tekrar deneyiniz.");
+      } else if (!result.ok) {
+        console.log(result.error);
+        // Eğer doğrulama hatasıyla ilgili özel bir mesaj almak istiyorsanız buraya ekleyin
+        // if (result.error.includes('doğrulanmamış') || result.error.includes('doğrulayınız')) {
+        //   setPopupData({
+        //     popupIsActive: true,
+        //     Title: 'Mail Adresiniz Doğrulanmamış!',
+        //     subTitle:
+        //       'Girdiğiniz mail adresi henüz doğrulanmamış. Mail adresinize gelen doğrulama kodunu girerek hesabınızı aktif edebilir, veya aşağıdaki butona basarak yeni bir doğrulama maili talep edebilirsiniz.',
+        //     buttonUrl: '/auth/sendVerifyEmail',
+        //     buttonText: 'Mail Doğrulama',
+        //   });
+        // }
+      } else {
+        console.log(result);
+        console.log("GİRİŞ BAŞARILI!");
+        router.push('/');
+      }
+    } catch (error) {
+      console.error("Giriş işlemi sırasında bir hata oluştu:", error);
+    }
+
+    console.log("GİRİŞ İŞLEMİ BİTTİ!");
   };
+
+  const router = useRouter();
 
   return (
     <div className="bg-white flex items-center flex-col py-[35px] sm:py-[60px] w-screen lg:w-[1188px]">
@@ -41,13 +80,13 @@ const LoginComponent = () => {
                 <span className="text-CustomRed ml-1">*</span>
               </label>
               <Field
-                type="text"
-                name="username"
+                type="mail"
+                name="email"
                 autoComplete="off"
                 className="border border-[#d5e0ec] py-[5px] px-[12px] rounded-md bg-white outline-none"
               />
               <ErrorMessage
-                name="username"
+                name="email"
                 component="div"
                 className="text-red-500 text-xs mt-1"
               />
