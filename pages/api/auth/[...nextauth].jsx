@@ -1,6 +1,7 @@
 import NextAuth from "next-auth"
 import CredentialsProvider, { CredentialsConfig } from "next-auth/providers/credentials";
 import { postAPI } from "@/services/fetchAPI";
+import EncryptPassword from "@/functions/other/cryptology/encryptPassword";
 
 
 let loginPageRoute = "partner";
@@ -19,61 +20,26 @@ const authOptions = {
       },
 
       async authorize(credentials) {
-        // kontrol edilecek (email ve password) bilgilerini credentials değişkeninden alıyoruz.
-        const { email, password, role } = credentials;
-        // giriş yapılacak sayfayı role değişkeninden alıyoruz.
-        loginPageRoute = role;
 
-        if (email) {
-          // yukarıda aldığımız giriş bilgilerini => [email eşleşmesi, password doğrulaması] için fonksiyonumuza gönderiyoruz.
-          
-          
-          const {data} = await postAPI(`/auth/login`, { role, email, password });
-          console.log("DATA : ");
-          console.log(data);
-          
+        
 
-          if (!data || data.error || data == null) {
-            if (data) {
-              throw new Error(data.error);
-            }
-            else {
-              throw new Error("Giriş işleminde bir hata oluştu. Lütfen daha sonra tekrar deneyiniz.");
-            }
-          }
-
-          if(data){
-            
-            return data;
-
-          }
-
-          // const { userFromDB, success, error, status, verifyEmail } = data;
-          // if (userFromDB === null || !success || userFromDB === undefined || error || !userFromDB) {
-          //   let error2 = new Error();
-          //   error2.message = error;
-          //   error2.status = status;
-          //   error2.verifyEmail = verifyEmail;
-          //   throw error2;
-          // }
-          // if (!userFromDB.role || !userFromDB.name || !userFromDB.surname || !userFromDB.email) {
-          //   throw new Error("Giriş işleminde bir hata oluştu.");
-          // }
-          // const user = {
-          //   role: userFromDB.role,
-          //   name: userFromDB.name,
-          //   surname: userFromDB.surname,
-          //   email: userFromDB.email,
-          // };
-
-          // if (user) {
-          //   return user;
-          // }
+        
+        let { email, password, role } = credentials;     
+        
+        const data = await postAPI(`/auth/login`, { role, email, password });
+        
+        if (!data || data.error || data == null) {
+            throw new Error(data.error || "Bir hata oluştu. Lütfen tekrar deneyiniz.");
         }
 
-        else {
-          throw new Error("Giriş işleminde bir hata oluştu.");
-        }
+        // Kullanıcı bilgilerini döndürüyoruz.
+        console.log("#### [...nextauth] ####");
+        console.log(data);
+        const user = data;
+        return user;
+
+
+
       }
     }),
   ],
@@ -108,7 +74,8 @@ const authOptions = {
 
   pages: {
     // signIn fonksiyonu çalıştığında kulanıcıyı yönlendireceğimiz sayfayı belirtiyoruz.
-    signIn: `/auth/login/${loginPageRoute}`,
+    signIn: `/`,
+    // signIn: `/auth/login/${loginPageRoute}`,
     encryption: true,
   },
 }

@@ -16,6 +16,9 @@ model CARKART {
   CARKOD           String     @id
   CARUNVAN         String?
   CARUNVAN3        String?
+  CAROZKOD1        String?
+  CAROZKOD2        String?
   CAROZKOD3        String?
   CAROZKOD4        String?
+  CAROZKOD5        String?
 }

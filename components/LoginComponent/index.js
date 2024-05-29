@@ -21,43 +21,59 @@ const LoginComponent = ({ pageRole }) => {
     password: Yup.string().required("Parola zorunludur"),
   });
 
-  const handleSubmit = async (values) => {
-    console.log("Form data", values);
-    console.log("GİRİŞ İŞLEMİ BAŞLADI!");
+  const handleSubmit = (values) => {
 
-    try {
-      const result = await signIn('credentials', {
+      // setIsloading(true);
+
+      // signIn içine hangi provider ile giriş yapılacağı ve giriş bilgileri gönderilir.
+      
+      const result = signIn('credentials', {
         email: values.email,
         password: values.password,
         role: pageRole,
+        callbackUrl: '/',
         redirect: false,
+      }).then((res) => {
+        console.log('RES: ', res);
+        if (!res) {
+          // toast.error('Bir hata oluştu. Lütfen tekrar deneyiniz.');
+          console.log("Bir hata oluştu. Lütfen tekrar deneyiniz.")
+          // setIsloading(false);
+        } else if (!res.ok) {
+          // toast.error(res.error);
+          console.log(res.error);
+          // setIsloading(false);
+
+          // MAİL DOĞRULAMAYA YÖNLENDİRİYORUZ
+          // verifyEmail şuanda nextauth error içerisinden gelmiyor kontrol et.
+          // if (
+          //   res.error.includes('doğrulanmamış') ||
+          //   res.error.includes('doğrulayınız')
+          // ) {
+          //   setPopupData({
+          //     popupIsActive: true,
+          //     Title: 'Mail Adresiniz Doğrulanmamış!',
+          //     subTitle:
+          //       'Girdiğiniz mail adresi henüz doğrulanmamış. Mail adresinize gelen doğrulama kodunu girerek hesabınızı aktif edebilir, veya aşağıdaki butona basarak yeni bir doğrulama maili talep edebilirsiniz.',
+          //     buttonUrl: '/auth/sendVerifyEmail',
+          //     buttonText: 'Mail Doğrulama',
+          //   });
+          // }
+        } else {
+
+          // BİR PROBLEM YOKSA GİRİŞ BAŞARILI BİLGİSİ VERİRİZ.
+          // setIsAccessing(true);
+          // setIsloading(false);
+          // toast.success('Giriş Başarılı (Yönlendiriliyorsunuz...)');
+          // console.log("Giriş Başarılı (Yönlendiriliyorsunuz...)");
+
+          const timeOut = setInterval(() => {
+            router.push('/');
+            clearInterval(timeOut);
+          }, 2000);
+
+        }
       });
-
-      if (!result) {
-        console.log("Bir hata oluştu. Lütfen tekrar deneyiniz.");
-      } else if (!result.ok) {
-        console.log(result.error);
-        // Eğer doğrulama hatasıyla ilgili özel bir mesaj almak istiyorsanız buraya ekleyin
-        // if (result.error.includes('doğrulanmamış') || result.error.includes('doğrulayınız')) {
-        //   setPopupData({
-        //     popupIsActive: true,
-        //     Title: 'Mail Adresiniz Doğrulanmamış!',
-        //     subTitle:
-        //       'Girdiğiniz mail adresi henüz doğrulanmamış. Mail adresinize gelen doğrulama kodunu girerek hesabınızı aktif edebilir, veya aşağıdaki butona basarak yeni bir doğrulama maili talep edebilirsiniz.',
-        //     buttonUrl: '/auth/sendVerifyEmail',
-        //     buttonText: 'Mail Doğrulama',
-        //   });
-        // }
-      } else {
-        console.log(result);
-        console.log("GİRİŞ BAŞARILI!");
-        router.push('/');
-      }
-    } catch (error) {
-      console.error("Giriş işlemi sırasında bir hata oluştu:", error);
-    }
-
-    console.log("GİRİŞ İŞLEMİ BİTTİ!");
   };
 
   const router = useRouter();
