@@ -12,21 +12,20 @@ import useCartItemCount from "@/utils/useCartItemCount";
 import { CiShop } from "react-icons/ci";
 import { MdLogout } from "react-icons/md";
 import { toast } from "react-toastify";
+import { signIn, signOut, useSession } from "next-auth/react";
 
 const Header = () => {
   const { header } = headerStore();
   const [hoveredMenu, setHoveredMenu] = useState(null);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const cartItemCount = useCartItemCount();
+
   // const [hoveredMainMenu, setHoveredMainMenu] = useState(null);
   // const [hoveredIcon, setHoveredIcon] = useState(null);
   // const [hoveredSubMenu, setHoveredSubMenu] = useState(null);
-  const [isLoggedIn, setIsLoggedIn] = useState(true);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [currentPath, setCurrentPath] = useState("");
 
-  const toastdeneme = () => {
-    toast.success("Changes saved locally!");
-  };
 
   useEffect(() => {
     if (typeof window !== "undefined") {
@@ -43,10 +42,10 @@ const Header = () => {
       <div className="hidden lg:flex items-center justify-between ">
         <div
           id="ustmenu"
-          className="h-[45px] bg-DarkBlue max-w-[1200px] flex container   "
+          className="h-[45px] bg-DarkBlue max-w-[1200px] flex container mx-auto justify-between items-center"
         >
           <div className="px-[15px]  text-white">
-            <div className="ml-[206px]">
+            <div className="">
               <ul className="flex flex-row text-[14px] font-semibold ">
                 {header.menus.map((menu, index) => (
                   <li
@@ -85,7 +84,7 @@ const Header = () => {
             </div>
           </div>
           {isLoggedIn ? (
-            <div className=" flex items-center space-x-3  pr-8   ">
+            <div className=" flex items-center space-x-3   ">
               <Image
                 src="/assets/images/avatarIcon.svg"
                 alt="avatar"
@@ -97,16 +96,18 @@ const Header = () => {
                 <span className="whitespace-nowrap"> Emrah Eskibağcı</span>
                 <span className="text-xs">(user)</span>
               </div>
-              <div className="text-white hover:text-red-500 text-2xl">
-                <MdLogout className="cursor-pointer" />
+              <div className="text-white hover:text-red-500 text-2xl"> 
+              {/* signOut */}
+              <Link href="/auth/login" onClick={() => signOut()}>              
+                  <Image src="/assets/images/cikisyap.svg" width={100} height={100} alt="" className="mx-4 w-28 hover:scale-110 transition-all" />            
+              </Link>
               </div>
             </div>
           ) : (
            
-            currentPath === "/" && <div className="flex justify-center items-center ">
+            currentPath === "/" && <div className="flex justify-center items-center mr-4">
 
-
-              <Link href="/auth/login" onClick={toastdeneme}>              
+              <Link href="/auth/login" onClick={() => signIn()}>              
                   <Image src="/assets/images/giris.svg" width={100} height={100} alt="" className=" w-28 hover:scale-110 transition-all" />            
               </Link>
 

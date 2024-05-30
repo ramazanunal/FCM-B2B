@@ -80,8 +80,7 @@ const authOptions = {
 
   pages: {
     // signIn fonksiyonu çalıştığında kulanıcıyı yönlendireceğimiz sayfayı belirtiyoruz.
-    signIn: `/`,
-    // signIn: `/auth/login/${loginPageRoute}`,
+    signIn: `/auth/login/`,
     encryption: true,
   },
 }
