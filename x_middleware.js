@@ -6,8 +6,7 @@ import DatabaseWhenUpdate from  '@/functions/other/regularCheckSystemData/databa
 
 // kullanıcıların gidebileceği sayfaların başlangıç kısmını belirleriz.
 const roles = {
-  student: '/student',
-  teacher: '/teacher',
+  partner: '/partner',
   admin: '/admin',
 };
 
@@ -16,6 +15,7 @@ export default async function middleware(req) {
 
   // Tüm istekleri burada yakalarız.
   const { pathname } = new URL(req.url) || new URL(req.nextUrl);
+  console.log(`PATH : "${pathname}" ######`);
 
     //########################################################################################################
     // Sistemin kendi API isteklerini görmezden gelir.########################################################
@@ -38,22 +38,23 @@ export default async function middleware(req) {
     //########################################################################################################
     // sistem API istekleri haricinde...######################################################################
     // /api/auth ile başlayan tüm gelen isteklerin hepsini kontrol eder. #####################################
-    else if (pathname.startsWith("/api/") && !pathname.startsWith("/api/mail")) {
+    // else if (pathname.startsWith("/api/") && !pathname.startsWith("/api/mail")) {
       
-      // rate limit kontrolü burada başlar.
-      if(!req.method === "GET"){ // İSTEK TİPİNE GÖRE "GET" gewlirse rate limiti çalıştırmıyoruz!
+    //   // rate limit kontrolü burada başlar. "RATE LİMİT DEVRE DIŞI BIRAKILDI YORUM SATIRINA ALINARAK!!!"
+    //   // if(!req.method === "GET"){ // İSTEK TİPİNE GÖRE "GET" gewlirse rate limiti çalıştırmıyoruz!
         
-        const { success, error, reset, backUrl, targetUrl, targetButtonName, backButtonName, label } = await RateLimitPageConfig(req, pathname);
+    //   //   const { success, error, reset, backUrl, targetUrl, targetButtonName, backButtonName, label } = await RateLimitPageConfig(req, pathname);
       
 
-        if (!success || error && false) {
+    //   //   if (!success || error && false) {
 
-          // kullanıcı limiti aştı ise kullanıcıyı başka bir sayfaya yönlendirir.
-          return NextResponse.redirect(new URL(
-            `/notification?type=error&message=${error}&label=${label}&remainingTime=${reset}&targetButtonName=${targetButtonName}&backButtonName=${backButtonName}&targetUrl=${targetUrl}&backUrl=${backUrl}`,req.url));
-        }
-      }  
-    }
+    //   //     // kullanıcı limiti aştı ise kullanıcıyı başka bir sayfaya yönlendirir.
+    //   //     return NextResponse.redirect(new URL(
+    //   //       `/notification?type=error&message=${error}&label=${label}&remainingTime=${reset}&targetButtonName=${targetButtonName}&backButtonName=${backButtonName}&targetUrl=${targetUrl}&backUrl=${backUrl}`,req.url));
+    //   //   }
+    //   // }  
+
+    // }
     //########################################################################################################
     // kullanıcının gittiği sayfaları (oturum açılmış) ve (oturum kapalı) durumuna göre kontrol eder. ########
     else {
@@ -83,11 +84,11 @@ export default async function middleware(req) {
       }
 
       //########################################################################################################
-      // kullanıcı oturum açmamış ise. aşağıdakileri kontrol eder ##############################################
+      // kullanıcı oturum açmamış ise. AŞAĞIDAKİ SAYFALARA GİTMESİNE İZİN VERİR ##############################################
       if (
         !session && 
         (
-        !pathname.startsWith("/auth/") ||
+        !pathname.startsWith("/auth/") || //İZİN VERİLEN SAYFALAR BURADA
         !pathname.startsWith("/api/")) &&
         !pathname.startsWith("/auth/login") &&
         !pathname.startsWith("/notification") &&
@@ -107,12 +108,12 @@ export default async function middleware(req) {
       }
     }
 
-    // dataUpdateConfig verilerinde güncelleştirme durumu olduğunda çalışır ve güncellenen veriyi veri tabanına kaydeder.
-    if(req.method === "POST"){
+    // // dataUpdateConfig verilerinde güncelleştirme durumu olduğunda çalışır ve güncellenen veriyi veri tabanına kaydeder.
+    // if(req.method === "POST"){
 
-      await DatabaseWhenUpdate(pathname, req);
+    //   await DatabaseWhenUpdate(pathname, req);
      
-    }
+    // }
   }
 
 export const config = {

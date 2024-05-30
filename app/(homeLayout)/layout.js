@@ -4,8 +4,8 @@ import Banner from '@/components/Banner';
 
 export default function HomeLayout({ children}) {
   return (
-    <div className=" flex w-screen lg:w-full h-full flex-col items-center bg-[url('https://caliskanari.com/wp-content/uploads/2018/10/clothes-2049536750.jpg.webp')] bg-no-repeat bg-[#6bcdec]">
-      <div className='bg-white'>
+    <div className=" flex w-screen lg:w-full h-full flex-col items-center bg-[url('/backgroundImage.webp')] bg-no-repeat bg-[#6bcdec]">
+      <div className='bg-white w-screen xl:w-[1188px]'>
         <Header />
       </div>
       <div className='bg-white'>{children}</div>

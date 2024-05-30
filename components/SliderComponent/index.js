@@ -13,7 +13,7 @@ const SliderComponent = () => {
 
 
   return (
-    <div className="w-screen xl:w-[1188px] pt-[30px]  bg-white ">
+    <div className="w-screen xl:w-[1188px]  bg-white ">
        <Swiper
         spaceBetween={30}
         centeredSlides={true}

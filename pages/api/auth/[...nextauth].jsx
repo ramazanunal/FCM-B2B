@@ -2,8 +2,7 @@ import NextAuth from "next-auth"
 import CredentialsProvider, { CredentialsConfig } from "next-auth/providers/credentials";
 import { postAPI } from "@/services/fetchAPI";
 
-
-let loginPageRoute = "student";
+let loginPageRoute = "partner";
 
 const authOptions = {
 
@@ -19,51 +18,34 @@ const authOptions = {
       },
 
       async authorize(credentials) {
-        // kontrol edilecek (email ve password) bilgilerini credentials değişkeninden alıyoruz.
-        const { email, password, role } = credentials;
-        // giriş yapılacak sayfayı role değişkeninden alıyoruz.
-        loginPageRoute = role;
 
-        if (email) {
-          // yukarıda aldığımız giriş bilgilerini => [email eşleşmesi, password doğrulaması] için fonksiyonumuza gönderiyoruz.
-          const data = await postAPI(`/auth/login`, { role, email, password });
-          if (!data || data.error || data == null) {
-            if (data) {
-              throw new Error(data.error);
-            }
-            else {
-              throw new Error("Giriş işleminde bir hata oluştu. Lütfen daha sonra tekrar deneyiniz.");
-            }
-          }
+        
 
+        
+        let { email, password, role } = credentials;     
+        
+        const data = await postAPI(`/auth/login`, { role, email, password });
 
-
-          const { userFromDB, success, error, status, verifyEmail } = data;
-          if (userFromDB === null || !success || userFromDB === undefined || error || !userFromDB) {
-            let error2 = new Error();
-            error2.message = error;
-            error2.status = status;
-            error2.verifyEmail = verifyEmail;
-            throw error2;
-          }
-          if (!userFromDB.role || !userFromDB.name || !userFromDB.surname || !userFromDB.email) {
-            throw new Error("Giriş işleminde bir hata oluştu.");
-          }
-          const user = {
-            role: userFromDB.role,
-            name: userFromDB.name,
-            surname: userFromDB.surname,
-            email: userFromDB.email,
-          };
-
-          if (user) {
-            return user;
-          }
+        console.log("########## DATA: ", data);
+        
+        if (!data || data.error || data == null) {
+            throw new Error(data.error || "Bir hata oluştu. Lütfen tekrar deneyiniz.");
         }
 
-        else {
-          throw new Error("Giriş işleminde bir hata oluştu.");
-        }
+        // Kullanıcı bilgilerini döndürüyoruz.
+        const user = {
+          id: data.findUser.CARKOD,
+          email: data.findUser.CARUNVAN3,
+          name: data.findUser.CARUNVAN,
+          role: role,
+          isActive: data.findUser.CAROZKOD1,
+          isPartner: data.findUser.CAROZKOD3,          
+        };
+
+        return user;
+
+
+
       }
     }),
   ],
@@ -98,7 +80,7 @@ const authOptions = {
 
   pages: {
     // signIn fonksiyonu çalıştığında kulanıcıyı yönlendireceğimiz sayfayı belirtiyoruz.
-    signIn: `/auth/login/${loginPageRoute}`,
+    signIn: `/auth/login/`,
     encryption: true,
   },
 }

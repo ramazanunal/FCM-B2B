@@ -44,30 +44,6 @@ const headerStore = create((set) => ({
         href: "https://heydayenglish.com/",
         subMenus: [],
       },
-      {
-        id: 5,
-        text: "İletişim",
-        href: "https://caliskanari.com/contact-us/",
-        subMenus: [],
-      },
-      {
-        id: 6,
-        text: "Beğendiklerim",
-        href: "https://caliskanari.com/wishlist/",
-        subMenus: [],
-      },
-      {
-        id: 7,
-        text: "Çalışkan Arı 1. Sınıf",
-        href: "https://caliskanari.com/1-sinif/",
-        subMenus: [],
-      },
-      {
-        id: 8,
-        text: "Giriş / Kayıt",
-        href: `/auth/login`,
-        subMenus: [],
-      }
       
     ],
     mainMenuLogo: [

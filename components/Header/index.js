@@ -10,16 +10,35 @@ import SearchPanel from "../SearchPanel";
 import { RiShoppingBasketFill } from "react-icons/ri";
 import useCartItemCount from "@/utils/useCartItemCount";
 import { CiShop } from "react-icons/ci";
+import { toast } from "react-toastify";
+import { signIn, signOut, useSession } from "next-auth/react";
+
 const Header = () => {
+
   const { header } = headerStore();
-  const [hoveredMenu, setHoveredMenu] = useState(null); 
-  const [isSearchOpen, setIsSearchOpen] = useState(false);  
+  const [hoveredMenu, setHoveredMenu] = useState(null);
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
   const cartItemCount = useCartItemCount();
+
+  const { data } = useSession();
+  const user = data?.user;
+
   // const [hoveredMainMenu, setHoveredMainMenu] = useState(null);
   // const [hoveredIcon, setHoveredIcon] = useState(null);
   // const [hoveredSubMenu, setHoveredSubMenu] = useState(null);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
- 
+  const [currentPath, setCurrentPath] = useState("");
+
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      setCurrentPath(window.location.pathname);
+    }
+  }, []);
+
+
+
+  
+
   const toggleSearchPanel = () => {
     setIsSearchOpen(!isSearchOpen);
   };
@@ -29,10 +48,10 @@ const Header = () => {
       <div className="hidden lg:flex items-center justify-between ">
         <div
           id="ustmenu"
-          className="h-[45px] bg-DarkBlue max-w-[1200px] container "
+          className="h-[45px] bg-DarkBlue max-w-[1200px] flex container mx-auto justify-between items-center"
         >
-          <div className="px-[15px] mx-[35px] text-white">
-            <div className="ml-[206px]">
+          <div className="px-[15px]  text-white">
+            <div className="">
               <ul className="flex flex-row text-[14px] font-semibold ">
                 {header.menus.map((menu, index) => (
                   <li
@@ -70,147 +89,43 @@ const Header = () => {
               </ul>
             </div>
           </div>
-        </div>
-      </div>
-
-      <div
-        id="altmenu"
-        className="p-[23px] lg:p-0 bg-white h-[165px] w-screen lg:w-full "
-      >
-        <div className="lg:p-[15px] md:mx-[35px] flex flex-row items-center justify-between">
-          <div className="flex lg:hidden ">
-            {/* Hamburger Menü */}
-            <MobileMenu header={header} />
-          </div>
-          <div>
-            <Image
-              src={header.mainMenuLogo[0].logosrc}
-              width={119}
-              height={135}
-              alt="Çalışkan Arı Mağaza"
-              className="w-[93px] md:w-[119px] h-[105px] md:h-[135px]"
-            />
-          </div>
-          <div className="flex flex-row hidden lg:flex pt-4 text-CustomGray">
-            <Link
-              className="flex flex-col items-center justify-center group" 
-                href={!isLoggedIn ? "/auth/login" : "https://caliskanari.com/shop/"}
-            >
-              <span className="w-[60px] h-[60px] flex items-center justify-center group-hover:scale-105 group-hover:text-LightBlue transition-all duration-1000 ease-in-out transform">
-                <CiShop className="w-[40px] h-[40px]" />
-              </span>
-              <span className="uppercase text-[12px] font-bold tracking-[1px] pb-[15px] hover:text-LightBlue transition-all duration-500 ease-in-out transform">
-                MAĞAZA
-              </span>
-            </Link>
-          </div>
-
-          {/*orta ikonlar
-           <div className="flex flex-row hidden lg:flex pt-4" id="mainmenuitem">
-            <ul className="flex flex-row items-center text-center justify-center text-CustomGray hidden lg:flex ml-[8px] md:ml-[36px]">
-              {header.mainMenuItems.map((mainMenuItem, index) => (
-                <li
-                  key={mainMenuItem.id}
-                  className={`relative mr-[25px] leading-[1.3] w-[117px] mx-2 `}
-                  onMouseEnter={() => {
-                    setHoveredMainMenu(index);
-                    if (hoveredSubMenu !== null) {
-                      setHoveredSubMenu(null);
-                    }
-                  }}
-                  onMouseLeave={() => {
-                    setHoveredMainMenu(null);
-                  }}
-                >
-                  <Link
-                    className={`flex flex-col items-center justify-center `}
-                    href={mainMenuItem.href}
-                  >
-                    <span
-                      className={`w-[60px] h-[60px] flex items-center justify-center ${
-                        hoveredIcon === mainMenuItem.id
-                          ? "scale-105 text-LightBlue transition-all duration-500 ease-in-out transform"
-                          : "transition-all duration-500 ease-in-out transform"
-                      }`}
-                    >
-                      <span className="w-[40px] h-[40px] ">
-                        {mainMenuItem.icon}
-                      </span>
-                    </span>
-                    <span
-                      className="uppercase text-[12px] font-bold tracking-[1px] pb-[15px] hover:text-LightBlue transition duration-500 ease-in-out transform"
-                      onMouseEnter={() => setHoveredIcon(mainMenuItem.id)}
-                      onMouseLeave={() => setHoveredIcon(null)}
-                    >
-                      {mainMenuItem.text}
-                    </span>
-                  </Link>
-
-                  {mainMenuItem.subMenus &&
-                    mainMenuItem.subMenus.length > 0 && (
-                      <div
-                        className={`absolute top-22 -left-4 z-[1000] w-[215px] bg-LightBlue shadow-[0_5px_20px_rgba(0,0,0,0.3)] py-[15px] rounded-md text-white transition-all duration-1000 ease-in-out transform ${
-                          hoveredMainMenu === index
-                            ? "opacity-100 translate-y-0"
-                            : "opacity-0 translate-y-10 pointer-events-none"
-                        }`}
-                      >
-                        <ul>
-                          {mainMenuItem.subMenus.map((subMenu) => (
-                            <li
-                              key={subMenu.id}
-                              className="mx-[20px] py-[11px] text-[15px] font-bold leading-[14px] cursor-pointer hover:text-HoverGray transition duration-300 ease-in-out transform text-left"
-                            >
-                              <Link href={`/urun-kategori/${subMenu.id}`}>
-                                {subMenu.text}
-                              </Link>
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
-                    )}
-                </li>
-              ))}
-            </ul>
-          </div> */}
-
-          <div className="flex flex-row items-center text-center justify-center text-CustomGray">
-            {header.mainMenuButtons.map((mainMenuButtons) => (
-              <div
-                key={mainMenuButtons.id}
-                className="flex flex-row items-center"
-              >
-                <button className="relative" onClick={toggleSearchPanel}>
-                  <FaSearch className="w-[20px] h-[20px] hover:text-LightBlue hover:scale-110 transition duration-300 ease-in-out transform mr-2 sm:mr-[36px]" />
-                </button>
-                {isSearchOpen && (
-                  <div className="absolute top-28 md:top-32 lg:top-40 rounded-xl  right-0 md:right-24 z-[1000]	bg-white">
-                    <SearchPanel toggleSearchPanel={toggleSearchPanel} />
-                  </div>
-                )}
-                <Link
-                  className="flex flex-col items-center justify-center  hover:text-LightBlue hover:scale-110 transition duration-300 ease-in-out transform relative"
-                  href="/cart"
-                >
-                  <span>
-                    <RiShoppingBasketFill
-                      style={{ width: "25px", height: "25px" }}
-                    />
-                  </span>
-                  {cartItemCount > 0 && (
-                    <div className="absolute -top-3 -right-4 bg-[#ff5b4b] rounded-full px-[5px]  flex items-center justify-center">
-                      <span className="text-white font-extrabold text-[16px] w-[14px] h-[24px]">
-                        {cartItemCount}
-                      </span>
-                    </div>
-                  )}
-                </Link>
+          {user ? (
+            <div className=" flex items-center space-x-3   ">
+              <Image
+                src="/assets/images/avatarIcon.svg"
+                alt="avatar"
+                className="w-8"
+                width={50} 
+                height={50}
+              />
+              <div className="text-sm text-white flex flex-col">
+                <span className="whitespace-nowrap"> Emrah Eskibağcı</span>
+                <span className="text-xs">(user)</span>
               </div>
-            ))}
+              <div className="text-white hover:text-red-500 text-2xl"> 
+              {/* signOut */}
+              {user && <Link href="/auth/login" onClick={() => signOut()}>              
+                  <Image src="/assets/images/cikisyap.svg" width={100} height={100} alt="" className="mx-4 w-28 hover:scale-110 transition-all" />            
+              </Link>}
+              </div>
+            </div>
+          ) : (
+           
+            currentPath === "/" && <div className="flex justify-center items-center mr-4">
+
+              {!user && <Link href="/auth/login" onClick={() => signIn()}>              
+                  <Image src="/assets/images/giris.svg" width={100} height={100} alt="" className=" w-28 hover:scale-110 transition-all" />            
+              </Link>}
+
           </div>
+          )}
         </div>
       </div>
-      <FixedHeader header={header} cartItemCount={cartItemCount} />
+
+      <div className="md:hidden block bg-[#394C69] w-full">
+        <MobileMenu header={header} user={user} />
+      </div>
+     
     </div>
   );
 };

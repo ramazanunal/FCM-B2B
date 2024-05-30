@@ -27,8 +27,8 @@ export async function createNewData(tableName, newData) {
 // GET BY UNIQUE ONE VALUE
 export async function getDataByUnique(tableName, where) {
   try {
-    const data = await prisma[tableName].findUnique({ where:  where });
-    return data;
+    const data = await prisma[tableName].findFirst({ where:  where });
+    return data;  
   } catch (error) {
     return { error: error.message};
   }
@@ -89,6 +89,7 @@ export async function deleteDataAll(tableName) {
   }
 }
 
+// eslint-disable-next-line import/no-anonymous-default-export
 export default {
   getAllData,
 

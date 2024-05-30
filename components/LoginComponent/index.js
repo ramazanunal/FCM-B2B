@@ -3,25 +3,63 @@ import Link from "next/link";
 import React from "react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
+import { signIn } from 'next-auth/react';
+import { useRouter } from 'next/navigation';
 
-const LoginComponent = () => {
+const LoginComponent = ({ pageRole }) => {
+
   const initialValues = {
-    username: "",
+    email: "",
     password: "",
     rememberMe: false,
   };
 
   const validationSchema = Yup.object({
-    username: Yup.string().required(
-      "Kullanıcı adı veya e-posta adresi zorunludur"
-    ),
+    email: Yup.string()
+    .required('e mail boş bırakılamaz.')
+    .email('Geçerli bir e mail adresi giriniz.'),
     password: Yup.string().required("Parola zorunludur"),
   });
 
   const handleSubmit = (values) => {
-    console.log("Form data", values);
-    // You can add the login logic here
+
+      // setIsloading(true);
+
+      // signIn içine hangi provider ile giriş yapılacağı ve giriş bilgileri gönderilir.
+      const result = signIn('credentials', {
+        email: values.email,
+        password: values.password,
+        role: pageRole,
+        callbackUrl: '/',
+        redirect: false,
+      }).then((res) => {
+        console.log('RES: ', res);
+        if (!res) {
+          // toast.error('Bir hata oluştu. Lütfen tekrar deneyiniz.');
+          console.log("Bir hata oluştu. Lütfen tekrar deneyiniz.")
+          // setIsloading(false);
+        } else if (!res.ok) {
+          // toast.error(res.error);
+          console.log(res.error);
+          // setIsloading(false);
+        } else {
+
+          // BİR PROBLEM YOKSA GİRİŞ BAŞARILI BİLGİSİ VERİRİZ.
+          // setIsAccessing(true);
+          // setIsloading(false);
+          // toast.success('Giriş Başarılı (Yönlendiriliyorsunuz...)');
+           console.log("Giriş Başarılı Yönlendiriliyorsunuz...");
+
+          const timeOut = setInterval(() => {
+            router.push('/');
+            clearInterval(timeOut);
+          }, 2000);
+
+        }
+      });
   };
+
+  const router = useRouter();
 
   return (
     <div className="bg-white flex items-center flex-col py-[35px] sm:py-[60px] w-screen lg:w-[1188px]">
@@ -41,13 +79,13 @@ const LoginComponent = () => {
                 <span className="text-CustomRed ml-1">*</span>
               </label>
               <Field
-                type="text"
-                name="username"
+                type="mail"
+                name="email"
                 autoComplete="off"
                 className="border border-[#d5e0ec] py-[5px] px-[12px] rounded-md bg-white outline-none"
               />
               <ErrorMessage
-                name="username"
+                name="email"
                 component="div"
                 className="text-red-500 text-xs mt-1"
               />
