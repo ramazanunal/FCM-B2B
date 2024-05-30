@@ -43,7 +43,7 @@ const Header = () => {
       <div className="hidden lg:flex items-center justify-between ">
         <div
           id="ustmenu"
-          className="h-[45px] bg-DarkBlue max-w-[1200px] flex container "
+          className="h-[45px] bg-DarkBlue max-w-[1200px] flex container   "
         >
           <div className="px-[15px]  text-white">
             <div className="ml-[206px]">
@@ -85,7 +85,7 @@ const Header = () => {
             </div>
           </div>
           {isLoggedIn ? (
-            <div className=" flex items-center space-x-3  pr-8 ">
+            <div className=" flex items-center space-x-3  pr-8   ">
               <Image
                 src="/assets/images/avatarIcon.svg"
                 alt="avatar"
@@ -103,7 +103,7 @@ const Header = () => {
             </div>
           ) : (
            
-            currentPath === "/" && <div className="flex justify-center items-center">
+            currentPath === "/" && <div className="flex justify-center items-center ">
 
 
               <Link href="/auth/login" onClick={toastdeneme}>              
