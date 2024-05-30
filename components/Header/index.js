@@ -28,16 +28,11 @@ const Header = () => {
   // const [hoveredSubMenu, setHoveredSubMenu] = useState(null);
   const [currentPath, setCurrentPath] = useState("");
 
-
   useEffect(() => {
     if (typeof window !== "undefined") {
       setCurrentPath(window.location.pathname);
     }
   }, []);
-
-
-
-  
 
   const toggleSearchPanel = () => {
     setIsSearchOpen(!isSearchOpen);
@@ -48,7 +43,7 @@ const Header = () => {
       <div className="hidden lg:flex items-center justify-between ">
         <div
           id="ustmenu"
-          className="h-[45px] bg-DarkBlue max-w-[1200px] flex container mx-auto justify-between items-center"
+          className="h-[50px] bg-DarkBlue max-w-[1200px] flex container mx-auto px-5 justify-between items-center"
         >
           <div className="px-[15px]  text-white">
             <div className="">
@@ -114,7 +109,7 @@ const Header = () => {
             currentPath === "/" && <div className="flex justify-center items-center mr-4">
 
               {!user && <Link href="/auth/login" onClick={() => signIn()}>              
-                  <Image src="/assets/images/giris.svg" width={100} height={100} alt="" className=" w-28 hover:scale-110 transition-all" />            
+                  <Image src="/assets/images/giris.svg" width={100} height={100} alt="" className=" w-28 hover:scale-110 transition-all transform ease-in-out duration-700" />            
               </Link>}
 
           </div>

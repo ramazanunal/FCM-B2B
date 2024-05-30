@@ -8,7 +8,7 @@ import { GoArrowRight } from "react-icons/go";
 import Link from "next/link";
 
 function SubProductsList({ params }) {
-
+  //belli id ye göre ürünleri bulur
   const findProductsById = (id) => {
     let products = [];
     header.mainMenuItems.forEach((menuItem) => {
@@ -20,23 +20,24 @@ function SubProductsList({ params }) {
     });
     return products;
   };
-  
+
   const subMenuProductsId = parseInt(params.id);
   const { header } = headerStore();
   const foundProducts = findProductsById(subMenuProductsId);
   const [cartItems, setCartItems] = useState([]);
 
-  
-
+  //Sayfa yüklendiğinde local storage'dan sepet öğelerini alma
   useEffect(() => {
     const storedCartItems = JSON.parse(localStorage.getItem("cartItems")) || [];
     setCartItems(storedCartItems);
   }, []);
 
+  // Belirli bir ürünün sepette olup olmadığını kontrol eder
   const isItemInCart = (productId) => {
     return cartItems.some((item) => item.id === productId);
   };
 
+  //indirimli fiyatı hesaplar
   const calculateDiscountedPrice = (price, discount) => {
     if (discount && discount > 0) {
       const discountedAmount = (price * discount) / 100;
@@ -45,6 +46,7 @@ function SubProductsList({ params }) {
     return price;
   };
 
+  //sepete ekleme fonksiyonu
   const addToCart = (product, quantity) => {
     let updatedCartItems = [...cartItems];
     const existingItemIndex = updatedCartItems.findIndex(

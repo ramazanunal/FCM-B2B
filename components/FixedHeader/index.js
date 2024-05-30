@@ -16,10 +16,12 @@ const FixedHeader = ({ header, cartItemCount }) => {
   const { data } = useSession();
   const user = data?.user;
 
+  // Arama yapmak için butonun açma/kapama işlevi
   const toggleSearchPanel = () => {
     setIsSearchOpen(!isSearchOpen);
   };
 
+  // Sayfa kaydırıldığında fixed header'ın görünürlüğünü kontrol eden işlev
   useEffect(() => {
     const handleScroll = () => {
       const scrollPosition = window.scrollY;
@@ -75,7 +77,9 @@ const FixedHeader = ({ header, cartItemCount }) => {
                     className="w-[60px] h-[60px] flex items-center justify-center
                     text-CustomGray/75 hover:text-LightBlue  hover:scale-105 transition-all duration-500 ease-in-out transform cursor-pointer"
                   >
-                    <span className="w-[40px] h-[40px]">{mainMenuItem.icon}</span>
+                    <span className="w-[40px] h-[40px]">
+                      {mainMenuItem.icon}
+                    </span>
                   </span>
                 </Link>
                 {mainMenuItem.subMenus && mainMenuItem.subMenus.length > 0 && (
@@ -92,7 +96,9 @@ const FixedHeader = ({ header, cartItemCount }) => {
                           key={subMenu.id}
                           className="mx-[20px] py-[11px] text-[15px] font-bold leading-[14px] cursor-pointer hover:text-HoverGray transition duration-300 ease-in-out transform text-left"
                         >
-                            <Link href={`/urun-kategori/${subMenu.id}`}>{subMenu.text}</Link>
+                          <Link href={`/urun-kategori/${subMenu.id}`}>
+                            {subMenu.text}
+                          </Link>
                         </li>
                       ))}
                     </ul>
@@ -122,7 +128,7 @@ const FixedHeader = ({ header, cartItemCount }) => {
                 </span>
                 {cartItemCount > 0 && (
                   <div className="absolute -top-3 -right-4 bg-[#ff5b4b] rounded-full px-[5px]  flex items-center justify-center">
-                  <span className="text-white font-extrabold text-[16px] w-[14px] h-[24px] flex items-center justify-center">
+                    <span className="text-white font-extrabold text-[16px] w-[14px] h-[24px] flex items-center justify-center">
                       {cartItemCount}
                     </span>
                   </div>
@@ -153,35 +159,37 @@ const FixedHeader = ({ header, cartItemCount }) => {
           />
         </div>
 
-        {user && <div className="flex flex-row items-center text-center justify-center text-CustomGray">
-          {header.mainMenuButtons.map((mainMenuButtons) => (
-            <div
-              key={mainMenuButtons.id}
-              className="flex flex-row items-center"
-            >
-              <button onClick={toggleSearchPanel}>
-                <FaSearch className="w-[20px] h-[20px] hover:text-LightBlue hover:scale-110 transition duration-300 ease-in-out transform mr-2 sm:mr-[36px]" />
-              </button>
-              <Link
-                href="/cart"
-                className="flex flex-col items-center justify-center hover:text-LightBlue hover:scale-110 transition duration-300 ease-in-out transform "
+        {user && (
+          <div className="flex flex-row items-center text-center justify-center text-CustomGray">
+            {header.mainMenuButtons.map((mainMenuButtons) => (
+              <div
+                key={mainMenuButtons.id}
+                className="flex flex-row items-center"
               >
-                <span>
-                  <RiShoppingBasketFill
-                    style={{ width: "25px", height: "25px" }}
-                  />
-                </span>
-                {cartItemCount > 0 && (
-                 <div className="absolute -top-3 -right-4 bg-[#ff5b4b] rounded-full px-[5px]  flex items-center justify-center">
-                 <span className="text-white font-extrabold text-[16px] w-[14px] h-[24px] flex items-center justify-center">
-                      {cartItemCount}
-                    </span>
-                  </div>
-                )}
-              </Link>
-            </div>
-          ))}
-        </div>}
+                <button onClick={toggleSearchPanel}>
+                  <FaSearch className="w-[20px] h-[20px] hover:text-LightBlue hover:scale-110 transition duration-300 ease-in-out transform mr-2 sm:mr-[36px]" />
+                </button>
+                <Link
+                  href="/cart"
+                  className="flex flex-col items-center justify-center hover:text-LightBlue hover:scale-110 transition duration-300 ease-in-out transform "
+                >
+                  <span>
+                    <RiShoppingBasketFill
+                      style={{ width: "25px", height: "25px" }}
+                    />
+                  </span>
+                  {cartItemCount > 0 && (
+                    <div className="absolute -top-3 -right-4 bg-[#ff5b4b] rounded-full px-[5px]  flex items-center justify-center">
+                      <span className="text-white font-extrabold text-[16px] w-[14px] h-[24px] flex items-center justify-center">
+                        {cartItemCount}
+                      </span>
+                    </div>
+                  )}
+                </Link>
+              </div>
+            ))}
+          </div>
+        )}
       </div>
       <div className="absolute top-32 lg:top-16 right-0 sm:right-12 md:right-24 lg:right-36 bg-white rounded-xl">
         {isSearchOpen && (

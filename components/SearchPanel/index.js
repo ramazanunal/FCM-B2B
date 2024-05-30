@@ -11,10 +11,12 @@ function SearchPanel({ toggleSearchPanel }) {
   const [searchNoResults, setSearchNoResults] = useState(false);
   const [searchInput, setSearchInput] = useState("");
 
+  // Formik için doğrulama şeması
   const validationSchema = Yup.object().shape({
     searchinput: Yup.string().required(""),
   });
 
+  // Arama işlemi için callback fonksiyonu
   const handleSearch = useCallback((searchTerm) => {
     searchTerm = normalizeTurkishChars(searchTerm.toLowerCase());
     console.log("Search Term:", searchTerm);
@@ -22,7 +24,9 @@ function SearchPanel({ toggleSearchPanel }) {
 
     categoryStore.getState().categories.forEach((category) => {
       category.products.forEach((product) => {
-        if (normalizeTurkishChars(product.name.toLowerCase()).includes(searchTerm)) {
+        if (
+          normalizeTurkishChars(product.name.toLowerCase()).includes(searchTerm)
+        ) {
           results.push(product);
         }
       });
@@ -32,6 +36,7 @@ function SearchPanel({ toggleSearchPanel }) {
     setSearchNoResults(true);
   }, []);
 
+  // Arama yapıldığında tetiklenen işlev
   const handleInputChange = (e) => {
     const value = e.target.value;
     setSearchInput(value);

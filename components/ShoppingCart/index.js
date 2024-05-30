@@ -76,16 +76,17 @@ const ShoppingCart = () => {
     }, 2000);
   };
 
+  //bir ürünün silme işlemi
   const initiateDelete = (itemId) => {
     setItemToDelete(itemId);
     setConfirmDelete(true);
   };
-
+  //silme işlemini iptal etme
   const cancelDelete = () => {
     setConfirmDelete(false);
     setItemToDelete(null);
   };
-
+  //silme işlemini onaylama
   const confirmDeleteItem = () => {
     handleItemDelete(itemToDelete);
     setConfirmDelete(false);
@@ -522,7 +523,9 @@ const ShoppingCart = () => {
           </div>
         </div>
       )}
-  {confirmOrder && <OrderConfirmation onClose={handleCloseOrderConfirmation} />}
+      {confirmOrder && (
+        <OrderConfirmation onClose={handleCloseOrderConfirmation} />
+      )}
     </div>
   );
 };
