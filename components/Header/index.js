@@ -11,6 +11,7 @@ import { RiShoppingBasketFill } from "react-icons/ri";
 import useCartItemCount from "@/utils/useCartItemCount";
 import { CiShop } from "react-icons/ci";
 import { MdLogout } from "react-icons/md";
+import { toast } from "react-toastify";
 
 
 const Header = () => {
@@ -21,8 +22,12 @@ const Header = () => {
   // const [hoveredMainMenu, setHoveredMainMenu] = useState(null);
   // const [hoveredIcon, setHoveredIcon] = useState(null);
   // const [hoveredSubMenu, setHoveredSubMenu] = useState(null);
-  const [isLoggedIn, setIsLoggedIn] = useState(true);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [currentPath, setCurrentPath] = useState("");
+
+  const toastdeneme= () => {
+    toast.success('Changes saved locally!')
+  }
 
   useEffect(() => {
     if (typeof window !== "undefined") {
@@ -91,7 +96,7 @@ const Header = () => {
          </div>
        </div> : <div className="flex justify-center items-center">
        <Link href="/auth/login">
-                                     <button className="border bg-LightBlue/75 hover:bg-LightBlue text-white p-1 rounded-xl">Giriş yap</button>
+                                     <button onClick={toastdeneme} className="border bg-LightBlue/75 hover:bg-LightBlue text-white p-1 rounded-xl">Giriş yap</button>
 
        </Link>
                           
