@@ -74,7 +74,7 @@ const NavbarHeader = () => {
           </div>
           <div>
                   <div className="w-8 flex items-center space-x-3">
-                    <img src="/assets/images/avatarIcon.svg" alt="avatar" />
+                    <Image src="/assets/images/avatarIcon.svg" width={50} height={50} alt="avatar" />
                     <div className="text-sm text-white flex flex-col">
                       <span className="whitespace-nowrap"> Emrah Eskibağcı</span>
                       <span className="text-xs">(user)</span>

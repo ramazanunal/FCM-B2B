@@ -21,7 +21,7 @@ const Header = () => {
   // const [hoveredMainMenu, setHoveredMainMenu] = useState(null);
   // const [hoveredIcon, setHoveredIcon] = useState(null);
   // const [hoveredSubMenu, setHoveredSubMenu] = useState(null);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(true);
   const [currentPath, setCurrentPath] = useState("");
 
   const toastdeneme = () => {
@@ -45,7 +45,7 @@ const Header = () => {
           id="ustmenu"
           className="h-[45px] bg-DarkBlue max-w-[1200px] flex container "
         >
-          <div className="px-[15px] mx-[35px] text-white">
+          <div className="px-[15px]  text-white">
             <div className="ml-[206px]">
               <ul className="flex flex-row text-[14px] font-semibold ">
                 {header.menus.map((menu, index) => (
@@ -86,10 +86,12 @@ const Header = () => {
           </div>
           {isLoggedIn ? (
             <div className=" flex items-center space-x-3  pr-8 ">
-              <img
+              <Image
                 src="/assets/images/avatarIcon.svg"
                 alt="avatar"
                 className="w-8"
+                width={50} 
+                height={50}
               />
               <div className="text-sm text-white flex flex-col">
                 <span className="whitespace-nowrap"> Emrah Eskibağcı</span>
@@ -101,12 +103,13 @@ const Header = () => {
             </div>
           ) : (
            
-            currentPath === "/" && <div className="flex   justify-center items-center">
-            <Link href="/auth/login" onClick={toastdeneme}>
-             
-                <img src="/assets/images/giris.svg" alt="" className="w-24" />
-           
-            </Link>
+            currentPath === "/" && <div className="flex justify-center items-center">
+
+
+              <Link href="/auth/login" onClick={toastdeneme}>              
+                  <Image src="/assets/images/giris.svg" width={100} height={100} alt="" className=" w-28 hover:scale-110 transition-all" />            
+              </Link>
+
           </div>
           )}
         </div>

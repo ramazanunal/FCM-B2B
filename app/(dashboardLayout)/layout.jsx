@@ -1,6 +1,7 @@
 import Header from "@/components/Header";
 import NavbarHeader from "@/components/NavbarHeader";
 import { MdLogout } from "react-icons/md";
+import Image from "next/image";
 
 
 
@@ -12,7 +13,7 @@ const DashboardLayout = ({ children }) => {
   </div>
   <div className="col-span-1  flex justify-end pr-3">
   <div className=" flex items-center space-x-3  ">
-    <img src="/assets/images/avatarIcon.svg" alt="avatar" className="w-8" />
+    <Image src="/assets/images/avatarIcon.svg" width={50} height={50} alt="avatar" className="w-8" />
     <div className="text-sm text-white flex flex-col">
       <span className="whitespace-nowrap"> Emrah Eskibağcı</span>
       <span className="text-xs">(user)</span>
