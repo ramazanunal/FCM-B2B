@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import React, { useState } from "react";
 import SliderComponent from "@/components/SliderComponent";
 import HomeCategories from "@/components/HomeCategories";
@@ -8,9 +8,8 @@ import { useEffect } from "react";
 import FixedHeader from "@/components/FixedHeader";
 import MainButtonsComponent from "@/components/MainButtons";
 
-
 const HomeContainer = () => {
-  const [isLoggedIn, setIsLoggedIn] = useState(false); 
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   const { data: session, status } = useSession();
 
@@ -19,8 +18,7 @@ const HomeContainer = () => {
       setIsLoggedIn(true);
       console.log("session: ", session);
     }
-  }
-  , [status, session]);
+  }, [status, session]);
 
   return (
     <div className="flex flex-col items-center">
@@ -28,19 +26,15 @@ const HomeContainer = () => {
         <SliderComponent />
       </div>
       {isLoggedIn ? (
-          <MainButtonsComponent/>
-        ) : (
-          <null/>
-        )}
+        <>
+          <MainButtonsComponent />
+          <FixedHeader />
+        </>
+      ) : (
+        <null />
+      )}
       <div className="bg-white">
-        {isLoggedIn ? (
-          <HomeCategories />
-        ) : (
-          <WelcomeSection/>
-        )}
-      </div>
-      <div>
-        <FixedHeader/>
+        {isLoggedIn ? <HomeCategories /> : <WelcomeSection />}
       </div>
     </div>
   );
