@@ -10,6 +10,7 @@ import SearchPanel from "../SearchPanel";
 import { RiShoppingBasketFill } from "react-icons/ri";
 import useCartItemCount from "@/utils/useCartItemCount";
 import { CiShop } from "react-icons/ci";
+import { MdLogout } from "react-icons/md";
 
 
 const Header = () => {
@@ -20,7 +21,14 @@ const Header = () => {
   // const [hoveredMainMenu, setHoveredMainMenu] = useState(null);
   // const [hoveredIcon, setHoveredIcon] = useState(null);
   // const [hoveredSubMenu, setHoveredSubMenu] = useState(null);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(true);
+  const [currentPath, setCurrentPath] = useState("");
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      setCurrentPath(window.location.pathname);
+    }
+  }, []);
  
   const toggleSearchPanel = () => {
     setIsSearchOpen(!isSearchOpen);
@@ -31,7 +39,7 @@ const Header = () => {
       <div className="hidden lg:flex items-center justify-between ">
         <div
           id="ustmenu"
-          className="h-[45px] bg-DarkBlue max-w-[1200px] container "
+          className="h-[45px] bg-DarkBlue max-w-[1200px] flex container "
         >
           <div className="px-[15px] mx-[35px] text-white">
             <div className="ml-[206px]">
@@ -72,10 +80,29 @@ const Header = () => {
               </ul>
             </div>
           </div>
+         {isLoggedIn ?  <div className=" flex items-center space-x-3  pr-8 ">
+         <img src="/assets/images/avatarIcon.svg" alt="avatar" className="w-8" />
+         <div className="text-sm text-white flex flex-col">
+           <span className="whitespace-nowrap"> Emrah Eskibağcı</span>
+           <span className="text-xs">(user)</span>
+         </div>
+         <div className="text-white hover:text-red-500 text-2xl">
+           <MdLogout className="cursor-pointer"/>
+         </div>
+       </div> : <div className="flex justify-center items-center">
+       <Link href="/auth/login">
+                                     <button className="border bg-LightBlue/75 hover:bg-LightBlue text-white p-1 rounded-xl">Giriş yap</button>
+
+       </Link>
+                          
+       </div>}
         </div>
+        
       </div>
 
-      <div
+     {
+      currentPath === "/" && (
+        <div
         id="altmenu"
         className="p-[23px] lg:p-0 bg-white h-[165px] w-screen lg:w-full "
       >
@@ -212,7 +239,9 @@ const Header = () => {
           </div>
         </div>
       </div>
-      <FixedHeader header={header} cartItemCount={cartItemCount} />
+      )
+     }
+     
     </div>
   );
 };
