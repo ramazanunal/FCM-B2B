@@ -13,11 +13,10 @@ import { CiShop } from "react-icons/ci";
 import { MdLogout } from "react-icons/md";
 import { toast } from "react-toastify";
 
-
 const Header = () => {
   const { header } = headerStore();
-  const [hoveredMenu, setHoveredMenu] = useState(null); 
-  const [isSearchOpen, setIsSearchOpen] = useState(false);  
+  const [hoveredMenu, setHoveredMenu] = useState(null);
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
   const cartItemCount = useCartItemCount();
   // const [hoveredMainMenu, setHoveredMainMenu] = useState(null);
   // const [hoveredIcon, setHoveredIcon] = useState(null);
@@ -25,16 +24,16 @@ const Header = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [currentPath, setCurrentPath] = useState("");
 
-  const toastdeneme= () => {
-    toast.success('Changes saved locally!')
-  }
+  const toastdeneme = () => {
+    toast.success("Changes saved locally!");
+  };
 
   useEffect(() => {
     if (typeof window !== "undefined") {
       setCurrentPath(window.location.pathname);
     }
   }, []);
- 
+
   const toggleSearchPanel = () => {
     setIsSearchOpen(!isSearchOpen);
   };
@@ -85,61 +84,77 @@ const Header = () => {
               </ul>
             </div>
           </div>
-         {isLoggedIn ?  <div className=" flex items-center space-x-3  pr-8 ">
-         <img src="/assets/images/avatarIcon.svg" alt="avatar" className="w-8" />
-         <div className="text-sm text-white flex flex-col">
-           <span className="whitespace-nowrap"> Emrah Eskibağcı</span>
-           <span className="text-xs">(user)</span>
-         </div>
-         <div className="text-white hover:text-red-500 text-2xl">
-           <MdLogout className="cursor-pointer"/>
-         </div>
-       </div> : <div className="flex justify-center items-center">
-       <Link href="/auth/login">
-                                     <button onClick={toastdeneme} className="border bg-LightBlue/75 hover:bg-LightBlue text-white p-1 rounded-xl">Giriş yap</button>
-
-       </Link>
-                          
-       </div>}
-        </div>
-        
-      </div>
-
-     {
-      currentPath === "/" && (
-        <div
-        id="altmenu"
-        className="p-[23px] lg:p-0 bg-white h-[165px] w-screen lg:w-full "
-      >
-        <div className="lg:p-[15px] md:mx-[35px] flex flex-row items-center justify-between">
-          <div className="flex lg:hidden ">
-            {/* Hamburger Menü */}
-            <MobileMenu header={header} />
-          </div>
-          <div>
-            <Image
-              src={header.mainMenuLogo[0].logosrc}
-              width={119}
-              height={135}
-              alt="Çalışkan Arı Mağaza"
-              className="w-[93px] md:w-[119px] h-[105px] md:h-[135px]"
-            />
-          </div>
-          <div className="flex-row hidden lg:flex pt-4 text-CustomGray">
-            <Link
-              className="flex flex-col items-center justify-center group" 
-                href={!isLoggedIn ? "/auth/login" : "https://caliskanari.com/shop/"}
-            >
-              <span className="w-[60px] h-[60px] flex items-center justify-center group-hover:scale-105 group-hover:text-LightBlue transition-all duration-1000 ease-in-out transform">
-                <CiShop className="w-[40px] h-[40px]" />
-              </span>
-              <span className="uppercase text-[12px] font-bold tracking-[1px] pb-[15px] hover:text-LightBlue transition-all duration-500 ease-in-out transform">
-                MAĞAZA
-              </span>
+          {isLoggedIn ? (
+            <div className=" flex items-center space-x-3  pr-8 ">
+              <img
+                src="/assets/images/avatarIcon.svg"
+                alt="avatar"
+                className="w-8"
+              />
+              <div className="text-sm text-white flex flex-col">
+                <span className="whitespace-nowrap"> Emrah Eskibağcı</span>
+                <span className="text-xs">(user)</span>
+              </div>
+              <div className="text-white hover:text-red-500 text-2xl">
+                <MdLogout className="cursor-pointer" />
+              </div>
+            </div>
+          ) : (
+           
+            currentPath === "/" && <div className="flex   justify-center items-center">
+            <Link href="/auth/login" onClick={toastdeneme}>
+             
+                <img src="/assets/images/giris.svg" alt="" className="w-24" />
+           
             </Link>
           </div>
+          )}
+        </div>
+      </div>
 
-          {/*orta ikonlar
+      {currentPath !=="/" && (
+        <div className="flex lg:hidden text-white">
+        {/* Hamburger Menü */}
+        <MobileMenu header={header} isLoggedIn={isLoggedIn} />
+      </div>
+      )}
+
+      {currentPath === "/" && (
+        <div
+          id="altmenu"
+          className="p-[23px] lg:p-0 bg-white h-[165px] w-screen lg:w-full "
+        >
+          <div className="lg:p-[15px] md:mx-[35px] flex flex-row items-center justify-between">
+            <div className="flex lg:hidden text-CustomGray ">
+              {/* Hamburger Menü */}
+              <MobileMenu header={header} isLoggedIn={isLoggedIn} />
+            </div>
+            <div>
+              <Image
+                src={header.mainMenuLogo[0].logosrc}
+                width={119}
+                height={135}
+                alt="Çalışkan Arı Mağaza"
+                className="w-[93px] md:w-[119px] h-[105px] md:h-[135px]"
+              />
+            </div>
+            <div className="flex-row hidden lg:flex pt-4 text-CustomGray">
+              <Link
+                className="flex flex-col items-center justify-center group"
+                href={
+                  !isLoggedIn ? "/auth/login" : "https://caliskanari.com/shop/"
+                }
+              >
+                <span className="w-[60px] h-[60px] flex items-center justify-center group-hover:scale-105 group-hover:text-LightBlue transition-all duration-1000 ease-in-out transform">
+                  <CiShop className="w-[40px] h-[40px]" />
+                </span>
+                <span className="uppercase text-[12px] font-bold tracking-[1px] pb-[15px] hover:text-LightBlue transition-all duration-500 ease-in-out transform">
+                  MAĞAZA
+                </span>
+              </Link>
+            </div>
+
+            {/*orta ikonlar
            <div className="flex flex-row hidden lg:flex pt-4" id="mainmenuitem">
             <ul className="flex flex-row items-center text-center justify-center text-CustomGray hidden lg:flex ml-[8px] md:ml-[36px]">
               {header.mainMenuItems.map((mainMenuItem, index) => (
@@ -208,45 +223,43 @@ const Header = () => {
             </ul>
           </div> */}
 
-          <div className="flex flex-row items-center text-center justify-center text-CustomGray">
-            {header.mainMenuButtons.map((mainMenuButtons) => (
-              <div
-                key={mainMenuButtons.id}
-                className="flex flex-row items-center"
-              >
-                <button className="relative" onClick={toggleSearchPanel}>
-                  <FaSearch className="w-[20px] h-[20px] hover:text-LightBlue hover:scale-110 transition duration-300 ease-in-out transform mr-2 sm:mr-[36px]" />
-                </button>
-                {isSearchOpen && (
-                  <div className="absolute top-28 md:top-32 lg:top-40 rounded-xl  right-0 md:right-24 z-[1000]	bg-white">
-                    <SearchPanel toggleSearchPanel={toggleSearchPanel} />
-                  </div>
-                )}
-                <Link
-                  className="flex flex-col items-center justify-center  hover:text-LightBlue hover:scale-110 transition duration-300 ease-in-out transform relative"
-                  href="/cart"
+            <div className="flex flex-row items-center text-center justify-center text-CustomGray">
+              {header.mainMenuButtons.map((mainMenuButtons) => (
+                <div
+                  key={mainMenuButtons.id}
+                  className="flex flex-row items-center"
                 >
-                  <span>
-                    <RiShoppingBasketFill
-                      style={{ width: "25px", height: "25px" }}
-                    />
-                  </span>
-                  {cartItemCount > 0 && (
-                    <div className="absolute -top-3 -right-4 bg-[#ff5b4b] rounded-full px-[5px]  flex items-center justify-center">
-                      <span className="text-white font-extrabold text-[16px] w-[14px] h-[24px]">
-                        {cartItemCount}
-                      </span>
+                  <button className="relative" onClick={toggleSearchPanel}>
+                    <FaSearch className="w-[20px] h-[20px] hover:text-LightBlue hover:scale-110 transition duration-300 ease-in-out transform mr-2 sm:mr-[36px]" />
+                  </button>
+                  {isSearchOpen && (
+                    <div className="absolute top-28 md:top-32 lg:top-40 rounded-xl  right-0 md:right-24 z-[1000]	bg-white">
+                      <SearchPanel toggleSearchPanel={toggleSearchPanel} />
                     </div>
                   )}
-                </Link>
-              </div>
-            ))}
+                  <Link
+                    className="flex flex-col items-center justify-center  hover:text-LightBlue hover:scale-110 transition duration-300 ease-in-out transform relative"
+                    href="/cart"
+                  >
+                    <span>
+                      <RiShoppingBasketFill
+                        style={{ width: "25px", height: "25px" }}
+                      />
+                    </span>
+                    {cartItemCount > 0 && (
+                      <div className="absolute -top-3 -right-4 bg-[#ff5b4b] rounded-full px-[5px]  flex items-center justify-center">
+                        <span className="text-white font-extrabold text-[16px] w-[14px] h-[24px]">
+                          {cartItemCount}
+                        </span>
+                      </div>
+                    )}
+                  </Link>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
-      </div>
-      )
-     }
-     
+      )}
     </div>
   );
 };
