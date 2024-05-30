@@ -5,12 +5,16 @@ import MobileMenu from "../MobileMenu";
 import SearchPanel from "../SearchPanel";
 import { FaSearch } from "react-icons/fa";
 import { RiShoppingBasketFill } from "react-icons/ri";
+import { signIn, signOut, useSession } from "next-auth/react";
 
 const FixedHeader = ({ header, cartItemCount }) => {
   const [hoveredMainMenu, setHoveredMainMenu] = useState(null);
   const [isVisible, setIsVisible] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [hoveredSubMenu, setHoveredSubMenu] = useState(null);
+
+  const { data } = useSession();
+  const user = data?.user;
 
   const toggleSearchPanel = () => {
     setIsSearchOpen(!isSearchOpen);
@@ -149,7 +153,7 @@ const FixedHeader = ({ header, cartItemCount }) => {
           />
         </div>
 
-        <div className="flex flex-row items-center text-center justify-center text-CustomGray">
+        {user && <div className="flex flex-row items-center text-center justify-center text-CustomGray">
           {header.mainMenuButtons.map((mainMenuButtons) => (
             <div
               key={mainMenuButtons.id}
@@ -177,7 +181,7 @@ const FixedHeader = ({ header, cartItemCount }) => {
               </Link>
             </div>
           ))}
-        </div>
+        </div>}
       </div>
       <div className="absolute top-32 lg:top-16 right-0 sm:right-12 md:right-24 lg:right-36 bg-white rounded-xl">
         {isSearchOpen && (

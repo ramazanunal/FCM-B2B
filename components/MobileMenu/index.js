@@ -6,9 +6,10 @@ import { IoIosArrowForward } from "react-icons/io";
 import { FaTimes } from "react-icons/fa";
 import { IoIosArrowBack } from "react-icons/io";
 import { CiShop } from "react-icons/ci";
+import Image from "next/image";
 
 
-const MobileMenu = ({ header, isLoggedIn }) => {
+const MobileMenu = ({ header, user }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [selectedMainMenu, setSelectedMainMenu] = useState(null);
   const [selectedSubMenu, setSelectedSubMenu] = useState(null);
@@ -40,10 +41,14 @@ const MobileMenu = ({ header, isLoggedIn }) => {
   };
 
   return (
-    <div className="block xl:hidden">
+    <div className="flex xl:hidden justify-between items-center px-4">
       <button className="w-[50px] h-[50px]" onClick={() => setIsMenuOpen(true)}>
-        <GiHamburgerMenu className=" w-[20px] h-[20px]" />
+        <GiHamburgerMenu className=" w-[20px] h-[20px]" color="white"/>
       </button>
+
+      <Link href="/">
+        <Image src={header.mainMenuLogo[0].logosrc} width={45} height={50} alt="Çalışkan Arı Mağaza" className="p-2"/>
+      </Link>
       {isMenuOpen && (
         <div className="fixed inset-0 bg-black bg-opacity-50 z-50">
           <div
@@ -67,7 +72,7 @@ const MobileMenu = ({ header, isLoggedIn }) => {
                   <Link
                     className="flex flex-col items-center justify-center group"
                     href={
-                      !isLoggedIn ? "/auth/login" : "https://caliskanari.com/shop/"
+                      !user ? "/auth/login" : "https://caliskanari.com/shop/"
                     }
                   >
                     <span className="w-[60px] h-[60px] flex items-center justify-center group-hover:scale-105 group-hover:text-LightBlue transition-all duration-1000 ease-in-out transform">
@@ -92,7 +97,7 @@ const MobileMenu = ({ header, isLoggedIn }) => {
               <ul>
                 {header.menus.map((menu, index) => (
                   <li
-                    className={`flex flex-row items-center text-LightBlue px-[30px] text-[13px] font-extrabold uppercase flex  ${
+                    className={`flex flex-row items-center text-LightBlue px-[30px] text-[13px] font-extrabold uppercase  ${
                       selectedMainMenu == null && selectedSubMenu == null
                         ? "py-[15px]  "
                         : "py-0"
@@ -139,7 +144,7 @@ const MobileMenu = ({ header, isLoggedIn }) => {
             <div className=" flex justify-center">
              <Link href="/auth/login"  >
              
-            <img src="/assets/images/giris.svg" alt="" className="w-32" />
+            <Image src="/assets/images/giris.svg" alt="" width={50} height={50} className="w-32" />
        
         </Link>
             </div>
