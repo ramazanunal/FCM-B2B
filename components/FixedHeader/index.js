@@ -7,14 +7,16 @@ import { FaSearch } from "react-icons/fa";
 import { RiShoppingBasketFill } from "react-icons/ri";
 import { signIn, signOut, useSession } from "next-auth/react";
 import headerStore from "@/utils/headerStore";
+import useCartItemCount from "@/utils/useCartItemCount";
 
-const FixedHeader = ({ cartItemCount }) => {
+const FixedHeader = () => {
   const [hoveredMainMenu, setHoveredMainMenu] = useState(null);
   const [isVisible, setIsVisible] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [hoveredSubMenu, setHoveredSubMenu] = useState(null);
   const { header } = headerStore();
-  
+  const cartItemCount = useCartItemCount();
+
   const { data } = useSession();
   const user = data?.user;
 
@@ -49,6 +51,7 @@ const FixedHeader = ({ cartItemCount }) => {
           }`}
         >
           <div className="container mx-auto px-[80px] h-[78px] hidden lg:flex items-center justify-between">
+             
             <div className="flex items-center">
               <div>
                 <Image
@@ -151,10 +154,7 @@ const FixedHeader = ({ cartItemCount }) => {
             id="altmenu"
             className="relative p-[23px]  lg:p-0 bg-white w-screen flex items-center justify-between lg:hidden "
           >
-            <div className="flex lg:hidden ">
-              {/* Hamburger Menü */}
-              <MobileMenu header={header} />
-            </div>
+          
             <div>
               <Image
                 src={header.mainMenuLogo[0].logosrc}

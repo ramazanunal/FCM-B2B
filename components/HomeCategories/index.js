@@ -22,11 +22,11 @@ function HomeCategories() {
 
 
   return (
-    <div className="bg-white w-screen xl:w-[1188px] pt-[60px]  ">
+    <div className="bg-white w-screen xl:w-[1188px] pt-[20px]  ">
       <div className="flex items-center justify-center mx-[35px] mb-[22px] lg:mb-[22px] px-[15px] relative ">
         <div className="h-[60px] lg:h-[0px]">
           <button
-            className={`bg-white absolute left-[20%] sm:left-[25%] md:sm:left-[30%] z-1000 lg:hidden flex flex-col items-left justify-center text-[14px] font-bold tracking-[1px] h-[40px] border border-[3px] border-LightBlue text-LightBlue rounded-[22px] w-[300px]  pl-[20px] ${
+            className={`bg-white absolute left-0 sm:left-[25%] md:sm:left-[30%] z-1000 lg:hidden flex flex-col items-left justify-center text-[14px] font-bold tracking-[1px] h-[40px] border border-[3px] border-LightBlue text-LightBlue rounded-[22px] w-[300px]  pl-[20px] ${
               isDropdownOpen ? " h-fit z-10 py-[2px]" : "py-[22px]  "
             }`}
             onClick={toggleDropdown}

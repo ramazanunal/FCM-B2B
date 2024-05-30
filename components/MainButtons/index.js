@@ -21,7 +21,7 @@ function MainButtonsComponent() {
     <div className="w-full px-8 relative">
       <div id="altmenu">
         <div className=" flex flex-row items-center justify-center">
-          <div className="flex-row hidden lg:flex pt-4 text-CustomGray items-center justify-center ">
+          <div className="flex-row flex pt-4 text-CustomGray items-center justify-center ">
             <Link
               className="flex flex-col items-center justify-center group"
               href={"https://caliskanari.com/shop/"}

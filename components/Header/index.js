@@ -97,7 +97,7 @@ const Header = () => {
               <div className="text-white hover:text-red-500 text-2xl"> 
               {/* signOut */}
               <Link href="/auth/login" onClick={() => signOut()}>              
-                  <Image src="/assets/images/cikisyap.svg" width={100} height={100} alt="" className="mx-4 w-28 hover:scale-110 transition-all" />            
+                  <Image src="/assets/images/cikisyap.svg" width={100} height={100} alt="" className="mx-4 w-28 hover:scale-110 transition-all transform ease-in-out duration-700" />            
               </Link>
               </div>
             </div>
