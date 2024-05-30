@@ -26,7 +26,6 @@ const LoginComponent = ({ pageRole }) => {
       // setIsloading(true);
 
       // signIn içine hangi provider ile giriş yapılacağı ve giriş bilgileri gönderilir.
-      
       const result = signIn('credentials', {
         email: values.email,
         password: values.password,
@@ -43,29 +42,13 @@ const LoginComponent = ({ pageRole }) => {
           // toast.error(res.error);
           console.log(res.error);
           // setIsloading(false);
-
-          // MAİL DOĞRULAMAYA YÖNLENDİRİYORUZ
-          // verifyEmail şuanda nextauth error içerisinden gelmiyor kontrol et.
-          // if (
-          //   res.error.includes('doğrulanmamış') ||
-          //   res.error.includes('doğrulayınız')
-          // ) {
-          //   setPopupData({
-          //     popupIsActive: true,
-          //     Title: 'Mail Adresiniz Doğrulanmamış!',
-          //     subTitle:
-          //       'Girdiğiniz mail adresi henüz doğrulanmamış. Mail adresinize gelen doğrulama kodunu girerek hesabınızı aktif edebilir, veya aşağıdaki butona basarak yeni bir doğrulama maili talep edebilirsiniz.',
-          //     buttonUrl: '/auth/sendVerifyEmail',
-          //     buttonText: 'Mail Doğrulama',
-          //   });
-          // }
         } else {
 
           // BİR PROBLEM YOKSA GİRİŞ BAŞARILI BİLGİSİ VERİRİZ.
           // setIsAccessing(true);
           // setIsloading(false);
           // toast.success('Giriş Başarılı (Yönlendiriliyorsunuz...)');
-          // console.log("Giriş Başarılı (Yönlendiriliyorsunuz...)");
+           console.log("Giriş Başarılı Yönlendiriliyorsunuz...");
 
           const timeOut = setInterval(() => {
             router.push('/');

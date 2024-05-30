@@ -1,8 +1,6 @@
 import NextAuth from "next-auth"
 import CredentialsProvider, { CredentialsConfig } from "next-auth/providers/credentials";
 import { postAPI } from "@/services/fetchAPI";
-import EncryptPassword from "@/functions/other/cryptology/encryptPassword";
-
 
 let loginPageRoute = "partner";
 
@@ -27,15 +25,23 @@ const authOptions = {
         let { email, password, role } = credentials;     
         
         const data = await postAPI(`/auth/login`, { role, email, password });
+
+        console.log("########## DATA: ", data);
         
         if (!data || data.error || data == null) {
             throw new Error(data.error || "Bir hata oluştu. Lütfen tekrar deneyiniz.");
         }
 
         // Kullanıcı bilgilerini döndürüyoruz.
-        console.log("#### [...nextauth] ####");
-        console.log(data);
-        const user = data;
+        const user = {
+          id: data.findUser.CARKOD,
+          email: data.findUser.CARUNVAN3,
+          name: data.findUser.CARUNVAN,
+          role: role,
+          isActive: data.findUser.CAROZKOD1,
+          isPartner: data.findUser.CAROZKOD3,          
+        };
+
         return user;
 
 

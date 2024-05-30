@@ -49,8 +49,8 @@ const FixedHeader = ({ header, cartItemCount }) => {
             />
           </div>
         </div>
-        <div className="flex flex-row hidden lg:flex " id="mainmenuitem">
-          <ul className="flex flex-row items-center text-center justify-center text-CustomGray hidden lg:flex ml-[8px] md:ml-[36px]">
+        <div className="flex-row hidden lg:flex " id="mainmenuitem">
+          <ul className="flex-row items-center text-center justify-center text-CustomGray hidden lg:flex ml-[8px] md:ml-[36px]">
             {header.mainMenuItems.map((mainMenuItem, index) => (
               <li
                 key={mainMenuItem.id}

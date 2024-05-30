@@ -10,6 +10,8 @@ import SearchPanel from "../SearchPanel";
 import { RiShoppingBasketFill } from "react-icons/ri";
 import useCartItemCount from "@/utils/useCartItemCount";
 import { CiShop } from "react-icons/ci";
+
+
 const Header = () => {
   const { header } = headerStore();
   const [hoveredMenu, setHoveredMenu] = useState(null); 
@@ -91,7 +93,7 @@ const Header = () => {
               className="w-[93px] md:w-[119px] h-[105px] md:h-[135px]"
             />
           </div>
-          <div className="flex flex-row hidden lg:flex pt-4 text-CustomGray">
+          <div className="flex-row hidden lg:flex pt-4 text-CustomGray">
             <Link
               className="flex flex-col items-center justify-center group" 
                 href={!isLoggedIn ? "/auth/login" : "https://caliskanari.com/shop/"}

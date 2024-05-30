@@ -62,12 +62,12 @@ const headerStore = create((set) => ({
         href: "https://caliskanari.com/1-sinif/",
         subMenus: [],
       },
-      {
-        id: 8,
-        text: "Giriş",
-        href: `/auth/login`,
-        subMenus: [],
-      }
+      // {
+      //   id: 8,
+      //   text: "Giriş",
+      //   href: `/auth/login`,
+      //   subMenus: [],
+      // }
       
     ],
     mainMenuLogo: [
