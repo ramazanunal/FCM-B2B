@@ -5,6 +5,7 @@ import HomeCategories from "@/components/HomeCategories";
 import WelcomeSection from "@/components/WelcomeSection";
 import { useSession } from "next-auth/react";
 import { useEffect } from "react";
+import FixedHeader from "@/components/FixedHeader";
 
 
 const HomeContainer = () => {
@@ -31,6 +32,9 @@ const HomeContainer = () => {
         ) : (
           <WelcomeSection/>
         )}
+      </div>
+      <div>
+        <FixedHeader/>
       </div>
     </div>
   );
