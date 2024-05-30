@@ -6,6 +6,7 @@ import WelcomeSection from "@/components/WelcomeSection";
 import { useSession } from "next-auth/react";
 import { useEffect } from "react";
 import FixedHeader from "@/components/FixedHeader";
+import MainButtonsComponent from "@/components/MainButtons";
 
 
 const HomeContainer = () => {
@@ -26,6 +27,11 @@ const HomeContainer = () => {
       <div className="bg-white">
         <SliderComponent />
       </div>
+      {isLoggedIn ? (
+          <MainButtonsComponent/>
+        ) : (
+          <null/>
+        )}
       <div className="bg-white">
         {isLoggedIn ? (
           <HomeCategories />
