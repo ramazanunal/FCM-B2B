@@ -1,4 +1,4 @@
-"use client";
+"use client"
 import React, { useState, useEffect } from "react";
 import headerStore from "@/utils/headerStore";
 import Link from "next/link";
@@ -20,12 +20,9 @@ const Header = () => {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const cartItemCount = useCartItemCount();
 
-  const { data } = useSession();
-  const user = data?.user;
-
-  // const [hoveredMainMenu, setHoveredMainMenu] = useState(null);
-  // const [hoveredIcon, setHoveredIcon] = useState(null);
-  // const [hoveredSubMenu, setHoveredSubMenu] = useState(null);
+  const { data: session } = useSession();
+  const user = session?.user;
+  console.log(user)
   const [currentPath, setCurrentPath] = useState("");
 
   useEffect(() => {
@@ -94,33 +91,28 @@ const Header = () => {
                 height={50}
               />
               <div className="text-sm text-white flex flex-col">
-                <span className="whitespace-nowrap"> Emrah Eskibağcı</span>
-                <span className="text-xs">(user)</span>
+                <span className="whitespace-nowrap">{user.name}</span>
+                <span className="text-xs">({user.role})</span>
               </div>
               <div className="text-white hover:text-red-500 text-2xl"> 
               {/* signOut */}
-              {user && <Link href="/auth/login" onClick={() => signOut()}>              
+              <Link href="/auth/login" onClick={() => signOut()}>              
                   <Image src="/assets/images/cikisyap.svg" width={100} height={100} alt="" className="mx-4 w-28 hover:scale-110 transition-all" />            
-              </Link>}
+              </Link>
               </div>
             </div>
           ) : (
-           
             currentPath === "/" && <div className="flex justify-center items-center mr-4">
-
-              {!user && <Link href="/auth/login" onClick={() => signIn()}>              
-                  <Image src="/assets/images/giris.svg" width={100} height={100} alt="" className=" w-28 hover:scale-110 transition-all transform ease-in-out duration-700" />            
-              </Link>}
-
+              <Link href="/auth/login" onClick={() => signIn()}>              
+                <Image src="/assets/images/giris.svg" width={100} height={100} alt="" className=" w-28 hover:scale-110 transition-all transform ease-in-out duration-700" />            
+              </Link>
           </div>
           )}
         </div>
       </div>
-
       <div className="md:hidden block bg-[#394C69] w-full">
         <MobileMenu header={header} user={user} />
       </div>
-     
     </div>
   );
 };
