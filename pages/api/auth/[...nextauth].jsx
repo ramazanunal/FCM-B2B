@@ -26,6 +26,17 @@ const authOptions = {
         
         const data = await postAPI(`/auth/login`, { role, email, password });
 
+        if(data.error){
+          throw new Error(data.error);
+        }
+
+        // admin girişi yapılırsa admin paneline yönlendirme yapılır.
+        if(data.findUser.CARKOD === "7034922"){
+          loginPageRoute = data.findUser.CARYETKILI;
+        }
+
+
+
         console.log("########## DATA: ", data);
         
         if (!data || data.error || data == null) {
@@ -37,7 +48,7 @@ const authOptions = {
           id: data.findUser.CARKOD,
           email: data.findUser.CARUNVAN3,
           name: data.findUser.CARUNVAN,
-          role: role,
+          role: loginPageRoute,
           isActive: data.findUser.CAROZKOD1,
           isPartner: data.findUser.CAROZKOD3,          
         };
