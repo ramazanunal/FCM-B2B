@@ -37,11 +37,11 @@ const SliderComponent = () => {
         }}
         navigation={true}
         modules={[Autoplay, Pagination, Navigation, EffectCreative]}
-        className="mySwiper"
+   
       >
         {images.map((image, index) => (
           <SwiperSlide key={image.id}>
-              <Image src={image.src} alt={image.alt} width={1188} height={800} className='h-[300px] sm:h-[400px] lg:h-full'/>
+              <Image src={image.src} alt={image.alt} width={1188} height={800} />
           </SwiperSlide>
         ))}
       </Swiper>

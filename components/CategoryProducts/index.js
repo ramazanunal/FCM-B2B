@@ -9,14 +9,17 @@ import { FaCheck, FaMinus, FaPlus, FaShoppingCart } from "react-icons/fa";
 
 function CategoryProducts({ selectedCategory }) {
   const [hoveredIndex, setHoveredIndex] = useState(null);
+  //sepet içindeki ürünleri cart items tutuyor
   const [cartItems, setCartItems] = useState([]);
   const [updatingItems, setUpdatingItems] = useState({});
 
   useEffect(() => {
+    // component mount olduğunda localStorage'dan sepet verilerini çek
     const storedCartItems = JSON.parse(localStorage.getItem("cartItems")) || [];
     setCartItems(storedCartItems);
   }, []);
 
+  // Ürünün indirimli fiyatını hesaplar
   const calculateDiscountedPrice = (price, discount) => {
     if (discount && discount > 0) {
       const discountedAmount = (price * discount) / 100;
@@ -25,15 +28,18 @@ function CategoryProducts({ selectedCategory }) {
     return price;
   };
 
+  // Ürünün sepette olup olmadığını kontrol eder
   const isItemInCart = (productId) => {
     return cartItems.some((item) => item.id === productId);
   };
 
+  // Sepetteki ürünün miktarını getirir
   const getCartItemQuantity = (productId) => {
     const cartItem = cartItems.find((item) => item.id === productId);
     return cartItem ? cartItem.quantity : 0;
   };
 
+  //sepete ekleme fonksiyonu
   const addToCart = (product, quantity) => {
     setUpdatingItems({ ...updatingItems, [product.id]: true });
     setTimeout(() => {
@@ -42,12 +48,13 @@ function CategoryProducts({ selectedCategory }) {
         (item) => item.id === product.id
       );
 
+      // Eğer ürün sepette zaten varsa, mevcut miktarını al
       const existingQuantity =
         existingItemIndex !== -1
           ? updatedCartItems[existingItemIndex].quantity
           : 0;
       const totalQuantity = existingQuantity + quantity;
-
+      // Eğer toplam miktar stoktan fazlaysa hata mesajı göster
       if (totalQuantity > product.stock) {
         toast.error(`En fazla ${product.stock} adet ekleyebilirsiniz`, {
           position: "top-right",
@@ -95,7 +102,7 @@ function CategoryProducts({ selectedCategory }) {
   };
 
   return (
-    <div className="bg-white w-screen md:w-[750px] lg:w-[970px] xl:w-[1188px] pt-[60px]">
+    <div className="bg-white w-screen md:w-[750px] lg:w-[970px] xl:w-[1188px] pt-[30px] lg:pt-[80px]">
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 justify-center sm:mx-[35px] mb-[30px] px-[15px]">
         {selectedCategory.products.map((product, index) => {
           const cartQuantity = getCartItemQuantity(product.id);

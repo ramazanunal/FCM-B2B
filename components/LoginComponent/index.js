@@ -62,7 +62,7 @@ const LoginComponent = ({ pageRole }) => {
   const router = useRouter();
 
   return (
-    <div className="bg-white flex items-center flex-col py-[35px] sm:py-[60px] w-screen lg:w-[1188px]">
+    <div className="bg-white flex items-center flex-col py-[35px] sm:py-[60px] w-screen lg:w-[1188px] h-screen">
       <h1 className="text-[48px] text-center font-semibold text-CustomGray italic mb-[40px]">
         Giriş Yap
       </h1>

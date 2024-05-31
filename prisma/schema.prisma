@@ -22,3 +22,11 @@ model CARKART {
   CAROZKOD4        String?
   CAROZKOD5        String?
 }
+
+model STKKART {
+  STKKOD           String     @id  
+  STKCINSI         String?    
+  STKOZKOD1        String?
+  STKOZKOD3        String? 
+}
+
