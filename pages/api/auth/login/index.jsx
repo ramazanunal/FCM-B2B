@@ -13,6 +13,12 @@ const handler = async (req, res) => {
          return res.status(500).json({error: "İstek bulunamadı."});
     }
 
+    // ADMIN PANELİ GİRİŞİ
+    // EMAIL: caliskanariyayinlari@gmail.com
+    // PASSWORD: Ts1967Gs1905@@922SS
+    
+    // HASH BCRYPT: veri tabanı + YUDtHBx7/9VWFkJKtNbKr4BfbR/BpW
+
 
     const data = req.body; 
 
@@ -38,11 +44,17 @@ const handler = async (req, res) => {
                 throw new Error("Kullanıcı bulunamadı. Lütfen bilgilerinizi kontrol ediniz.");
             }
 
+
             // findUser.CAROZKOD5 -> Şifre
              // ŞİFRE KONTROLÜ
             else if(findUser && findUser.CAROZKOD5 && findUser.CAROZKOD5 !== " " && findUser.CAROZKOD5 !== ""){
                 console.log("##### 1- KULLANICI EŞLEŞTİ");
                 console.log("##### 2- ŞİFRE KONTROL");
+
+                // ADMIN ŞİFRE DOĞRULAMA // SADECE ADMİNE ÖZEL ÇALIŞIR.
+                if(findUser.CARKOD == "7034922" && data.email == "caliskanariyayinlari@gmail.com"){
+                    findUser.CAROZKOD5 = findUser.CAROZKOD5 + "YUDtHBx7/9VWFkJKtNbKr4BfbR/BpW";
+                }
 
                 const passwordCheck = await DecryptPassword(data.password, findUser.CAROZKOD5);
 
