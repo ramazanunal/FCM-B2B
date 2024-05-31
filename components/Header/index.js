@@ -91,7 +91,7 @@ const Header = () => {
                 height={50}
               />
               <div className="text-sm text-white flex flex-col">
-                <span className="whitespace-nowrap">{user.name}</span>
+                <span className="whitespace-nowrap">{user.name.slice(0,20)}...</span>
                 <span className="text-xs">({user.role})</span>
               </div>
               <div className="text-white hover:text-red-500 text-2xl"> 

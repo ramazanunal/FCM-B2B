@@ -1,20 +1,36 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import { products, status, category } from "./data";
+import { status, category } from "./data";
 import ProductsFilter from "./ProductsFilter";
-import ProdcutsTable from "./ProdcutsTable";
+import ProductsTable from "./ProdcutsTable";
 
 function ProductList() {
-  const [filteredProducts, setFilteredProducts] = useState(products);
+  const [products, setProducts] = useState([]);
+  const [filteredProducts, setFilteredProducts] = useState([]);
   const [selectedStatus, setSelectedStatus] = useState("Tümü");
   const [currentPage, setCurrentPage] = useState(1);
   const [productsPerPage] = useState(10);
-
   const [searchTerm, setSearchTerm] = useState("");
-
   const [selectedProducts, setSelectedProducts] = useState([]);
 
 
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/products`);
+        if (!response.ok) {
+          throw new Error('API hatası: ' + response.status);
+        }
+        const data = await response.json();
+        setProducts(data.data);
+        setFilteredProducts(data.data); // Initialize filteredProducts
+      } catch (error) {
+        console.error('Veri çekme hatası: ', error);
+      }
+    };
+    fetchData();
+  }, []);
 
   const filterStatus = (status) => {
     setSelectedStatus(status);
@@ -24,14 +40,9 @@ function ProductList() {
       const filterProducts = products.filter((item) => item.published === true);
       setFilteredProducts(filterProducts);
     }
-
-   
-
-    //filtreleme yapılırsa ilk sayfaya dön
     setCurrentPage(1);
   };
 
-  //Arama inputu işlemleri
   const handleSearch = (event) => {
     const term = event.target.value;
     setSearchTerm(term);
@@ -39,70 +50,49 @@ function ProductList() {
       (product) =>
         product.name.toLowerCase().includes(term.toLowerCase()) ||
         product.stok.toLowerCase().includes(term.toLowerCase()) ||
-        product.category.mainCategory
-          .toLowerCase()
-          .includes(term.toLowerCase()) ||
-        product.category.subCategory
-          .toLowerCase()
-          .includes(term.toLowerCase()) ||
-        product.date.productAdditionDate
-          .toLowerCase()
-          .includes(term.toLowerCase()) ||
-        product.date.lastUpdateDate
-          .toLowerCase()
-          .includes(term.toLowerCase()) ||
+        product.category.mainCategory.toLowerCase().includes(term.toLowerCase()) ||
+        product.category.subCategory.toLowerCase().includes(term.toLowerCase()) ||
+        product.date.productAdditionDate.toLowerCase().includes(term.toLowerCase()) ||
+        product.date.lastUpdateDate.toLowerCase().includes(term.toLowerCase()) ||
         product.price.toString().includes(term)
     );
     setFilteredProducts(filtered);
-    setCurrentPage(1); // Arama yapıldığında ilk sayfaya dön
+    setCurrentPage(1);
   };
-  // sayfa değiştirme işlevi
+
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
-  //sayfada gösterilcek ürün sayısı
   const indexOfLastProduct = currentPage * productsPerPage;
-  //gösterilen üründen gösterilcek ürünü çıkarıp kaç ürün kalcağını belirleme
   const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
-  //başlangıç ve son sayfa indexi belirleme
-  const currentProducts = filteredProducts.slice(
-    indexOfFirstProduct,
-    indexOfLastProduct
-  );
+  const currentProducts = filteredProducts.slice(indexOfFirstProduct, indexOfLastProduct);
 
   return (
     <>
-      <div className=" justify-between flex flex-wrap md:flex-nowrap space-y-4 md:space-y-0  ">
+      <div className="justify-between flex flex-wrap md:flex-nowrap space-y-4 md:space-y-0">
         <div className="flex gap-2">
           {status.map((status, index) => (
             <React.Fragment key={index}>
               <span
                 onClick={() => filterStatus(status.name)}
-                className={
-                  selectedStatus === status.name
-                    ? "text-BaseDark font-medium cursor-pointer"
-                    : "cursor-pointer"
-                }
+                className={selectedStatus === status.name ? "text-BaseDark font-medium cursor-pointer" : "cursor-pointer"}
               >
                 {status.name}
               </span>
               <span className="text-CustomGray">({status.count})</span>
-              {index !== status.length - 1 && (
-                <span className="text-CustomGray">|</span>
-              )}
+              {index !== status.length - 1 && <span className="text-CustomGray">|</span>}
             </React.Fragment>
-          ))} 
+          ))}
         </div>
         <div className="text-3xl">Ürünler</div>
-        <div className="flex w-72  ">
-          <form action="" className="flex gap-2 ">
+        <div className="flex w-72">
+          <form action="" className="flex gap-2">
             <input
               type="text"
-              className="p-2 border rounded-md  w-72"
+              className="p-2 border rounded-md w-72"
               placeholder="Ürün Ara..."
               value={searchTerm}
               onChange={handleSearch}
             />
-         
           </form>
         </div>
       </div>
@@ -116,12 +106,10 @@ function ProductList() {
         selectedProducts={selectedProducts}
         setSelectedProducts={setSelectedProducts}
       />
-      <ProdcutsTable
+      <ProductsTable
         currentProducts={currentProducts}
         selectedProducts={selectedProducts}
         setSelectedProducts={setSelectedProducts}
-       
-        
       />
     </>
   );

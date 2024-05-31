@@ -7,7 +7,7 @@ import { signIn } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import Loading from "../Loading";
 
-const LoginComponent = ({ pageRole }) => {
+const AdminLogin = ({ pageRole }) => {
   const [isLoading, setIsLoading] = useState(false);
 
   const initialValues = {
@@ -143,4 +143,4 @@ const LoginComponent = ({ pageRole }) => {
   );
 };
 
-export default LoginComponent;
+export default AdminLogin;

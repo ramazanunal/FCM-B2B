@@ -176,7 +176,7 @@ function ProdcutsTable({currentProducts,setSelectedProducts,selectedProducts}) {
             Sınıf
           </th>
         
-          <th
+          {/**<th
             scope="col"
             className="px-6 py-3 text-left text-base font-medium "
             onClick={() => handleSort('lastUpdateDate')}
@@ -187,7 +187,7 @@ function ProdcutsTable({currentProducts,setSelectedProducts,selectedProducts}) {
             <span>{sortOrder === 'asc' ? <FaCaretUp /> : <FaCaretDown />}</span>
           ) : <PiCaretUpDownFill />}
         </span>
-          </th>
+          </th> */}
           <th
           scope="col"
           className="px-6 py-3 text-left text-base font-medium "
@@ -209,28 +209,28 @@ function ProdcutsTable({currentProducts,setSelectedProducts,selectedProducts}) {
           />
         </td>
             <td className="px-6 py-4 whitespace-nowrap cursor-pointer" onClick={() => {handleOpenModal(product)}}>
-             <img src= {product.imgPath} className='w-20' alt="" />
+            img
             </td>
            
              <td className="px-6 py-4 whitespace-nowrap  ">
              <Link href={`/products/${product.id}`} className='cursor-pointer hover:text-[#0284c7]  '>
-              {product.name}
+              {product.STKCINSI}
               </Link>
             </td>
             
            
-            <td className="px-6 py-4 whitespace-nowrap text-BaseDark ">{product.stok}</td>
-            <td className="px-6 py-4 whitespace-nowrap text-BaseDark">{product.stokCount}</td>
-            <td className="px-6 py-4 whitespace-nowrap text-BaseDark">₺{product.price}</td>
+            <td className="px-6 py-4 whitespace-nowrap text-BaseDark ">{product.STKKOD}</td>
+            <td className="px-6 py-4 whitespace-nowrap text-BaseDark">stok sayısı</td>
+            <td className="px-6 py-4 whitespace-nowrap text-BaseDark">₺</td>
             <td className="px-6 py-4 whitespace-nowrap text-BaseDark">{product?.category?.subCategory}</td>
-            <td className="px-6 py-4 whitespace-nowrap text-BaseDark">{product?.category?.mainCategory}</td>
-            <td className="px-6  text-center py-4 whitespace-nowrap space-x-10 text-BaseDark">
+            <td className="px-6 py-4 whitespace-nowrap text-BaseDark">{product.STKOZKOD3}</td>
+            {/**<td className="px-6  text-center py-4 whitespace-nowrap space-x-10 text-BaseDark">
             <span>{product?.date?.lastUpdateDate}</span>
            
-            </td>
+            </td> */}
             <td className=' p-2'>
          
-            {product?.stokCount <= 0 ?
+            {product?.STKOZKOD1 === 'A' ?
               <span className="p-2  flex items-center space-x-1   rounded-xl text-sm bg-red-400 text-white"> <IoIosCloseCircle className='text-xl'/><span>Satışa uygun değil</span> </span> :
               <span className="p-2  flex items-center justify-center space-x-1   rounded-xl text-sm bg-green-400 text-white"> <FaCheckCircle className='text-xl'/><span>Satışa uygun </span> </span>
             }
