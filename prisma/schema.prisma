@@ -28,5 +28,6 @@ model STKKART {
   STKCINSI         String?    
   STKOZKOD1        String?
   STKOZKOD3        String? 
+  STKOZKOD5        String? 
 }
 
