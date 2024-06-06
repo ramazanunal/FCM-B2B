@@ -48,13 +48,12 @@ function ProductList() {
     setSearchTerm(term);
     const filtered = products.filter(
       (product) =>
-        product.name.toLowerCase().includes(term.toLowerCase()) ||
-        product.stok.toLowerCase().includes(term.toLowerCase()) ||
-        product.category.mainCategory.toLowerCase().includes(term.toLowerCase()) ||
-        product.category.subCategory.toLowerCase().includes(term.toLowerCase()) ||
-        product.date.productAdditionDate.toLowerCase().includes(term.toLowerCase()) ||
-        product.date.lastUpdateDate.toLowerCase().includes(term.toLowerCase()) ||
-        product.price.toString().includes(term)
+        product.STKCINSI?.toLowerCase().includes(term.toLowerCase()) ||
+        product.STKKOD?.toLowerCase().includes(term.toLowerCase()) ||
+        product.STOK?.toLowerCase().includes(term.toLowerCase()) ||
+        product.FIYAT?.toLowerCase().includes(term.toLowerCase()) ||
+        product.STKOZKOD3?.toLowerCase().includes(term.toLowerCase()) ||
+        product.CARGRADE?.toString().includes(term)
     );
     setFilteredProducts(filtered);
     setCurrentPage(1);
@@ -105,6 +104,7 @@ function ProductList() {
         productsPerPage={productsPerPage}
         selectedProducts={selectedProducts}
         setSelectedProducts={setSelectedProducts}
+        products={products}
       />
       <ProductsTable
         currentProducts={currentProducts}

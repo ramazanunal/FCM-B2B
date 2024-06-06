@@ -5,7 +5,7 @@ import {
   MdKeyboardArrowRight,
   MdKeyboardDoubleArrowRight,
 } from "react-icons/md";
-import { mainCategory, subCategory, products } from "./data";
+import { mainCategory, subCategory, category  } from "./data";
 
 function ProductsFilter({
   filteredProducts,
@@ -15,6 +15,7 @@ function ProductsFilter({
   setFilteredProducts,
   selectedProducts,
   setSelectedProducts,
+  products
 }) {
   const [selectedCategory, setSelectedCategory] = useState("Ders Seçin");
   const [selectedProductType, setSelectedProductType] = useState("Ürüne göre filtreleme");
@@ -22,6 +23,20 @@ function ProductsFilter({
   const [selectedAll, setSelectedAll] = useState("Toplu Islemler");
   const [selectedStatus, setSelectedStatus] = useState("Durum İşlemi");
   const [anyFilterSelected, setAnyFilterSelected] = useState(false);
+  const [STKOZKOD3Array, setSTKOZKOD3Array] = useState([]);
+  
+
+  useEffect(() => {
+    handleFilters();
+  }, [selectedCategory, selectedProductType, selectedStock, selectedAll]);
+
+  // STKOZKOD3'leri toplama fonksiyonu
+  useEffect(() => {
+    const STKOZKOD3s = products.map(product => product.STKOZKOD3).filter(Boolean);
+    const uniqueSTKOZKOD3s = [...new Set(STKOZKOD3s)];
+    setSTKOZKOD3Array(uniqueSTKOZKOD3s);
+  }, [products]);
+
 
   const handleClearFilters = () => {
     setSelectedCategory("Ders Seçin");
@@ -55,19 +70,24 @@ function ProductsFilter({
     setSelectedAll(e.target.value);
     setAnyFilterSelected(true);
   };
-
+  console.log(filteredProducts,"adssd");
   const handleFilters = () => {
     let filteredProducts = [...products];
-
+    console.log(filteredProducts,"filte por ");
     if (selectedCategory !== "Ders Seçin") {
       filteredProducts = filteredProducts.filter(
-        (item) => item.category.subCategory === selectedCategory
+        (item) => item.STKOZKOD3 === selectedCategory
+       
       );
+      console.log(selectedCategory);
+        
     }
+  
     if (selectedProductType !== "Ürüne göre filtreleme") {
+     
       filteredProducts = filteredProducts.filter(
         (item) => item.category.mainCategory === selectedProductType
-      );
+      ); 
     }
     if (selectedStock !== "Stoğa göre filtreleme") {
       if (selectedStock === "Stokta Olanlar") {
@@ -150,7 +170,7 @@ function ProductsFilter({
             >
               <option hidden>Ders Seçin</option>
               <option>Ders Seçin</option>
-              {subCategory.map((product, index) => (
+              {STKOZKOD3Array.map((product, index) => (
                 <option key={index} value={product}>
                   {product}
                 </option>

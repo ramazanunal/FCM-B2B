@@ -30,5 +30,11 @@ model STKKART {
   STKOZKOD1        String?
   STKOZKOD3        String? 
   STKOZKOD5        String? 
+  CARGRADE         String?
+  CARCATEGORY      String?
+  STOK             Int?
+  FIYAT           Float?
+  RESIM           String?
+
 }
 

@@ -220,10 +220,10 @@ function ProdcutsTable({currentProducts,setSelectedProducts,selectedProducts}) {
             
            
             <td className="px-6 py-4 whitespace-nowrap text-BaseDark ">{product.STKKOD}</td>
-            <td className="px-6 py-4 whitespace-nowrap text-BaseDark">stok sayısı</td>
-            <td className="px-6 py-4 whitespace-nowrap text-BaseDark">₺</td>
-            <td className="px-6 py-4 whitespace-nowrap text-BaseDark">{product?.category?.subCategory}</td>
+            <td className="px-6 py-4 whitespace-nowrap text-BaseDark">{product.STOK}</td>
+            <td className="px-6 py-4 whitespace-nowrap text-BaseDark">₺{product.FIYAT}</td>
             <td className="px-6 py-4 whitespace-nowrap text-BaseDark">{product.STKOZKOD3}</td>
+            <td className="px-6 py-4 whitespace-nowrap text-BaseDark">{product.CARGRADE}</td>
             {/**<td className="px-6  text-center py-4 whitespace-nowrap space-x-10 text-BaseDark">
             <span>{product?.date?.lastUpdateDate}</span>
            
