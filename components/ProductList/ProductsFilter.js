@@ -18,12 +18,14 @@ function ProductsFilter({
   products
 }) {
   const [selectedCategory, setSelectedCategory] = useState("Ders Seçin");
-  const [selectedProductType, setSelectedProductType] = useState("Ürüne göre filtreleme");
+  const [selectedProductType, setSelectedProductType] = useState("Sınıfa göre filtreleme");
   const [selectedStock, setSelectedStock] = useState("Stoğa göre filtreleme");
   const [selectedAll, setSelectedAll] = useState("Toplu Islemler");
   const [selectedStatus, setSelectedStatus] = useState("Durum İşlemi");
   const [anyFilterSelected, setAnyFilterSelected] = useState(false);
   const [STKOZKOD3Array, setSTKOZKOD3Array] = useState([]);
+  const [CARGRADEArray, setCARGRADEArray] = useState([]);
+
   
 
   useEffect(() => {
@@ -37,10 +39,18 @@ function ProductsFilter({
     setSTKOZKOD3Array(uniqueSTKOZKOD3s);
   }, [products]);
 
+  //CARGRADE'leri toplama fonsksiyonu
+  useEffect(() => {
+    const CARGRADEs = products.map(product => product.CARGRADE).filter(Boolean);
+    const uniqueCARGRADEs = [...new Set(CARGRADEs)];
+    setCARGRADEArray(uniqueCARGRADEs);
+  }, [products]);
+  
+
 
   const handleClearFilters = () => {
     setSelectedCategory("Ders Seçin");
-    setSelectedProductType("Ürüne göre filtreleme");
+    setSelectedProductType("Sınıfa göre filtreleme");
     setSelectedStock("Stoğa göre filtreleme");
     setSelectedAll("Toplu Islemler");
     setAnyFilterSelected(false);
@@ -70,10 +80,10 @@ function ProductsFilter({
     setSelectedAll(e.target.value);
     setAnyFilterSelected(true);
   };
-  console.log(filteredProducts,"adssd");
+ 
   const handleFilters = () => {
     let filteredProducts = [...products];
-    console.log(filteredProducts,"filte por ");
+   
     if (selectedCategory !== "Ders Seçin") {
       filteredProducts = filteredProducts.filter(
         (item) => item.STKOZKOD3 === selectedCategory
@@ -83,21 +93,27 @@ function ProductsFilter({
         
     }
   
-    if (selectedProductType !== "Ürüne göre filtreleme") {
+    if (selectedProductType !== "Sınıfa göre filtreleme") {
      
       filteredProducts = filteredProducts.filter(
-        (item) => item.category.mainCategory === selectedProductType
+        (item) => item.CARGRADE === selectedProductType
       ); 
     }
-    if (selectedStock !== "Stoğa göre filtreleme") {
+
+    {/**if (selectedStock !== "Stoğa göre filtreleme") {
       if (selectedStock === "Stokta Olanlar") {
         filteredProducts = filteredProducts.filter((item) => item.stokCount > 0);
       } else if (selectedStock === "Stokta Olmayanlar") {
         filteredProducts = filteredProducts.filter((item) => item.stokCount === 0);
       }
-    }
+    } */}
+    
     if (selectedAll !== "Toplu Islemler") {
-      filteredProducts = filteredProducts.filter((item) => item.active.toString() === selectedAll);
+      if (selectedAll === "Aktif Olan Ürünler") {
+        filteredProducts = filteredProducts.filter((item) => item.STKOZKOD1 === 'A');
+      } else if (selectedAll === "Aktif Olmayan Ürünler") {
+        filteredProducts = filteredProducts.filter((item) => item.STKOZKOD1 === ' ');
+      }
     }
 
     setFilteredProducts(filteredProducts);
@@ -158,8 +174,8 @@ function ProductsFilter({
             >
               <option hidden>Toplu Islemler</option>
               <option>Toplu Islemler</option>
-              <option value={true}>Aktif Olan Ürünler</option>
-              <option value={false}>Aktif Olmayan Ürünler</option>
+              <option value="Aktif Olan Ürünler">Aktif Olan Ürünler</option>
+              <option  value="Aktif Olmayan Ürünler">Aktif Olmayan Ürünler</option>
             </select>
             <select
               className={`p-2 cursor-pointer shadow-2xl border rounded-md text-CustomGray md:w-30 w-full ${
@@ -178,20 +194,20 @@ function ProductsFilter({
             </select>
             <select
               className={`p-2 cursor-pointer shadow-2xl border rounded-md text-CustomGray md:w-48 w-full ${
-                selectedProductType !== "Ürüne göre filtreleme" && "bg-NavyBlue text-white font-semibold"
+                selectedProductType !== "Sınıfa göre filtreleme" && "bg-NavyBlue text-white font-semibold"
               }`}
               onChange={handleProductType}
               value={selectedProductType}
             >
-              <option hidden>Ürüne göre filtreleme</option>
-              <option>Ürüne göre filtreleme</option>
-              {mainCategory.map((product, index) => (
+              <option hidden>Sınıfa göre filtreleme</option>
+              <option>Sınıfa göre filtreleme</option>
+              {CARGRADEArray.map((product, index) => (
                 <option key={index} value={product}>
                   {product}
                 </option>
               ))}
             </select>
-            <select
+       {/**     <select
               className={`p-2 cursor-pointer shadow-2xl border rounded-md text-CustomGray md:w-48 w-full ${
                 selectedStock !== "Stoğa göre filtreleme" && "bg-NavyBlue text-white font-semibold"
               }`}
@@ -202,7 +218,7 @@ function ProductsFilter({
               <option>Stoğa göre filtreleme</option>
               <option>Stokta Olanlar</option>
               <option>Stokta Olmayanlar</option>
-            </select>
+            </select> */}
             <button
               className={`p-[6px] font-[500] border text-NavyBlue rounded-md text-sm whitespace-nowrap ${
                 anyFilterSelected

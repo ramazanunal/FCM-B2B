@@ -230,9 +230,9 @@ function ProdcutsTable({currentProducts,setSelectedProducts,selectedProducts}) {
             </td> */}
             <td className=' p-2'>
          
-            {product?.STKOZKOD1 === 'A' ?
-              <span className="p-2  flex items-center space-x-1   rounded-xl text-sm bg-red-400 text-white"> <IoIosCloseCircle className='text-xl'/><span>Satışa uygun değil</span> </span> :
-              <span className="p-2  flex items-center justify-center space-x-1   rounded-xl text-sm bg-green-400 text-white"> <FaCheckCircle className='text-xl'/><span>Satışa uygun </span> </span>
+            {product?.STKOZKOD1 === 'A' ? <span className="p-2  flex items-center justify-center space-x-1   rounded-xl text-sm bg-green-400 text-white"> <FaCheckCircle className='text-xl'/><span>Satışa uygun </span> </span>:
+              <span className="p-2  flex items-center space-x-1   rounded-xl text-sm bg-red-400 text-white"> <IoIosCloseCircle className='text-xl'/><span>Satışa uygun değil</span> </span> 
+             
             }
 
             </td>
