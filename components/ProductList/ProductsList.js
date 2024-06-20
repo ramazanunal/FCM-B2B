@@ -63,7 +63,9 @@ console.log(selectedProducts,"SELECT PRODUCTS");
 
   const indexOfLastProduct = currentPage * productsPerPage;
   const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
+  // aşağıdaki ahtayı düzelt
   const currentProducts = filteredProducts.slice(indexOfFirstProduct, indexOfLastProduct);
+
 
   return (
     <>
