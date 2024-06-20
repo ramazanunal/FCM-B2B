@@ -12,6 +12,8 @@ function ProductList() {
   const [productsPerPage] = useState(10);
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedProducts, setSelectedProducts] = useState([]);
+  const [loading, setLoading] = useState(true); 
+
 
 console.log(selectedProducts,"SELECT PRODUCTS");
 
@@ -25,12 +27,14 @@ console.log(selectedProducts,"SELECT PRODUCTS");
         const data = await response.json();
         setProducts(data.data);
         setFilteredProducts(data.data); // Initialize filteredProducts
+        setLoading(false)
       } catch (error) {
         console.error('Veri çekme hatası: ', error);
       }
     };
     fetchData();
   }, []);
+  console.log(products);
 
   const filterStatus = (status) => {
     setSelectedStatus(status);
@@ -112,6 +116,7 @@ console.log(selectedProducts,"SELECT PRODUCTS");
         currentProducts={currentProducts}
         selectedProducts={selectedProducts}
         setSelectedProducts={setSelectedProducts}
+        loading={loading}
       />
     </>
   );

@@ -7,12 +7,13 @@ import ProductModal from './ProductModal';
 import Link from 'next/link';
 import { IoIosCloseCircle } from "react-icons/io";
 import { FaCheckCircle } from "react-icons/fa";
+import Loading from '../Loading';
 
 
 
 
 
-function ProdcutsTable({currentProducts,setSelectedProducts,selectedProducts}) {
+function ProdcutsTable({currentProducts,setSelectedProducts,selectedProducts, loading}) {
   const [sortOrder, setSortOrder] = useState('asc');
   const [sortedColumn, setSortedColumn] = useState(null);
   const [isOpenModal, setIsOpenModal] = useState(false)
@@ -102,7 +103,8 @@ function ProdcutsTable({currentProducts,setSelectedProducts,selectedProducts}) {
 
   return (  
     <div className="overflow-x-auto border">
-    <table className="min-w-full divide-y divide-gray-200">
+    {
+      loading ? <Loading/> : <table className="min-w-full divide-y divide-gray-200">
       <thead className="bg-NavyBlue text-white ">
         <tr>
           <th
@@ -166,7 +168,7 @@ function ProdcutsTable({currentProducts,setSelectedProducts,selectedProducts}) {
             scope="col"
             className="px-6 py-3 text-left text-base font-medium "
           >
-            Ders
+            Kategori
           </th>
           <th
             scope="col"
@@ -221,8 +223,8 @@ function ProdcutsTable({currentProducts,setSelectedProducts,selectedProducts}) {
             <td className="px-6 py-4 whitespace-nowrap text-BaseDark ">{product.STKKOD}</td>
         {/**<td className="px-6 py-4 whitespace-nowrap text-BaseDark">{product.STOK}</td> */}
             <td className="px-6 py-4 whitespace-nowrap text-BaseDark">₺{product.FIYAT}</td>
+            <td className="px-6 py-4 whitespace-nowrap text-BaseDark">{product.STKOZKOD2}</td>
             <td className="px-6 py-4 whitespace-nowrap text-BaseDark">{product.STKOZKOD3}</td>
-            <td className="px-6 py-4 whitespace-nowrap text-BaseDark">{product.CARGRADE}</td>
             {/**<td className="px-6  text-center py-4 whitespace-nowrap space-x-10 text-BaseDark">
             <span>{product?.date?.lastUpdateDate}</span>
            
@@ -238,7 +240,7 @@ function ProdcutsTable({currentProducts,setSelectedProducts,selectedProducts}) {
           </tr>
         ))}
       </tbody>
-    </table>
+    </table>    }
     
          { isOpenModal && <ProductModal setIsOpenModal={setIsOpenModal} productImage={productImage} />}
     
