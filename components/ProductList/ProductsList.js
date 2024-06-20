@@ -40,10 +40,7 @@ console.log(selectedProducts,"SELECT PRODUCTS");
     setSelectedStatus(status);
     if (status === "Tümü") {
       setFilteredProducts(products);
-    } else if (status === "Yayımlanmış") {
-      const filterProducts = products.filter((item) => item.published === true);
-      setFilteredProducts(filterProducts);
-    }
+    } 
     setCurrentPage(1);
   };
 
@@ -74,7 +71,7 @@ console.log(selectedProducts,"SELECT PRODUCTS");
   return (
     <>
       <div className="justify-between flex flex-wrap md:flex-nowrap space-y-4 md:space-y-0">
-        <div className="flex gap-2">
+        {/**<div className="flex gap-2">
           {status.map((status, index) => (
             <React.Fragment key={index}>
               <span
@@ -84,10 +81,10 @@ console.log(selectedProducts,"SELECT PRODUCTS");
                 {status.name}
               </span>
               <span className="text-CustomGray">({status.count})</span>
-              {index !== status.length - 1 && <span className="text-CustomGray">|</span>}
+            
             </React.Fragment>
           ))}
-        </div>
+        </div> */}
         <div className="text-3xl">Ürünler</div>
         <div className="flex w-72">
           <form action="" className="flex gap-2">
