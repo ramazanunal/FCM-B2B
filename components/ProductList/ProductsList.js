@@ -13,7 +13,7 @@ function ProductList() {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedProducts, setSelectedProducts] = useState([]);
 
-
+console.log(selectedProducts,"SELECT PRODUCTS");
 
   useEffect(() => {
     const fetchData = async () => {
