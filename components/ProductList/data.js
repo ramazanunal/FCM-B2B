@@ -551,5 +551,5 @@ export const products = [
 
 export const status = [
     { name: "Tümü", count: products.length },
-    { name: "Yayımlanmış", count: products.filter(product => product.published === true).length},
+   
   ];

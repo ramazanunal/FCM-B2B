@@ -5,7 +5,7 @@ import {
   MdKeyboardArrowRight,
   MdKeyboardDoubleArrowRight,
 } from "react-icons/md";
-import { mainCategory, subCategory, products } from "./data";
+import { mainCategory, subCategory, category  } from "./data";
 
 function ProductsFilter({
   filteredProducts,
@@ -15,17 +15,44 @@ function ProductsFilter({
   setFilteredProducts,
   selectedProducts,
   setSelectedProducts,
+  products
 }) {
-  const [selectedCategory, setSelectedCategory] = useState("Ders Seçin");
-  const [selectedProductType, setSelectedProductType] = useState("Ürüne göre filtreleme");
+  const [selectedCategory, setSelectedCategory] = useState("Kategori Seçin");
+  const [selectedProductType, setSelectedProductType] = useState("Sınıfa göre filtreleme");
   const [selectedStock, setSelectedStock] = useState("Stoğa göre filtreleme");
   const [selectedAll, setSelectedAll] = useState("Toplu Islemler");
   const [selectedStatus, setSelectedStatus] = useState("Durum İşlemi");
   const [anyFilterSelected, setAnyFilterSelected] = useState(false);
+  const [STKOZKOD2Array, setSTKOZKOD2Array] = useState([]);
+  const [STKOZKOD3Array, setSTKOZKOD3Array] = useState([]);
+ 
+  
+
+  useEffect(() => {
+    handleFilters();
+  }, [selectedCategory, selectedProductType, selectedStock, selectedAll]);
+
+  // STKOZKOD2'leri toplama fonksiyonu
+  useEffect(() => {
+    const STKOZKOD2s = products.map(product => product.STKOZKOD2).filter(Boolean);
+    const uniqueSTKOZKOD2s = [...new Set(STKOZKOD2s)];
+    setSTKOZKOD2Array(uniqueSTKOZKOD2s);
+  }, [products]);
+    // STKOZKOD3'leri toplama fonksiyonu
+
+  useEffect(() => {
+    const STKOZKOD3s = products.map(product => product.STKOZKOD3).filter(Boolean);
+    const uniqueSTKOZKOD3s = [...new Set(STKOZKOD3s)];
+    setSTKOZKOD3Array(uniqueSTKOZKOD3s);
+  }, [products]);
+
+  
+  
+
 
   const handleClearFilters = () => {
-    setSelectedCategory("Ders Seçin");
-    setSelectedProductType("Ürüne göre filtreleme");
+    setSelectedCategory("Kategori Seçin");
+    setSelectedProductType("Sınıfa göre filtreleme");
     setSelectedStock("Stoğa göre filtreleme");
     setSelectedAll("Toplu Islemler");
     setAnyFilterSelected(false);
@@ -55,29 +82,40 @@ function ProductsFilter({
     setSelectedAll(e.target.value);
     setAnyFilterSelected(true);
   };
-
+ 
   const handleFilters = () => {
     let filteredProducts = [...products];
+   
+    if (selectedCategory !== "Kategori Seçin") {
+      filteredProducts = filteredProducts.filter(
+        (item) => item.STKOZKOD2 === selectedCategory
+       
+      );
+      console.log(selectedCategory);
+        
+    }
+  
+    if (selectedProductType !== "Sınıfa göre filtreleme") {
+     
+      filteredProducts = filteredProducts.filter(
+        (item) => item.STKOZKOD3 === selectedProductType
+      ); 
+    }
 
-    if (selectedCategory !== "Ders Seçin") {
-      filteredProducts = filteredProducts.filter(
-        (item) => item.category.subCategory === selectedCategory
-      );
-    }
-    if (selectedProductType !== "Ürüne göre filtreleme") {
-      filteredProducts = filteredProducts.filter(
-        (item) => item.category.mainCategory === selectedProductType
-      );
-    }
-    if (selectedStock !== "Stoğa göre filtreleme") {
+    {/**if (selectedStock !== "Stoğa göre filtreleme") {
       if (selectedStock === "Stokta Olanlar") {
         filteredProducts = filteredProducts.filter((item) => item.stokCount > 0);
       } else if (selectedStock === "Stokta Olmayanlar") {
         filteredProducts = filteredProducts.filter((item) => item.stokCount === 0);
       }
-    }
+    } */}
+    
     if (selectedAll !== "Toplu Islemler") {
-      filteredProducts = filteredProducts.filter((item) => item.active.toString() === selectedAll);
+      if (selectedAll === "Aktif Olan Ürünler") {
+        filteredProducts = filteredProducts.filter((item) => item.STKOZKOD1 === 'A');
+      } else if (selectedAll === "Aktif Olmayan Ürünler") {
+        filteredProducts = filteredProducts.filter((item) => item.STKOZKOD1 === ' ');
+      }
     }
 
     setFilteredProducts(filteredProducts);
@@ -89,11 +127,11 @@ function ProductsFilter({
 
   const applyStatusChange = () => {
     if (selectedStatus !== "Durum İşlemi") {
-      selectedProducts.forEach((product) => (product.active = selectedStatus));
+      selectedProducts.forEach((product) => (product.STKOZKOD1 = selectedStatus));
       const filteredActiveProduct = products.filter(
-        (item) => item.active.toString() !== selectedStatus
+        (item) => item.STKOZKOD1.toString() !== selectedStatus
       );
-      setFilteredProducts(filteredActiveProduct);
+      setFilteredProducts(products);
       setSelectedProducts([]);
       setSelectedStatus("Durum İşlemi");
     }
@@ -113,8 +151,8 @@ function ProductsFilter({
             >
               <option hidden>Durum İşlemi</option>
               <option>Durum İşlemi</option>
-              <option value={true}>Ürünü Aktif Yap</option>
-              <option value={false}>Ürünü Pasif Yap</option>
+              <option value={'A'}>Ürünü Aktif Yap</option>
+              {/**<option value={false}>Ürünü Pasif Yap</option> */}
             </select>
             <button
               className={`shadow-2xl border-NavyBlue border rounded-md text-CustomGray md:w-16 md:text-sm text-xs w-12 ${
@@ -138,19 +176,19 @@ function ProductsFilter({
             >
               <option hidden>Toplu Islemler</option>
               <option>Toplu Islemler</option>
-              <option value={true}>Aktif Olan Ürünler</option>
-              <option value={false}>Aktif Olmayan Ürünler</option>
+              <option value="Aktif Olan Ürünler">Aktif Olan Ürünler</option>
+            {/**  <option  value="Aktif Olmayan Ürünler">Aktif Olmayan Ürünler</option> */}
             </select>
             <select
               className={`p-2 cursor-pointer shadow-2xl border rounded-md text-CustomGray md:w-30 w-full ${
-                selectedCategory !== "Ders Seçin" && "bg-NavyBlue text-white font-semibold"
+                selectedCategory !== "Kategori Seçin" && "bg-NavyBlue text-white font-semibold"
               }`}
               onChange={handleCategory}
               value={selectedCategory}
             >
-              <option hidden>Ders Seçin</option>
-              <option>Ders Seçin</option>
-              {subCategory.map((product, index) => (
+              <option hidden>Kategori Seçin</option>
+              <option>Kategori Seçin</option>
+              {STKOZKOD2Array.map((product, index) => (
                 <option key={index} value={product}>
                   {product}
                 </option>
@@ -158,20 +196,20 @@ function ProductsFilter({
             </select>
             <select
               className={`p-2 cursor-pointer shadow-2xl border rounded-md text-CustomGray md:w-48 w-full ${
-                selectedProductType !== "Ürüne göre filtreleme" && "bg-NavyBlue text-white font-semibold"
+                selectedProductType !== "Sınıfa göre filtreleme" && "bg-NavyBlue text-white font-semibold"
               }`}
               onChange={handleProductType}
               value={selectedProductType}
             >
-              <option hidden>Ürüne göre filtreleme</option>
-              <option>Ürüne göre filtreleme</option>
-              {mainCategory.map((product, index) => (
+              <option hidden>Sınıfa göre filtreleme</option>
+              <option>Sınıfa göre filtreleme</option>
+              {STKOZKOD3Array.map((product, index) => (
                 <option key={index} value={product}>
                   {product}
                 </option>
               ))}
             </select>
-            <select
+       {/**     <select
               className={`p-2 cursor-pointer shadow-2xl border rounded-md text-CustomGray md:w-48 w-full ${
                 selectedStock !== "Stoğa göre filtreleme" && "bg-NavyBlue text-white font-semibold"
               }`}
@@ -182,7 +220,7 @@ function ProductsFilter({
               <option>Stoğa göre filtreleme</option>
               <option>Stokta Olanlar</option>
               <option>Stokta Olmayanlar</option>
-            </select>
+            </select> */}
             <button
               className={`p-[6px] font-[500] border text-NavyBlue rounded-md text-sm whitespace-nowrap ${
                 anyFilterSelected

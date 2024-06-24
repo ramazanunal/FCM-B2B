@@ -7,12 +7,13 @@ import ProductModal from './ProductModal';
 import Link from 'next/link';
 import { IoIosCloseCircle } from "react-icons/io";
 import { FaCheckCircle } from "react-icons/fa";
+import Loading from '../Loading';
 
 
 
 
 
-function ProdcutsTable({currentProducts,setSelectedProducts,selectedProducts}) {
+function ProdcutsTable({currentProducts,setSelectedProducts,selectedProducts, loading}) {
   const [sortOrder, setSortOrder] = useState('asc');
   const [sortedColumn, setSortedColumn] = useState(null);
   const [isOpenModal, setIsOpenModal] = useState(false)
@@ -54,9 +55,8 @@ function ProdcutsTable({currentProducts,setSelectedProducts,selectedProducts}) {
     
   
     const handleProductSelect = (product) => {
-      // Seçili ürünleri güncelle (ekle veya çıkar)
-      if (selectedProducts.some((p) => p.id === product.id)) {
-        setSelectedProducts(selectedProducts.filter((p) => p.id !== product.id));
+      if (selectedProducts.some((p) => p.STKKOD === product.STKKOD)) {
+        setSelectedProducts(selectedProducts.filter((p) => p.STKKOD !== product.STKKOD));
       } else {
         setSelectedProducts([...selectedProducts, product]);
       }
@@ -103,7 +103,8 @@ function ProdcutsTable({currentProducts,setSelectedProducts,selectedProducts}) {
 
   return (  
     <div className="overflow-x-auto border">
-    <table className="min-w-full divide-y divide-gray-200">
+    {
+      loading ? <Loading/> : <table className="min-w-full divide-y divide-gray-200">
       <thead className="bg-NavyBlue text-white ">
         <tr>
           <th
@@ -137,7 +138,7 @@ function ProdcutsTable({currentProducts,setSelectedProducts,selectedProducts}) {
           >
             Stok Kodu
           </th>
-          <th
+           {/**   <th
             scope="col"
             className="px-6 py-3 text-left text-base font-medium cursor-pointer  "
             onClick={() => handleSort('stokCount')}
@@ -150,7 +151,7 @@ function ProdcutsTable({currentProducts,setSelectedProducts,selectedProducts}) {
               </span>
             ) : <PiCaretUpDownFill />}
             </span>
-          </th>
+          </th> */}
           <th
             scope="col"
             className="px-6 flex items-center cursor-pointer py-3 text-left text-base font-medium  "
@@ -167,7 +168,7 @@ function ProdcutsTable({currentProducts,setSelectedProducts,selectedProducts}) {
             scope="col"
             className="px-6 py-3 text-left text-base font-medium "
           >
-            Ders
+            Kategori
           </th>
           <th
             scope="col"
@@ -220,9 +221,9 @@ function ProdcutsTable({currentProducts,setSelectedProducts,selectedProducts}) {
             
            
             <td className="px-6 py-4 whitespace-nowrap text-BaseDark ">{product.STKKOD}</td>
-            <td className="px-6 py-4 whitespace-nowrap text-BaseDark">stok sayısı</td>
-            <td className="px-6 py-4 whitespace-nowrap text-BaseDark">₺</td>
-            <td className="px-6 py-4 whitespace-nowrap text-BaseDark">{product?.category?.subCategory}</td>
+        {/**<td className="px-6 py-4 whitespace-nowrap text-BaseDark">{product.STOK}</td> */}
+            <td className="px-6 py-4 whitespace-nowrap text-BaseDark">₺{product.FIYAT}</td>
+            <td className="px-6 py-4 whitespace-nowrap text-BaseDark">{product.STKOZKOD2}</td>
             <td className="px-6 py-4 whitespace-nowrap text-BaseDark">{product.STKOZKOD3}</td>
             {/**<td className="px-6  text-center py-4 whitespace-nowrap space-x-10 text-BaseDark">
             <span>{product?.date?.lastUpdateDate}</span>
@@ -230,16 +231,16 @@ function ProdcutsTable({currentProducts,setSelectedProducts,selectedProducts}) {
             </td> */}
             <td className=' p-2'>
          
-            {product?.STKOZKOD1 === 'A' ?
-              <span className="p-2  flex items-center space-x-1   rounded-xl text-sm bg-red-400 text-white"> <IoIosCloseCircle className='text-xl'/><span>Satışa uygun değil</span> </span> :
-              <span className="p-2  flex items-center justify-center space-x-1   rounded-xl text-sm bg-green-400 text-white"> <FaCheckCircle className='text-xl'/><span>Satışa uygun </span> </span>
+            {product?.STKOZKOD1 === 'A' ? <span className="p-2  flex items-center justify-center space-x-1   rounded-xl text-sm bg-green-400 text-white"> <FaCheckCircle className='text-xl'/><span>Satışa uygun </span> </span>:
+              <span className="p-2  flex items-center space-x-1   rounded-xl text-sm bg-red-400 text-white"> <IoIosCloseCircle className='text-xl'/><span>Satışa uygun değil</span> </span> 
+             
             }
 
             </td>
           </tr>
         ))}
       </tbody>
-    </table>
+    </table>    }
     
          { isOpenModal && <ProductModal setIsOpenModal={setIsOpenModal} productImage={productImage} />}
     

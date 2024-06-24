@@ -2,7 +2,7 @@ import React from "react";
 
 function Loading() {
   return (
-    <div className="bg-white w-screen lg:w-[1188px] h-screen">
+    <div className="bg-white w-screen lg:w-full h-screen">
       <div
         className={`fixed top-0 left-0 w-full h-full flex items-center justify-center `}
       >
@@ -27,7 +27,7 @@ function Loading() {
               fill="currentFill"
             />
           </svg>
-          <span className="text-white text-[24px]">GİRİŞ Loading...</span>
+          <span className="text-white text-[24px]"> Loading...</span>
         </div>
       </div>
     </div>
