@@ -4,7 +4,7 @@ const useCartItemCount = () => {
     const [cartItemCount, setCartItemCount] = useState(0);
 
     const updateCartItemCount = () => {
-        const itemCount = JSON.parse(localStorage.getItem("cartItems"))?.length || 0;
+        const itemCount = JSON.parse(localStorage.getItem("cart"))?.length || 0;
         setCartItemCount(itemCount);
     };
 
