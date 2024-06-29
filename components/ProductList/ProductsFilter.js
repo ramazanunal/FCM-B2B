@@ -141,30 +141,7 @@ function ProductsFilter({
     <>
       <div className="flex flex-wrap md:flex-nowrap justify-between items-center py-3">
         <div className="flex gap-2 flex-wrap md:flex-nowrap items-center">
-          <div className="flex gap-2 md:mr-8">
-            <select
-              className={`p-2 cursor-pointer shadow-2xl border rounded-md text-CustomGray md:w-36 w-full ${
-                selectedProducts.length === 0 ? "pointer-events-none opacity-50" : ""
-              } ${selectedStatus !== "Durum İşlemi" ? "bg-NavyBlue text-white" : ""}`}
-              onChange={handleStatusChange}
-              value={selectedStatus}
-            >
-              <option hidden>Durum İşlemi</option>
-              <option>Durum İşlemi</option>
-              <option value={'A'}>Ürünü Aktif Yap</option>
-              {/**<option value={false}>Ürünü Pasif Yap</option> */}
-            </select>
-            <button
-              className={`shadow-2xl border-NavyBlue border rounded-md text-CustomGray md:w-16 md:text-sm text-xs w-12 ${
-                selectedProducts.length === 0
-                  ? "cursor-not-allowed opacity-50"
-                  : "cursor-pointer hover:bg-NavyBlue hover:text-white"
-              }`}
-              onClick={applyStatusChange}
-            >
-              Uygula
-            </button>
-          </div>
+         
 
           <div className="flex flex-wrap md:flex-nowrap gap-2 items-center text-sm">
             <select

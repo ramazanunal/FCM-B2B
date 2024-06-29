@@ -25,25 +25,33 @@ console.log(selectedProducts,"SELECT PRODUCTS");
           throw new Error('API hatası: ' + response.status);
         }
         const data = await response.json();
-        setProducts(data.data);
-        setFilteredProducts(data.data); // Initialize filteredProducts
+        const allProducts = data.data;
+        const filteredProducts = allProducts.filter(product => product.STKOZKOD1 === 'A');
+        setProducts(allProducts);
+        setFilteredProducts(filteredProducts); // Initialize filteredProducts
         setLoading(false)
+        console.log(data.data,"asdasd");
       } catch (error) {
         console.error('Veri çekme hatası: ', error);
       }
     };
     fetchData();
   }, []);
-  console.log(products);
+ 
 
   const filterStatus = (status) => {
     setSelectedStatus(status);
     if (status === "Tümü") {
-      setFilteredProducts(products);
-    } 
+      // Tüm ürünleri göstermek için filtreleme
+      const allProducts = products.filter(product => product.STKOZKOD1 === 'A');
+      setFilteredProducts(allProducts);
+    } else {
+      // Diğer durumlarda statusa göre filtreleme yap
+      const filtered = products.filter(product => product.status === status && product.STKOZKOD1 === 'A');
+      setFilteredProducts(filtered);
+    }
     setCurrentPage(1);
   };
-
   const handleSearch = (event) => {
     const term = event.target.value;
     setSearchTerm(term);

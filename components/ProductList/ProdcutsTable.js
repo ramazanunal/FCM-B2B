@@ -107,12 +107,12 @@ function ProdcutsTable({currentProducts,setSelectedProducts,selectedProducts, lo
       loading ? <Loading/> : <table className="min-w-full divide-y divide-gray-200">
       <thead className="bg-NavyBlue text-white ">
         <tr>
-          <th
+          {/**<th
             scope="col"
             className="px-6 py-3 text-left text-xs font-medium "
           >
             <input type="checkbox"onChange={handleSelectAll} checked={selectAll}  className='w-4 h-4 '/>
-          </th>
+          </th> */}
           <th
             scope="col"
             className="px-10 py-3 text-left text-base font-medium "
@@ -200,7 +200,7 @@ function ProdcutsTable({currentProducts,setSelectedProducts,selectedProducts, lo
       <tbody className="bg-white divide-y divide-gray-200">
         {sortedProducts.map((product, index) => (
           <tr key={product.id}  className={`${index % 2 === 1 ? "bg-white" : "bg-gray-50"} `}>
-          <td className="px-6 py-4 whitespace-nowrap">
+          {/**<td className="px-6 py-4 whitespace-nowrap">
           <input 
             type="checkbox" 
             
@@ -208,7 +208,7 @@ function ProdcutsTable({currentProducts,setSelectedProducts,selectedProducts, lo
             checked={selectedProducts.includes(product)} 
             onChange={() => handleProductSelect(product)} // Her bir ürünün onay kutusunu seçim işleyicisiyle bağla
           />
-        </td>
+        </td> */}
             <td className="px-6 py-4 whitespace-nowrap cursor-pointer" onClick={() => {handleOpenModal(product)}}>
             img
             </td>
