@@ -20,7 +20,7 @@ function ProductsFilter({
   const [selectedCategory, setSelectedCategory] = useState("Kategori Seçin");
   const [selectedProductType, setSelectedProductType] = useState("Sınıfa göre filtreleme");
   const [selectedStock, setSelectedStock] = useState("Stoğa göre filtreleme");
-  const [selectedAll, setSelectedAll] = useState("Toplu Islemler");
+  const [selectedAll, setSelectedAll] = useState("Aktif Olan Ürünler");
   const [selectedStatus, setSelectedStatus] = useState("Durum İşlemi");
   const [anyFilterSelected, setAnyFilterSelected] = useState(false);
   const [STKOZKOD2Array, setSTKOZKOD2Array] = useState([]);
@@ -153,7 +153,7 @@ function ProductsFilter({
             >
               <option hidden>Toplu Islemler</option>
               <option>Toplu Islemler</option>
-              <option value="Aktif Olan Ürünler">Aktif Olan Ürünler</option>
+              <option value="Aktif Olan Ürünler" >Aktif Olan Ürünler</option>
             {/**  <option  value="Aktif Olmayan Ürünler">Aktif Olmayan Ürünler</option> */}
             </select>
             <select
