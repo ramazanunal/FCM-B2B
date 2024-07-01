@@ -2,53 +2,45 @@ import React, { useState, useEffect, useCallback } from "react";
 import { Formik, Form, Field } from "formik";
 import * as Yup from "yup";
 import { FaSearch, FaTimes } from "react-icons/fa";
-import categoryStore from "@/utils/categoryStore";
 import Image from "next/image";
-import Link from "next/link";
 
 function SearchPanel({ toggleSearchPanel }) {
-  const [searchResults, setSearchResults] = useState([]);
-  const [searchNoResults, setSearchNoResults] = useState(false);
-  const [searchInput, setSearchInput] = useState("");
+  const [searchResults, setSearchResults] = useState([]); // Arama sonuçları state'i
+  const [searchNoResults, setSearchNoResults] = useState(null); // Arama sonuçları yoksa durumu
+  const [searchInput, setSearchInput] = useState(""); // Arama input değeri
+  const [products, setProducts] = useState([]); // Ürünlerin tutulduğu state
 
-  // Formik için doğrulama şeması
+  // Formik validasyon şeması
   const validationSchema = Yup.object().shape({
-    searchinput: Yup.string().required(""),
+    searchinput: Yup.string().required(""), // Arama inputunun zorunlu olması
   });
 
-  // Arama işlemi için callback fonksiyonu
-  const handleSearch = useCallback((searchTerm) => {
-    searchTerm = normalizeTurkishChars(searchTerm.toLowerCase());
-    console.log("Search Term:", searchTerm);
-    const results = [];
+  // API'den ürünleri getiren fonksiyon
+  const fetchProducts = async () => {
+    try {
+      const response = await fetch("http://localhost:3000/api/products"); // API'den veri çekme
+      const responseData = await response.json(); // JSON formatına dönüştürme
 
-    categoryStore.getState().categories.forEach((category) => {
-      category.products.forEach((product) => {
-        if (
-          normalizeTurkishChars(product.name.toLowerCase()).includes(searchTerm)
-        ) {
-          results.push(product);
-        }
-      });
-    });
-
-    setSearchResults(results);
-    setSearchNoResults(true);
-  }, []);
-
-  // Arama yapıldığında tetiklenen işlev
-  const handleInputChange = (e) => {
-    const value = e.target.value;
-    setSearchInput(value);
-    handleSearch(value);
+      // API'den gelen verinin dizi olup olmadığını kontrol etme
+      if (Array.isArray(responseData.data)) {
+        // STKOZKOD1 değeri "A" olan ürünleri filtreleme
+        const filteredProducts = responseData.data.filter(
+          (product) => product.STKOZKOD1 === "A"
+        );
+        setProducts(filteredProducts); // Filtrelenmiş ürünleri state'e set etme
+      } else {
+        console.error("Fetched data is not an array:", responseData); // Hata durumunda konsola bilgi yazdırma
+      }
+    } catch (error) {
+      console.error("Error fetching products:", error); // Hata durumunda konsola hata mesajı yazdırma
+    }
   };
 
   useEffect(() => {
-    const initialSearchTerm = "initial search term";
-    handleSearch(initialSearchTerm);
-  }, [handleSearch]);
+    fetchProducts(); // Component yüklendiğinde ürünleri getirme işlemi
+  }, []);
 
-  // Türkçe karakterleri normalize etmek için bir yardımcı fonksiyon
+  // Türkçe karakterleri normalize eden fonksiyon
   const normalizeTurkishChars = (str) => {
     return str
       .replace(/ı/g, "i")
@@ -59,25 +51,58 @@ function SearchPanel({ toggleSearchPanel }) {
       .replace(/ç/g, "c");
   };
 
-  useEffect(() => {
-    setSearchNoResults(false);
-  }, []);
+  // Arama işlemi
+  const handleSearch = useCallback(
+    (searchTerm) => {
+      const normalizedSearchTerm = normalizeTurkishChars(
+        searchTerm.toLowerCase()
+      ); // Arama terimini küçük harfe çevirip normalize etme
+      console.log("Search Term:", normalizedSearchTerm); // Konsola arama terimini yazdırma
+
+      // Ürünler dizisi varsa
+      if (Array.isArray(products)) {
+        // Arama terimine göre ürünleri filtreleme
+        const results = products.filter((product) =>
+          normalizeTurkishChars(product.STKCINSI.toLowerCase()).includes(
+            normalizedSearchTerm
+          )
+        );
+
+        setSearchResults(results); // Filtrelenmiş ürünleri state'e set etme
+        setSearchNoResults(results.length === 0); // Sonuç yoksa durumunu güncelleme
+      } else {
+        console.error("Products is not an array:", products); // Ürünler dizi değilse hata mesajı yazdırma
+      }
+    },
+    [products]
+  );
+
+  // Input değeri değiştiğinde çalışan fonksiyon
+  const handleInputChange = (e) => {
+    const value = e.target.value;
+    setSearchInput(value); // Input değerini state'e set etme
+    setSearchNoResults(null); // Arama sonucu yoksa durumu sıfırlama
+    handleSearch(value); // Arama işlemini başlatma
+  };
 
   return (
-    <div className="w-full flex flex-col items-center justify-center transition-transform duration-500 ease-in-out shadow-[0_5px_20px_rgba(0,0,0,0.3)] py-[15px] z-[1000] rounded-xl ">
+    <div className="w-full flex flex-col items-center justify-center transition-transform duration-500 ease-in-out shadow-[0_5px_20px_rgba(0,0,0,0.3)] py-[15px] z-[1000] rounded-xl">
+      {/* Formik form bileşeni */}
       <Formik
         initialValues={{ searchinput: "" }}
         validationSchema={validationSchema}
-        onSubmit={(values) => handleSearch(values.searchinput)}
+        onSubmit={(values) => handleSearch(values.searchinput)} // Form submit işlemi
       >
         {({ errors, touched, setFieldValue }) => (
           <div className="bg-white w-[310px] sm:w-[400px]  flex items-center justify-center flex-col">
+            {/* Form bileşeni */}
             <Form
               id="ajax-search"
-              className="container mx-auto px-3 sm:px-[30px] md:px-[15px] "
+              className="container mx-auto px-3 sm:px-[30px] md:px-[15px]"
             >
               <div>
                 <div className="relative text-[10px] uppercase text-[#555555] pt-10 flex items-center ">
+                  {/* Kapatma butonu */}
                   <button
                     className="absolute top-1 md:top-0 right-0 "
                     type="button"
@@ -87,6 +112,7 @@ function SearchPanel({ toggleSearchPanel }) {
                   </button>
                 </div>
 
+                {/* Arama inputu ve butonu */}
                 <div className="relative border-2 border-LightBlue rounded-full  py-2 pr-2 hover:border-DarkBlue transition duration-300 ease-in-out transform pl-4">
                   <Field
                     name="searchinput"
@@ -98,10 +124,11 @@ function SearchPanel({ toggleSearchPanel }) {
                     }`}
                     value={searchInput}
                     onChange={(e) => {
-                      setFieldValue("searchinput", e.target.value);
-                      handleInputChange(e);
+                      setFieldValue("searchinput", e.target.value); // Formik değeri set etme
+                      handleInputChange(e); // Input değişikliğini işleme alma
                     }}
                   />
+                  {/* Arama butonu */}
                   <button
                     type="submit"
                     className="search absolute right-3 top-2"
@@ -110,6 +137,7 @@ function SearchPanel({ toggleSearchPanel }) {
                   </button>
                 </div>
               </div>
+              {/* Form hataları */}
               {errors.searchinput && touched.searchinput && (
                 <div>{errors.searchinput}</div>
               )}
@@ -117,34 +145,41 @@ function SearchPanel({ toggleSearchPanel }) {
           </div>
         )}
       </Formik>
+      {/* Arama sonuçları gösterimi */}
       <div>
         {searchResults.length > 0 && (
-          <div className="w-[310px] sm:w-[400px] mt-4 overflow-y-auto max-h-80 ">
+          <div className="w-[310px] sm:w-[400px] mt-4 overflow-y-auto max-h-80">
             <ul>
+              {/* Her bir ürün için liste elemanı */}
               {searchResults.map((product) => (
                 <li
                   className="p-5 shadow-b shadow-sm flex flex-row justify-start gap-4"
-                  key={product.id}
+                  key={product.STKKOD}
                 >
+                  {/* Ürün resmi */}
                   <Image
-                    src={product.imagesrc}
+                    src={
+                      "https://caliskanari.com/wp-content/uploads/2022/11/X7-420x420.png.webp"
+                    }
+                    alt={"image"}
                     width={70}
                     height={70}
-                    alt={product.name}
                   />
-                  <Link href={product.link} className="flex items-center">
+                  {/* Ürün bilgileri */}
+                  <div className="flex items-center">
                     <span className="flex text-start">
                       <p className="font-bold text-[16px] text-CustomGray hover:scale-105 hover:text-LightBlue transition-all transform easy-in-out duration-500">
-                        {product.name}
+                        {product.STKCINSI} {/* Ürün ismi */}
                       </p>
                     </span>
-                  </Link>
+                  </div>
                 </li>
               ))}
             </ul>
           </div>
         )}
-        {searchNoResults && searchResults.length === 0 && (
+        {/* Arama sonucu bulunamadı durumu */}
+        {searchNoResults === true && (
           <div className="w-[400px] mt-4 flex items-center justify-center">
             <p className="text-red-500 font-bold">Ürün bulunamadı</p>
           </div>

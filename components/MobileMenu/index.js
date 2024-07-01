@@ -40,19 +40,35 @@ const MobileMenu = ({ header, user }) => {
 
   return (
     <div className="flex xl:hidden justify-between items-center px-4">
-      <button className="w-[50px] h-[50px]" onClick={() => setIsMenuOpen(true)}>
-        <GiHamburgerMenu className=" w-[20px] h-[20px]" color="white" />
-      </button>
-
-      <Link href="/">
+      <button
+        className="w-[70px] h-[70px] "
+        onClick={() => setIsMenuOpen(true)}
+      >
+        <GiHamburgerMenu className=" w-[20px] h-[20px] text-white transition-all transform duration-700 ease-in-out hover:text-LightBlue hover:scale-105 " />
+      </button>{" "}
+      <Link href="/" className="ml-5">
         <Image
           src={header.mainMenuLogo[0].logosrc}
-          width={45}
-          height={50}
+          width={70}
+          height={70}
           alt="Çalışkan Arı Mağaza"
           className="p-2"
         />
       </Link>
+      {user ? (
+        <div className="text-white hover:text-red-500 text-2xl">
+          {/* signOut */}
+          <Link href="/auth/login" onClick={() => signOut()}>
+            <Image
+              src="/assets/images/cikisyap.svg"
+              width={100}
+              height={100}
+              alt=""
+              className="mx-4 w-28 hover:scale-110 transition-all transform ease-in-out duration-700"
+            />
+          </Link>
+        </div>
+      ) : null}
       {isMenuOpen && (
         <div className="fixed inset-0 bg-black bg-opacity-50 z-50">
           <div
@@ -163,20 +179,35 @@ const MobileMenu = ({ header, user }) => {
                 ))}
               </ul>
             </div>
-            { !user ? (
+            {!user ? (
               <div className=" flex justify-center">
-              <Link href="/auth/login" className="hover:scale-105 transition-all duration-700 ease-in-out transform">
-                <Image
-                  src="/assets/images/giris.svg"
-                  alt=""
-                  width={50}
-                  height={50}
-                  className="w-32"
-                />
-              </Link>
-            </div>
-            ) : null }
-            
+                <Link
+                  href="/auth/login"
+                  className="hover:scale-105 transition-all duration-700 ease-in-out transform"
+                >
+                  <Image
+                    src="/assets/images/giris.svg"
+                    alt=""
+                    width={50}
+                    height={50}
+                    className="w-32"
+                  />
+                </Link>
+              </div>
+            ) : (
+              <div className="text-white hover:text-red-500 text-2xl flex justify-center">
+                {/* signOut */}
+                <Link href="/auth/login" onClick={() => signOut()}>
+                  <Image
+                    src="/assets/images/cikisyap.svg"
+                    width={100}
+                    height={100}
+                    alt=""
+                    className="mx-4 w-28 hover:scale-110 transition-all transform ease-in-out duration-700"
+                  />
+                </Link>
+              </div>
+            )}
           </div>
         </div>
       )}
