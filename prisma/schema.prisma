@@ -22,6 +22,7 @@ model CARKART {
   CAROZKOD3        String?
   CAROZKOD4        String?
   CAROZKOD5        String?
+   CARHAR          CARHAR[]
 }
 
 model STKKART {
@@ -33,3 +34,17 @@ model STKKART {
   STKOZKOD5        String? 
 }
 
+model CARHAR {
+  id             Int      @id @default(autoincrement())
+  CARHARTAR      DateTime
+  CARHARCARKOD   String
+  CARHARCARUNVAN String
+  CARHARISTIPCOD String
+  CARHARACIKLAMA String
+  CARHARTUTAR    Float
+  CARHARVADETAR  DateTime
+  CARHARACIKLAMA1 String
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+  CARKART        CARKART?  @relation(fields: [CARHARCARKOD], references: [CARKOD])
+}
