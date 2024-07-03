@@ -8,8 +8,6 @@ import {
   MdKeyboardArrowRight,
   MdKeyboardDoubleArrowLeft,
   MdKeyboardDoubleArrowRight,
-  MdOutlineKeyboardArrowLeft,
-  MdOutlineKeyboardArrowRight,
 } from "react-icons/md";
 import {
   Table,
@@ -29,7 +27,6 @@ export default function DataTable() {
   const [filterType, setFilterType] = useState("");
   const [isLoading, setIsLoading] = useState(true);
   const itemsPerPage = 8;
-  const maxPagesToShow = 5;
 
   useEffect(() => {
     const fetchData = async () => {
@@ -76,12 +73,6 @@ export default function DataTable() {
     setCurrentPage(pageNumber);
   };
 
-  // Fonksiyon: Filtre değişikliği işlemini yönetmek için
-  const handleFilterChange = (event) => {
-    const selectedFilter = event.target.value;
-    setFilterType(selectedFilter);
-  };
-
   // Filtrelenmiş verileri al
   const filteredData = filterType
     ? data.filter((item) => item.CARHARISTIPKOD === filterType)
@@ -110,44 +101,6 @@ export default function DataTable() {
   const borcTotal = getTotal("CARHARTUTAR") || 0;
   const alacakTotal = 0; // Varsayılan olarak alacak yok kabul ediliyor
   const bakiyeTotal = borcTotal - alacakTotal;
-
-  // Sayfa numaralarını al
-  const getPageNumbers = () => {
-    if (totalPages <= maxPagesToShow) {
-      return Array.from({ length: totalPages }, (_, index) => index + 1);
-    }
-
-    const leftOffset = Math.floor(maxPagesToShow / 2);
-    const rightOffset = Math.ceil(maxPagesToShow / 2) - 1;
-
-    let startPage = currentPage - leftOffset;
-    let endPage = currentPage + rightOffset;
-
-    if (startPage < 1) {
-      startPage = 1;
-      endPage = maxPagesToShow;
-    }
-
-    if (endPage > totalPages) {
-      endPage = totalPages;
-      startPage = totalPages - maxPagesToShow + 1;
-    }
-
-    let pages = Array.from(
-      { length: endPage - startPage + 1 },
-      (_, index) => startPage + index
-    );
-
-    if (startPage > 1) {
-      pages = [1, "...", ...pages];
-    }
-
-    if (endPage < totalPages) {
-      pages = [...pages, "...", totalPages];
-    }
-
-    return pages;
-  };
 
   // Yükleme durumunu kontrol et
   if (isLoading) {

@@ -1,12 +1,12 @@
-"use client"; // Next.js client modunu kullanıyoruz
-import { useState, useEffect, useRef } from "react"; // React hook'ları
+"use client";
+import { useState, useEffect, useRef } from "react";
 import { useSession } from "next-auth/react"; // NextAuth kullanarak oturum yönetimi
 import {
   MdKeyboardDoubleArrowLeft,
   MdKeyboardArrowLeft,
   MdKeyboardArrowRight,
   MdKeyboardDoubleArrowRight,
-} from "react-icons/md"; // Sayfalama için ikonlar
+} from "react-icons/md";
 import {
   Table,
   TableBody,
@@ -15,7 +15,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "./TableComponents"; // Özel tablo bileşenleri
+} from "./TableComponents";
 
 export default function DetailedDataTable() {
   const { data: session } = useSession(); // Oturum bilgisini almak için kullanılan hook
@@ -26,7 +26,6 @@ export default function DetailedDataTable() {
   const [currentPage, setCurrentPage] = useState(1); // Mevcut sayfa numarası için state
   const [filterType, setFilterType] = useState(""); // Filtre tipi için state
   const itemsPerPage = 8; // Sayfa başına gösterilecek öğe sayısı
-  const maxPagesToShow = 5; // Gösterilecek maksimum sayfa sayısı
   const isMounted = useRef(true); // Component'in unmount olup olmadığını takip etmek için useRef kullanılıyor
 
   useEffect(() => {
@@ -90,12 +89,6 @@ export default function DetailedDataTable() {
     setCurrentPage(pageNumber); // Sayfa numarasını güncelle
   };
 
-  const handleFilterChange = (event) => {
-    const selectedFilter = event.target.value;
-    setFilterType(selectedFilter); // Filtre tipini güncelle
-    setCurrentPage(1); // Filtre değiştiğinde sayfa numarasını sıfırla
-  };
-
   // Filtrelenmiş veriyi al
   const filteredData = filterType
     ? fatharData.filter((item) => item.CARHARISTIPKOD === filterType)
@@ -138,36 +131,6 @@ export default function DetailedDataTable() {
     );
   }
 
-  // Sayfa numaralarını oluştur
-  const getPageNumbers = () => {
-    const pageNumbers = [];
-    let startPage = 1;
-    if (currentPage > Math.floor(maxPagesToShow / 2)) {
-      startPage = currentPage - Math.floor(maxPagesToShow / 2);
-    }
-    const endPage = Math.min(startPage + maxPagesToShow - 1, totalPages);
-
-    if (startPage > 1) {
-      pageNumbers.push(1);
-      if (startPage > 2) {
-        pageNumbers.push("...");
-      }
-    }
-
-    for (let i = startPage; i <= endPage; i++) {
-      pageNumbers.push(i);
-    }
-
-    if (endPage < totalPages) {
-      if (endPage < totalPages - 1) {
-        pageNumbers.push("...");
-      }
-      pageNumbers.push(totalPages);
-    }
-
-    return pageNumbers;
-  };
-
   // Component'in dönüşü
   return (
     <>
@@ -188,7 +151,7 @@ export default function DetailedDataTable() {
         </div>
 
         <div className="flex items-center">
-          {/* Sayfalama butonları */}
+          {/* Pagination butonları */}
           <button
             className={`border-2 rounded-sm text-[18px] md:p-3 p-1 ${
               currentPage === 1
