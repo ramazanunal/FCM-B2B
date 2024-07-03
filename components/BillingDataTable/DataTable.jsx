@@ -167,18 +167,15 @@ export default function DataTable() {
     <>
       <div className="max-w-[1880px] mx-auto mt-8 flex flex-col justify-between items-center px-8 gap-4 md:flex-row">
         <div className="flex items-center gap-4">
-          <h1 className="text-xl md:text-2xl text-LightBlue">Faturalar</h1>
-          <div className="flex items-center gap-4">
-            <span className="mr-2">İşlem Tipi:</span>
-            <select
-              className="px-2 py-1 border rounded"
-              value={filterType}
-              onChange={handleFilterChange}
-            >
-              <option value="">Tümü</option>
-              <option value="Devir">Devir</option>
-              <option value="Fatura">Fatura</option>
-            </select>
+          <div className="flex flex-col text-center md:text-left">
+            <h1 className="text-xl md:text-2xl text-blue-500">Faturalar</h1>
+            <h1>
+              <span className="font-bold">Cari Kodu:</span> {session?.user?.id}
+            </h1>
+            <h1>
+              <span className="font-bold">Cari Unvanı:</span>{" "}
+              {session?.user?.name}
+            </h1>
           </div>
         </div>
 
@@ -273,7 +270,9 @@ export default function DataTable() {
                   {item.CARHARCARKOD}
                 </TableCell>
                 <TableCell>{item.CARHARCARUNVAN}</TableCell>
-                <TableCell>{item.CARHARTAR}</TableCell>
+                <TableCell>
+                  {new Date(item.CARHARTAR).toLocaleDateString("tr-TR")}
+                </TableCell>
                 <TableCell>{item.CARHARISTIPKOD}</TableCell>
                 <TableCell>{item.CARHARACIKLAMA1}</TableCell>
                 <TableCell>{item.CARHARACIKLAMA}</TableCell>

@@ -173,20 +173,17 @@ export default function DetailedDataTable() {
     <>
       <div className="max-w-[1880px] mx-auto mt-8 flex flex-col justify-between items-center px-8 gap-4 md:flex-row">
         <div className="flex items-center gap-4">
-          <h1 className="text-xl md:text-2xl text-blue-500">
-            Detaylı Faturalar
-          </h1>
-          <div className="flex items-center gap-4">
-            <span className="mr-2">İşlem Tipi:</span>
-            <select
-              className="px-2 py-1 border rounded"
-              value={filterType}
-              onChange={handleFilterChange}
-            >
-              <option value="">Tümü</option>
-              <option value="Devir">Devir</option>
-              <option value="Fatura">Fatura</option>
-            </select>
+          <div className="flex flex-col text-center md:text-left">
+            <h1 className="text-xl md:text-2xl text-blue-500">
+              Detaylı Faturalar
+            </h1>
+            <h1>
+              <span className="font-bold">Cari Kodu:</span> {session?.user?.id}
+            </h1>
+            <h1>
+              <span className="font-bold">Cari Unvanı:</span>{" "}
+              {session?.user?.name}
+            </h1>
           </div>
         </div>
 
@@ -278,7 +275,9 @@ export default function DetailedDataTable() {
               // Tablo satırı oluştur
               return (
                 <TableRow key={index}>
-                  <TableCell>{fatharItem.FATHARTAR}</TableCell>
+                  <TableCell>
+                    {new Date(fatharItem.FATHARTAR).toLocaleDateString("tr-TR")}
+                  </TableCell>
                   <TableCell>
                     {carharItem ? carharItem.CARHARISTIPKOD : ""}
                   </TableCell>
@@ -291,12 +290,25 @@ export default function DetailedDataTable() {
                   <TableCell>{fatharItem.FATHARCARKOD}</TableCell>
                   <TableCell>{fatharItem.FATHARSTKCINS}</TableCell>
                   <TableCell>{fatharItem.FATHARMIKTAR}</TableCell>
-                  <TableCell>{fatharItem.FATHARFIYAT}</TableCell>
-                  <TableCell>{fatharItem.FATHARTUTAR}</TableCell>
+                  <TableCell>
+                    {fatharItem.FATHARFIYAT.toLocaleString("tr-TR", {
+                      style: "currency",
+                      currency: "TRY",
+                      minimumFractionDigits: 2,
+                    })}
+                  </TableCell>
+                  <TableCell>
+                    {fatharItem.FATHARTUTAR.toLocaleString("tr-TR", {
+                      style: "currency",
+                      currency: "TRY",
+                      minimumFractionDigits: 2,
+                    })}
+                  </TableCell>
                   <TableCell>
                     {carharItem ? carharItem.CARHARCARUNVAN : ""}
                   </TableCell>
-                  <TableCell>{fatharItem.FATHARMIKTAR}</TableCell>
+                  {/* Alttaki TableCell Alacak kismi icindir */}
+                  <TableCell></TableCell>
                   <TableCell className="text-right">
                     {(
                       fatharItem.FATHARTUTAR - fatharItem.FATHARMIKTAR
