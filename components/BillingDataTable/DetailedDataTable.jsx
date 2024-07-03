@@ -1,11 +1,12 @@
-"use client";
-
-import { useState } from "react";
-import { FaSort, FaSortUp, FaSortDown } from "react-icons/fa";
+"use client"; // Next.js client modunu kullanıyoruz
+import { useState, useEffect, useRef } from "react"; // React hook'ları
+import { useSession } from "next-auth/react"; // NextAuth kullanarak oturum yönetimi
 import {
-  MdOutlineKeyboardArrowLeft,
-  MdOutlineKeyboardArrowRight,
-} from "react-icons/md";
+  MdKeyboardDoubleArrowLeft,
+  MdKeyboardArrowLeft,
+  MdKeyboardArrowRight,
+  MdKeyboardDoubleArrowRight,
+} from "react-icons/md"; // Sayfalama için ikonlar
 import {
   Table,
   TableBody,
@@ -14,112 +15,167 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "./TableComponents";
-import { DETAILED_BILLING_DATA } from "@/app/(dashboardLayout)/detailed-billings/data";
+} from "./TableComponents"; // Özel tablo bileşenleri
 
 export default function DetailedDataTable() {
-  const [data, setData] = useState(DETAILED_BILLING_DATA);
-  const [sortOrder, setSortOrder] = useState("asc"); // Siralama duzenini tutan state
-  const [currentPage, setCurrentPage] = useState(1); // Guncel sayfa numarasini tutan state
-  const [filterType, setFilterType] = useState(""); // Filter type'i setlemek icin kullaniriz
-  const itemsPerPage = 8; // Her sayfada gosterilecek item sayisi
-  const maxPagesToShow = 5; // Pagination kisminda yigilma olmamasi icin 5'ten fazla olunca '...' seklinde gozukur
+  const { data: session } = useSession(); // Oturum bilgisini almak için kullanılan hook
+  const [carharData, setCarharData] = useState([]); // CARHAR verileri için state
+  const [fatharData, setFatharData] = useState([]); // FATHAR verileri için state
+  const [isLoading, setIsLoading] = useState(true); // Veri yükleniyor durumu için state
+  const [sortOrder, setSortOrder] = useState("asc"); // Sıralama düzeni için state
+  const [currentPage, setCurrentPage] = useState(1); // Mevcut sayfa numarası için state
+  const [filterType, setFilterType] = useState(""); // Filtre tipi için state
+  const itemsPerPage = 8; // Sayfa başına gösterilecek öğe sayısı
+  const maxPagesToShow = 5; // Gösterilecek maksimum sayfa sayısı
+  const isMounted = useRef(true); // Component'in unmount olup olmadığını takip etmek için useRef kullanılıyor
 
-  // Veriyi tarihe göre sıralamak için kullanılan fonksiyon.
-  const handleSort = () => {
-    const sortedData = [...data].sort((a, b) => {
-      const [dayA, monthA, yearA] = a.tarih.split(".");
-      const [dayB, monthB, yearB] = b.tarih.split(".");
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        // CARHAR verilerini API'den çekme
+        const carharResponse = await fetch(
+          `${process.env.NEXT_PUBLIC_API_URL}/billings`
+        );
+        if (!carharResponse.ok) {
+          throw new Error("API hatası: " + carharResponse.status);
+        }
+        const { data: carharData } = await carharResponse.json();
+        setCarharData(carharData);
 
-      const dateA = new Date(yearA, monthA - 1, dayA);
-      const dateB = new Date(yearB, monthB - 1, dayB);
+        // FATHAR verilerini API'den çekme
+        const fatharResponse = await fetch(
+          `${process.env.NEXT_PUBLIC_API_URL}/detailed-billings`
+        );
+        if (!fatharResponse.ok) {
+          throw new Error("API hatası: " + fatharResponse.status);
+        }
+        const { data: fatharData } = await fatharResponse.json();
+        setFatharData(fatharData);
+      } catch (error) {
+        console.error("Veri çekme hatası: ", error);
+      } finally {
+        setIsLoading(false); // Veri yükleme tamamlandı
+      }
+    };
 
-      if (dateA < dateB) return sortOrder === "asc" ? -1 : 1;
-      if (dateA > dateB) return sortOrder === "asc" ? 1 : -1;
-      return 0;
+    fetchData(); // Veri çekme işlemini başlat
+
+    return () => {
+      isMounted.current = false; // Component unmount olduğunda güncelleme yapma
+    };
+  }, [session]); // Oturum değiştiğinde yeniden veri çek
+
+  useEffect(() => {
+    // Tarihe göre sıralamayı güncelle
+    const sortedData = [...fatharData].sort((a, b) => {
+      const dateA = new Date(a.FATHARTAR);
+      const dateB = new Date(b.FATHARTAR);
+      if (sortOrder === "asc") {
+        return dateA - dateB;
+      } else {
+        return dateB - dateA;
+      }
     });
 
-    setData(sortedData);
-    setSortOrder(sortOrder === "asc" ? "desc" : "asc");
+    if (isMounted.current) {
+      setFatharData(sortedData); // Sıralanmış veriyi güncelle
+    }
+  }, [fatharData, sortOrder]); // FATHAR verileri veya sıralama düzeni değiştiğinde güncelle
+
+  const handleSort = () => {
+    setSortOrder(sortOrder === "asc" ? "desc" : "asc"); // Sıralama düzenini değiştir
   };
 
-  // Sayfa değiştirme işlemini gerçekleştiren fonksiyon.
   const handlePageChange = (pageNumber) => {
-    setCurrentPage(pageNumber);
+    setCurrentPage(pageNumber); // Sayfa numarasını güncelle
   };
 
-  // Filtre değişikliğini yöneten fonksiyon.
   const handleFilterChange = (event) => {
     const selectedFilter = event.target.value;
-    setFilterType(selectedFilter);
+    setFilterType(selectedFilter); // Filtre tipini güncelle
+    setCurrentPage(1); // Filtre değiştiğinde sayfa numarasını sıfırla
   };
 
+  // Filtrelenmiş veriyi al
   const filteredData = filterType
-    ? data.filter((item) => item.islemC === filterType)
-    : data;
+    ? fatharData.filter((item) => item.CARHARISTIPKOD === filterType)
+    : fatharData.filter((item) => item.FATHARCARKOD === session?.user?.id); // Oturum açmış kullanıcının ID'sine göre filtrele
 
+  // Sayfalama işlemi için veriyi dilimle
   const paginatedData = filteredData.slice(
     (currentPage - 1) * itemsPerPage,
     currentPage * itemsPerPage
   );
 
+  // Toplam sayfa sayısını hesapla
   const totalPages = Math.ceil(filteredData.length / itemsPerPage);
 
-  // Toplam borç, alacak ve bakiye miktarlarını hesaplayan fonksiyon.
+  // Belirtilen anahtar için toplam miktarı hesapla
   const getTotal = (key) => {
-    return filteredData.reduce((total, item) => {
-      const value = parseFloat(item[key].replace(".", "").replace(",", "."));
+    return fatharData.reduce((total, item) => {
+      const value = parseFloat(
+        item[key].toString().replace(".", "").replace(",", ".")
+      );
       return total + (isNaN(value) ? 0 : value);
     }, 0);
   };
 
-  const borcTotal = getTotal("borc");
-  const alacakTotal = getTotal("alacak");
+  // Borç, alacak ve bakiye toplamlarını hesapla
+  const borcTotal = getTotal("FATHARTUTAR") || 0;
+  const alacakTotal = getTotal("FATHARMIKTAR") || 0;
   const bakiyeTotal = borcTotal - alacakTotal;
 
-  // Sayfalama için gösterilecek sayfa numaralarını hesaplayan fonksiyon.
-  const getPageNumbers = () => {
-    if (totalPages <= maxPagesToShow) {
-      return Array.from({ length: totalPages }, (_, index) => index + 1);
-    }
-
-    const leftOffset = Math.floor(maxPagesToShow / 2);
-    const rightOffset = Math.ceil(maxPagesToShow / 2) - 1;
-
-    let startPage = currentPage - leftOffset;
-    let endPage = currentPage + rightOffset;
-
-    if (startPage < 1) {
-      startPage = 1;
-      endPage = maxPagesToShow;
-    }
-
-    if (endPage > totalPages) {
-      endPage = totalPages;
-      startPage = totalPages - maxPagesToShow + 1;
-    }
-
-    let pages = Array.from(
-      { length: endPage - startPage + 1 },
-      (_, index) => startPage + index
+  // Veri yükleniyor durumunda yükleme animasyonunu göster
+  if (isLoading) {
+    return (
+      <div className="flex justify-center items-center min-h-screen">
+        <div className="flex flex-row gap-2">
+          <div className="w-4 h-4 rounded-full bg-NavyBlue animate-bounce [animation-delay:.7s]"></div>
+          <div className="w-4 h-4 rounded-full bg-NavyBlue animate-bounce [animation-delay:.3s]"></div>
+          <div className="w-4 h-4 rounded-full bg-NavyBlue animate-bounce [animation-delay:.7s]"></div>
+        </div>
+      </div>
     );
+  }
+
+  // Sayfa numaralarını oluştur
+  const getPageNumbers = () => {
+    const pageNumbers = [];
+    let startPage = 1;
+    if (currentPage > Math.floor(maxPagesToShow / 2)) {
+      startPage = currentPage - Math.floor(maxPagesToShow / 2);
+    }
+    const endPage = Math.min(startPage + maxPagesToShow - 1, totalPages);
 
     if (startPage > 1) {
-      pages = [1, "...", ...pages];
+      pageNumbers.push(1);
+      if (startPage > 2) {
+        pageNumbers.push("...");
+      }
+    }
+
+    for (let i = startPage; i <= endPage; i++) {
+      pageNumbers.push(i);
     }
 
     if (endPage < totalPages) {
-      pages = [...pages, "...", totalPages];
+      if (endPage < totalPages - 1) {
+        pageNumbers.push("...");
+      }
+      pageNumbers.push(totalPages);
     }
 
-    return pages;
+    return pageNumbers;
   };
 
+  // Component'in dönüşü
   return (
     <>
       <div className="max-w-[1880px] mx-auto mt-8 flex flex-col justify-between items-center px-8 gap-4 md:flex-row">
         <div className="flex items-center gap-4">
-          <h1 className="text-xl md:text-2xl text-LightBlue">Faturalar</h1>
+          <h1 className="text-xl md:text-2xl text-blue-500">
+            Detaylı Faturalar
+          </h1>
           <div className="flex items-center gap-4">
             <span className="mr-2">İşlem Tipi:</span>
             <select
@@ -133,64 +189,72 @@ export default function DetailedDataTable() {
             </select>
           </div>
         </div>
-        <div className="flex justify-center">
+
+        <div className="flex items-center">
+          {/* Sayfalama butonları */}
           <button
-            className="px-4 py-2 mx-1 bg-gray-300 hover:bg-gray-400 rounded"
+            className={`border-2 rounded-sm text-[18px] md:p-3 p-1 ${
+              currentPage === 1
+                ? "cursor-not-allowed text-gray-300"
+                : "cursor-pointer hover:bg-gray-200 duration-300 hover:border-NavyBlue hover:rounded-xl"
+            }`}
             onClick={() => handlePageChange(1)}
             disabled={currentPage === 1}
           >
-            <MdOutlineKeyboardArrowLeft />
+            <MdKeyboardDoubleArrowLeft />
           </button>
-
-          {getPageNumbers().map((page, index) => (
-            <button
-              key={index}
-              className={`px-4 py-2 mx-1 ${
-                currentPage === page
-                  ? "bg-NavyBlue text-white"
-                  : typeof page === "number"
-                  ? "bg-gray-300"
-                  : "text-gray-500"
-              } rounded`}
-              onClick={() => handlePageChange(page)}
-              disabled={typeof page !== "number"}
-            >
-              {page}
-            </button>
-          ))}
           <button
-            className="px-4 py-2 mx-1 bg-gray-300 rounded hover:bg-gray-400"
+            className={`border-2 rounded-sm text-[18px] md:p-3 p-1 ml-2 ${
+              currentPage === 1
+                ? "cursor-not-allowed text-gray-300"
+                : "cursor-pointer hover:bg-gray-200 duration-300 hover:border-NavyBlue hover:rounded-xl"
+            }`}
+            onClick={() => handlePageChange(currentPage - 1)}
+            disabled={currentPage === 1}
+          >
+            <MdKeyboardArrowLeft />
+          </button>
+          <span className="border md:px-4 md:py-2 py-1 px-3 rounded-full bg-NavyBlue text-white ml-2">
+            {currentPage}
+          </span>
+          <span className="md:px-2 md:py-2 py-1 px-3 rounded-full mr-2">
+            / {totalPages}
+          </span>
+          <button
+            className={`border-2 rounded-sm text-[18px] md:p-3 p-1 mr-2 ${
+              currentPage === totalPages
+                ? "cursor-not-allowed text-gray-300"
+                : "cursor-pointer hover:bg-gray-200 duration-300 hover:border-NavyBlue hover:rounded-xl"
+            }`}
+            onClick={() => handlePageChange(currentPage + 1)}
+            disabled={currentPage === totalPages}
+          >
+            <MdKeyboardArrowRight />
+          </button>
+          <button
+            className={`border-2 rounded-sm text-[18px] md:p-3 p-1 ${
+              currentPage === totalPages
+                ? "cursor-not-allowed text-gray-300"
+                : "cursor-pointer hover:bg-gray-200 duration-300 hover:border-NavyBlue hover:rounded-xl"
+            }`}
             onClick={() => handlePageChange(totalPages)}
             disabled={currentPage === totalPages}
           >
-            <MdOutlineKeyboardArrowRight />
+            <MdKeyboardDoubleArrowRight />
           </button>
         </div>
       </div>
-      <div className="flex flex-col items-center mt-2 max-w-[1880px] mx-auto px-8 md:items-start">
-        <h2>Cari Unvanı: {DETAILED_BILLING_DATA[0].cariUnvani}</h2>
-        <h2>Cari Yetkili: {DETAILED_BILLING_DATA[0].cariYetkili}</h2>
-      </div>
-      <div className="max-w-[1880px] mx-auto mt-4 border">
+
+      {/* Detaylı veri tablosu */}
+      <div className="max-w-[1880px] mx-auto mt-6 border">
         <Table>
+          {/* Tablo başlığı */}
           <TableHeader>
             <TableRow>
-              <TableHead>Cari Kodu</TableHead>
-              <TableHead>Unvan</TableHead>
-              <TableHead
-                onClick={handleSort}
-                className="cursor-pointer flex items-center py-11 md:py-6"
-              >
-                Tarih
-                {sortOrder === "asc" ? (
-                  <FaSortUp className="ml-2" />
-                ) : sortOrder === "desc" ? (
-                  <FaSortDown className="ml-2" />
-                ) : (
-                  <FaSort className="ml-2" />
-                )}
+              <TableHead className="cursor-pointer" onClick={handleSort}>
+                Tarih {sortOrder === "asc" ? "↑" : "↓"}
               </TableHead>
-              <TableHead>İşlem</TableHead>
+              <TableHead>İşlem Cinsi</TableHead>
               <TableHead>Açıklama 1</TableHead>
               <TableHead>Vadesi</TableHead>
               <TableHead>Kodu</TableHead>
@@ -198,53 +262,58 @@ export default function DetailedDataTable() {
               <TableHead>Miktar</TableHead>
               <TableHead>Fiyat</TableHead>
               <TableHead>Borç</TableHead>
+              <TableHead>Unvan</TableHead>
               <TableHead>Alacak</TableHead>
-              <TableHead>Bakiye</TableHead>
+              <TableHead className="text-right">Bakiye</TableHead>
             </TableRow>
           </TableHeader>
+          {/* Tablo içeriği */}
           <TableBody>
-            {paginatedData.map((item, index) => (
-              <TableRow
-                key={index}
-                className={index % 2 === 0 ? "bg-gray-100" : "bg-white"}
-              >
-                <TableCell>{item.cariKodu}</TableCell>
-                <TableCell>{item.cariUnvani}</TableCell>
-                <TableCell>{item.tarih}</TableCell>
-                <TableCell>{item.islemC}</TableCell>
-                <TableCell>{item.aciklama1}</TableCell>
-                <TableCell>{item.vadesi}</TableCell>
-                <TableCell>{item.kodu}</TableCell>
-                <TableCell>{item.cinsi}</TableCell>
-                <TableCell>{item.miktar}</TableCell>
-                <TableCell>{item.fiyat}</TableCell>
-                <TableCell>
-                  {item.borc.toLocaleString("tr-TR", {
-                    style: "currency",
-                    currency: "TRY",
-                    minimumFractionDigits: 2,
-                  })}
-                </TableCell>
-                <TableCell>
-                  {item.alacak.toLocaleString("tr-TR", {
-                    style: "currency",
-                    currency: "TRY",
-                    minimumFractionDigits: 2,
-                  })}
-                </TableCell>
-                <TableCell>
-                  {item.bakiye.toLocaleString("tr-TR", {
-                    style: "currency",
-                    currency: "TRY",
-                    minimumFractionDigits: 2,
-                  })}
-                </TableCell>
-              </TableRow>
-            ))}
+            {paginatedData.map((fatharItem, index) => {
+              // İlgili CARHAR verisini bul
+              const carharItem = carharData.find(
+                (carhar) => carhar.CARHARCARKOD === fatharItem.FATHARCARKOD
+              );
+
+              // Tablo satırı oluştur
+              return (
+                <TableRow key={index}>
+                  <TableCell>{fatharItem.FATHARTAR}</TableCell>
+                  <TableCell>
+                    {carharItem ? carharItem.CARHARISTIPKOD : ""}
+                  </TableCell>
+                  <TableCell>
+                    {carharItem ? carharItem.CARHARACIKLAMA1 : ""}
+                  </TableCell>
+                  <TableCell>
+                    {carharItem ? carharItem.CARHARVADETAR : ""}
+                  </TableCell>
+                  <TableCell>{fatharItem.FATHARCARKOD}</TableCell>
+                  <TableCell>{fatharItem.FATHARSTKCINS}</TableCell>
+                  <TableCell>{fatharItem.FATHARMIKTAR}</TableCell>
+                  <TableCell>{fatharItem.FATHARFIYAT}</TableCell>
+                  <TableCell>{fatharItem.FATHARTUTAR}</TableCell>
+                  <TableCell>
+                    {carharItem ? carharItem.CARHARCARUNVAN : ""}
+                  </TableCell>
+                  <TableCell>{fatharItem.FATHARMIKTAR}</TableCell>
+                  <TableCell className="text-right">
+                    {(
+                      fatharItem.FATHARTUTAR - fatharItem.FATHARMIKTAR
+                    ).toLocaleString("tr-TR", {
+                      style: "currency",
+                      currency: "TRY",
+                      minimumFractionDigits: 2,
+                    })}
+                  </TableCell>
+                </TableRow>
+              );
+            })}
           </TableBody>
+          {/* Tablo altbilgi */}
           <TableFooter>
             <TableRow>
-              <TableCell colSpan="10" className="text-right font-bold">
+              <TableCell colSpan={8} className="text-right font-bold">
                 Toplam:
               </TableCell>
               <TableCell className="font-bold">
@@ -261,7 +330,7 @@ export default function DetailedDataTable() {
                   minimumFractionDigits: 2,
                 })}
               </TableCell>
-              <TableCell className="font-bold">
+              <TableCell className="text-right font-bold">
                 {bakiyeTotal.toLocaleString("tr-TR", {
                   style: "currency",
                   currency: "TRY",

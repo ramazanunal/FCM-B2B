@@ -5,7 +5,7 @@ import {
   MdKeyboardArrowRight,
   MdKeyboardDoubleArrowRight,
 } from "react-icons/md";
-import { mainCategory, subCategory, category  } from "./data";
+import { mainCategory, subCategory, category } from "./data";
 
 function ProductsFilter({
   filteredProducts,
@@ -15,18 +15,18 @@ function ProductsFilter({
   setFilteredProducts,
   selectedProducts,
   setSelectedProducts,
-  products
+  products,
 }) {
   const [selectedCategory, setSelectedCategory] = useState("Kategori Seçin");
-  const [selectedProductType, setSelectedProductType] = useState("Sınıfa göre filtreleme");
+  const [selectedProductType, setSelectedProductType] = useState(
+    "Sınıfa göre filtreleme"
+  );
   const [selectedStock, setSelectedStock] = useState("Stoğa göre filtreleme");
   const [selectedAll, setSelectedAll] = useState("Toplu Islemler");
   const [selectedStatus, setSelectedStatus] = useState("Durum İşlemi");
   const [anyFilterSelected, setAnyFilterSelected] = useState(false);
   const [STKOZKOD2Array, setSTKOZKOD2Array] = useState([]);
   const [STKOZKOD3Array, setSTKOZKOD3Array] = useState([]);
- 
-  
 
   useEffect(() => {
     handleFilters();
@@ -34,21 +34,21 @@ function ProductsFilter({
 
   // STKOZKOD2'leri toplama fonksiyonu
   useEffect(() => {
-    const STKOZKOD2s = products.map(product => product.STKOZKOD2).filter(Boolean);
+    const STKOZKOD2s = products
+      .map((product) => product.STKOZKOD2)
+      .filter(Boolean);
     const uniqueSTKOZKOD2s = [...new Set(STKOZKOD2s)];
     setSTKOZKOD2Array(uniqueSTKOZKOD2s);
   }, [products]);
-    // STKOZKOD3'leri toplama fonksiyonu
+  // STKOZKOD3'leri toplama fonksiyonu
 
   useEffect(() => {
-    const STKOZKOD3s = products.map(product => product.STKOZKOD3).filter(Boolean);
+    const STKOZKOD3s = products
+      .map((product) => product.STKOZKOD3)
+      .filter(Boolean);
     const uniqueSTKOZKOD3s = [...new Set(STKOZKOD3s)];
     setSTKOZKOD3Array(uniqueSTKOZKOD3s);
   }, [products]);
-
-  
-  
-
 
   const handleClearFilters = () => {
     setSelectedCategory("Kategori Seçin");
@@ -82,39 +82,42 @@ function ProductsFilter({
     setSelectedAll(e.target.value);
     setAnyFilterSelected(true);
   };
- 
+
   const handleFilters = () => {
     let filteredProducts = [...products];
-   
+
     if (selectedCategory !== "Kategori Seçin") {
       filteredProducts = filteredProducts.filter(
         (item) => item.STKOZKOD2 === selectedCategory
-       
       );
       console.log(selectedCategory);
-        
-    }
-  
-    if (selectedProductType !== "Sınıfa göre filtreleme") {
-     
-      filteredProducts = filteredProducts.filter(
-        (item) => item.STKOZKOD3 === selectedProductType
-      ); 
     }
 
-    {/**if (selectedStock !== "Stoğa göre filtreleme") {
+    if (selectedProductType !== "Sınıfa göre filtreleme") {
+      filteredProducts = filteredProducts.filter(
+        (item) => item.STKOZKOD3 === selectedProductType
+      );
+    }
+
+    {
+      /**if (selectedStock !== "Stoğa göre filtreleme") {
       if (selectedStock === "Stokta Olanlar") {
         filteredProducts = filteredProducts.filter((item) => item.stokCount > 0);
       } else if (selectedStock === "Stokta Olmayanlar") {
         filteredProducts = filteredProducts.filter((item) => item.stokCount === 0);
       }
-    } */}
-    
+    } */
+    }
+
     if (selectedAll !== "Toplu Islemler") {
       if (selectedAll === "Aktif Olan Ürünler") {
-        filteredProducts = filteredProducts.filter((item) => item.STKOZKOD1 === 'A');
+        filteredProducts = filteredProducts.filter(
+          (item) => item.STKOZKOD1 === "A"
+        );
       } else if (selectedAll === "Aktif Olmayan Ürünler") {
-        filteredProducts = filteredProducts.filter((item) => item.STKOZKOD1 === ' ');
+        filteredProducts = filteredProducts.filter(
+          (item) => item.STKOZKOD1 === " "
+        );
       }
     }
 
@@ -127,7 +130,9 @@ function ProductsFilter({
 
   const applyStatusChange = () => {
     if (selectedStatus !== "Durum İşlemi") {
-      selectedProducts.forEach((product) => (product.STKOZKOD1 = selectedStatus));
+      selectedProducts.forEach(
+        (product) => (product.STKOZKOD1 = selectedStatus)
+      );
       const filteredActiveProduct = products.filter(
         (item) => item.STKOZKOD1.toString() !== selectedStatus
       );
@@ -144,14 +149,20 @@ function ProductsFilter({
           <div className="flex gap-2 md:mr-8">
             <select
               className={`p-2 cursor-pointer shadow-2xl border rounded-md text-CustomGray md:w-36 w-full ${
-                selectedProducts.length === 0 ? "pointer-events-none opacity-50" : ""
-              } ${selectedStatus !== "Durum İşlemi" ? "bg-NavyBlue text-white" : ""}`}
+                selectedProducts.length === 0
+                  ? "pointer-events-none opacity-50"
+                  : ""
+              } ${
+                selectedStatus !== "Durum İşlemi"
+                  ? "bg-NavyBlue text-white"
+                  : ""
+              }`}
               onChange={handleStatusChange}
               value={selectedStatus}
             >
               <option hidden>Durum İşlemi</option>
               <option>Durum İşlemi</option>
-              <option value={'A'}>Ürünü Aktif Yap</option>
+              <option value={"A"}>Ürünü Aktif Yap</option>
               {/**<option value={false}>Ürünü Pasif Yap</option> */}
             </select>
             <button
@@ -169,7 +180,8 @@ function ProductsFilter({
           <div className="flex flex-wrap md:flex-nowrap gap-2 items-center text-sm">
             <select
               className={`p-2 cursor-pointer shadow-2xl border rounded-md text-CustomGray md:w-48 w-full ${
-                selectedAll !== "Toplu Islemler" && "bg-NavyBlue text-white font-semibold"
+                selectedAll !== "Toplu Islemler" &&
+                "bg-NavyBlue text-white font-semibold"
               }`}
               onChange={handleAllFilter}
               value={selectedAll}
@@ -177,11 +189,12 @@ function ProductsFilter({
               <option hidden>Toplu Islemler</option>
               <option>Toplu Islemler</option>
               <option value="Aktif Olan Ürünler">Aktif Olan Ürünler</option>
-            {/**  <option  value="Aktif Olmayan Ürünler">Aktif Olmayan Ürünler</option> */}
+              {/**  <option  value="Aktif Olmayan Ürünler">Aktif Olmayan Ürünler</option> */}
             </select>
             <select
               className={`p-2 cursor-pointer shadow-2xl border rounded-md text-CustomGray md:w-30 w-full ${
-                selectedCategory !== "Kategori Seçin" && "bg-NavyBlue text-white font-semibold"
+                selectedCategory !== "Kategori Seçin" &&
+                "bg-NavyBlue text-white font-semibold"
               }`}
               onChange={handleCategory}
               value={selectedCategory}
@@ -196,7 +209,8 @@ function ProductsFilter({
             </select>
             <select
               className={`p-2 cursor-pointer shadow-2xl border rounded-md text-CustomGray md:w-48 w-full ${
-                selectedProductType !== "Sınıfa göre filtreleme" && "bg-NavyBlue text-white font-semibold"
+                selectedProductType !== "Sınıfa göre filtreleme" &&
+                "bg-NavyBlue text-white font-semibold"
               }`}
               onChange={handleProductType}
               value={selectedProductType}
@@ -209,7 +223,7 @@ function ProductsFilter({
                 </option>
               ))}
             </select>
-       {/**     <select
+            {/**     <select
               className={`p-2 cursor-pointer shadow-2xl border rounded-md text-CustomGray md:w-48 w-full ${
                 selectedStock !== "Stoğa göre filtreleme" && "bg-NavyBlue text-white font-semibold"
               }`}
@@ -285,7 +299,9 @@ function ProductsFilter({
                 ? "cursor-not-allowed text-gray-300"
                 : "cursor-pointer hover:bg-gray-200 duration-300 hover:border-NavyBlue hover:rounded-xl"
             } rounded-sm text-[18px] md:p-3 p-1 border-2`}
-            onClick={() => paginate(Math.ceil(filteredProducts.length / productsPerPage))}
+            onClick={() =>
+              paginate(Math.ceil(filteredProducts.length / productsPerPage))
+            }
           >
             <MdKeyboardDoubleArrowRight />
           </div>

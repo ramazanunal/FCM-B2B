@@ -38,7 +38,7 @@ export default async function middleware(req) {
   // else if (pathname.startsWith("/api/") && !pathname.startsWith("/api/mail")) {
 
   //   // rate limit kontrolü burada başlar. "RATE LİMİT DEVRE DIŞI BIRAKILDI YORUM SATIRINA ALINARAK!!!"
-  //   // if(!req.method === "GET"){ // İSTEK TİPİNE GÖRE "GET" gewlirse rate limiti çalıştırmıyoruz!
+  //   // if(!req.method === "GET"){ // İSTEK TİPİNE GÖRE "GET" gelirse rate limiti çalıştırmıyoruz!
 
   //   //   const { success, error, reset, backUrl, targetUrl, targetButtonName, backButtonName, label } = await RateLimitPageConfig(req, pathname);
 

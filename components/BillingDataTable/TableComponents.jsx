@@ -65,7 +65,7 @@ TableHead.displayName = "TableHead";
 const TableCell = forwardRef(({ className, ...props }, ref) => (
   <td
     ref={ref}
-    className={`py-4 px-3 align-middle [&:has([role=checkbox])]:pr-0 [&>[role=checkbox]]:translate-y-[2px] ${
+    className={`py-6 px-3 align-middle [&:has([role=checkbox])]:pr-0 [&>[role=checkbox]]:translate-y-[2px] ${
       className || ""
     }`}
     {...props}

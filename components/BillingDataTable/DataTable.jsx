@@ -1,8 +1,13 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useSession } from "next-auth/react";
 import { FaSort, FaSortUp, FaSortDown } from "react-icons/fa";
 import {
+  MdKeyboardArrowLeft,
+  MdKeyboardArrowRight,
+  MdKeyboardDoubleArrowLeft,
+  MdKeyboardDoubleArrowRight,
   MdOutlineKeyboardArrowLeft,
   MdOutlineKeyboardArrowRight,
 } from "react-icons/md";
@@ -15,23 +20,47 @@ import {
   TableHeader,
   TableRow,
 } from "./TableComponents";
-import { BILLING_DATA } from "@/app/(dashboardLayout)/billings/data";
 
 export default function DataTable() {
-  const [data, setData] = useState(BILLING_DATA);
+  const { data: session } = useSession();
+  const [data, setData] = useState([]);
   const [sortOrder, setSortOrder] = useState("asc");
   const [currentPage, setCurrentPage] = useState(1);
   const [filterType, setFilterType] = useState("");
+  const [isLoading, setIsLoading] = useState(true);
   const itemsPerPage = 8;
   const maxPagesToShow = 5;
 
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch(
+          `${process.env.NEXT_PUBLIC_API_URL}/billings`
+        );
+        if (!response.ok) {
+          throw new Error("API hatası: " + response.status);
+        }
+        const { data } = await response.json();
+
+        // Giriş yapmış kullanıcının CARHARCARKOD'uyla uyumlu olan verileri filtrele
+        const filteredData = data.filter(
+          (item) => item.CARHARCARKOD === session?.user?.id
+        );
+        setData(filteredData);
+      } catch (error) {
+        console.error("Veri çekme hatası: ", error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    fetchData();
+  }, [session]);
+
+  // Fonksiyon: Tablodaki tarihleri sıralamak için
   const handleSort = () => {
     const sortedData = [...data].sort((a, b) => {
-      const [dayA, monthA, yearA] = a.tarih.split(".");
-      const [dayB, monthB, yearB] = b.tarih.split(".");
-
-      const dateA = new Date(yearA, monthA - 1, dayA);
-      const dateB = new Date(yearB, monthB - 1, dayB);
+      const dateA = new Date(a.CARHARTAR);
+      const dateB = new Date(b.CARHARTAR);
 
       if (dateA < dateB) return sortOrder === "asc" ? -1 : 1;
       if (dateA > dateB) return sortOrder === "asc" ? 1 : -1;
@@ -42,37 +71,47 @@ export default function DataTable() {
     setSortOrder(sortOrder === "asc" ? "desc" : "asc");
   };
 
+  // Fonksiyon: Sayfa değişikliği işlemini yönetmek için
   const handlePageChange = (pageNumber) => {
     setCurrentPage(pageNumber);
   };
 
+  // Fonksiyon: Filtre değişikliği işlemini yönetmek için
   const handleFilterChange = (event) => {
     const selectedFilter = event.target.value;
     setFilterType(selectedFilter);
   };
 
+  // Filtrelenmiş verileri al
   const filteredData = filterType
-    ? data.filter((item) => item.islemC === filterType)
+    ? data.filter((item) => item.CARHARISTIPKOD === filterType)
     : data;
 
+  // Sayfalama yapılan veriyi al
   const paginatedData = filteredData.slice(
     (currentPage - 1) * itemsPerPage,
     currentPage * itemsPerPage
   );
 
+  // Toplam sayfa sayısını hesapla
   const totalPages = Math.ceil(filteredData.length / itemsPerPage);
 
+  // Toplam borç miktarını hesapla
   const getTotal = (key) => {
     return filteredData.reduce((total, item) => {
-      const value = parseFloat(item[key].replace(".", "").replace(",", "."));
+      const value = parseFloat(
+        item[key].toString().replace(".", "").replace(",", ".")
+      );
       return total + (isNaN(value) ? 0 : value);
     }, 0);
   };
 
-  const borcTotal = getTotal("borc");
-  const alacakTotal = getTotal("alacak");
+  // Toplam borç, alacak ve bakiye miktarlarını hesapla
+  const borcTotal = getTotal("CARHARTUTAR") || 0;
+  const alacakTotal = 0; // Varsayılan olarak alacak yok kabul ediliyor
   const bakiyeTotal = borcTotal - alacakTotal;
 
+  // Sayfa numaralarını al
   const getPageNumbers = () => {
     if (totalPages <= maxPagesToShow) {
       return Array.from({ length: totalPages }, (_, index) => index + 1);
@@ -110,6 +149,20 @@ export default function DataTable() {
     return pages;
   };
 
+  // Yükleme durumunu kontrol et
+  if (isLoading) {
+    return (
+      <div className="flex justify-center items-center min-h-screen">
+        <div className="flex flex-row gap-2">
+          <div className="w-4 h-4 rounded-full bg-NavyBlue animate-bounce [animation-delay:.7s]"></div>
+          <div className="w-4 h-4 rounded-full bg-NavyBlue animate-bounce [animation-delay:.3s]"></div>
+          <div className="w-4 h-4 rounded-full bg-NavyBlue animate-bounce [animation-delay:.7s]"></div>
+        </div>
+      </div>
+    );
+  }
+
+  // Veri yüklendiğinde tabloyu göster
   return (
     <>
       <div className="max-w-[1880px] mx-auto mt-8 flex flex-col justify-between items-center px-8 gap-4 md:flex-row">
@@ -129,43 +182,60 @@ export default function DataTable() {
           </div>
         </div>
 
-        <div className="flex justify-center">
+        <div className="flex items-center">
           <button
-            className="px-4 py-2 mx-1 bg-gray-300 hover:bg-gray-400 rounded"
+            className={`border-2 rounded-sm text-[18px] md:p-3 p-1 ${
+              currentPage === 1
+                ? "cursor-not-allowed text-gray-300"
+                : "cursor-pointer hover:bg-gray-200 duration-300 hover:border-NavyBlue hover:rounded-xl"
+            }`}
             onClick={() => handlePageChange(1)}
             disabled={currentPage === 1}
           >
-            <MdOutlineKeyboardArrowLeft />
+            <MdKeyboardDoubleArrowLeft />
           </button>
-          {getPageNumbers().map((page, index) => (
-            <button
-              key={index}
-              className={`px-4 py-2 mx-1 ${
-                currentPage === page
-                  ? "bg-NavyBlue text-white"
-                  : typeof page === "number"
-                  ? "bg-gray-300"
-                  : "text-gray-500"
-              } rounded`}
-              onClick={() => handlePageChange(page)}
-              disabled={typeof page !== "number"}
-            >
-              {page}
-            </button>
-          ))}
           <button
-            className="px-4 py-2 mx-1 bg-gray-300 rounded hover:bg-gray-400"
+            className={`border-2 rounded-sm text-[18px] md:p-3 p-1 ml-2 ${
+              currentPage === 1
+                ? "cursor-not-allowed text-gray-300"
+                : "cursor-pointer hover:bg-gray-200 duration-300 hover:border-NavyBlue hover:rounded-xl"
+            }`}
+            onClick={() => handlePageChange(currentPage - 1)}
+            disabled={currentPage === 1}
+          >
+            <MdKeyboardArrowLeft />
+          </button>
+          <span className="border md:px-4 md:py-2 py-1 px-3 rounded-full bg-NavyBlue text-white ml-2">
+            {currentPage}
+          </span>
+          <span className="md:px-2 md:py-2 py-1 px-3 rounded-full mr-2">
+            / {totalPages}
+          </span>
+          <button
+            className={`border-2 rounded-sm text-[18px] md:p-3 p-1 mr-2 ${
+              currentPage === totalPages
+                ? "cursor-not-allowed text-gray-300"
+                : "cursor-pointer hover:bg-gray-200 duration-300 hover:border-NavyBlue hover:rounded-xl"
+            }`}
+            onClick={() => handlePageChange(currentPage + 1)}
+            disabled={currentPage === totalPages}
+          >
+            <MdKeyboardArrowRight />
+          </button>
+          <button
+            className={`border-2 rounded-sm text-[18px] md:p-3 p-1 ${
+              currentPage === totalPages
+                ? "cursor-not-allowed text-gray-300"
+                : "cursor-pointer hover:bg-gray-200 duration-300 hover:border-NavyBlue hover:rounded-xl"
+            }`}
             onClick={() => handlePageChange(totalPages)}
             disabled={currentPage === totalPages}
           >
-            <MdOutlineKeyboardArrowRight />
+            <MdKeyboardDoubleArrowRight />
           </button>
         </div>
       </div>
-      <div className="flex flex-col items-center mt-2 max-w-[1880px] mx-auto px-8 md:items-start">
-        <h2>Cari Unvanı: {BILLING_DATA[0].cariUnvani}</h2>
-        <h2>Cari Yetkili: {BILLING_DATA[0].cariYetkili}</h2>
-      </div>
+
       <div className="max-w-[1880px] mx-auto mt-6 border">
         <Table>
           <TableHeader>
@@ -174,7 +244,7 @@ export default function DataTable() {
               <TableHead>Unvan</TableHead>
               <TableHead
                 onClick={handleSort}
-                className="cursor-pointer flex items-center py-11 md:py-6"
+                className="cursor-pointer flex items-center py-12 md:py-6"
               >
                 Tarih
                 {sortOrder === "asc" ? (
@@ -199,28 +269,30 @@ export default function DataTable() {
                 key={index}
                 className={index % 2 === 0 ? "bg-gray-100" : "bg-white"}
               >
-                <TableCell className="font-medium">{item.cariKodu}</TableCell>
-                <TableCell>{item.cariUnvani}</TableCell>
-                <TableCell>{item.tarih}</TableCell>
-                <TableCell>{item.islemC}</TableCell>
-                <TableCell>{item.aciklama1}</TableCell>
-                <TableCell>{item.aciklama}</TableCell>
+                <TableCell className="font-medium">
+                  {item.CARHARCARKOD}
+                </TableCell>
+                <TableCell>{item.CARHARCARUNVAN}</TableCell>
+                <TableCell>{item.CARHARTAR}</TableCell>
+                <TableCell>{item.CARHARISTIPKOD}</TableCell>
+                <TableCell>{item.CARHARACIKLAMA1}</TableCell>
+                <TableCell>{item.CARHARACIKLAMA}</TableCell>
                 <TableCell>
-                  {item.borc.toLocaleString("tr-TR", {
+                  {item.CARHARTUTAR.toLocaleString("tr-TR", {
                     style: "currency",
                     currency: "TRY",
                     minimumFractionDigits: 2,
                   })}
                 </TableCell>
                 <TableCell>
-                  {item.alacak.toLocaleString("tr-TR", {
+                  {item.CARHARTUTAR.toLocaleString("tr-TR", {
                     style: "currency",
                     currency: "TRY",
                     minimumFractionDigits: 2,
                   })}
                 </TableCell>
                 <TableCell className="text-right">
-                  {item.bakiye.toLocaleString("tr-TR", {
+                  {item.CARHARTUTAR.toLocaleString("tr-TR", {
                     style: "currency",
                     currency: "TRY",
                     minimumFractionDigits: 2,
