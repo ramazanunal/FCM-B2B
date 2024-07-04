@@ -1,6 +1,6 @@
 "use client";
-import { useState, useEffect, useRef } from "react";
-import { useSession } from "next-auth/react"; // NextAuth kullanarak oturum yönetimi
+import { useState, useEffect } from "react";
+import { useSession } from "next-auth/react";
 import {
   MdKeyboardDoubleArrowLeft,
   MdKeyboardArrowLeft,
@@ -19,92 +19,70 @@ import {
 import Loading from "../Loading";
 
 export default function DetailedDataTable() {
-  const { data: session } = useSession(); // Oturum bilgisini almak için kullanılan hook
-  const [carharData, setCarharData] = useState([]); // CARHAR verileri için state
-  const [fatharData, setFatharData] = useState([]); // FATHAR verileri için state
-  const [isLoading, setIsLoading] = useState(true); // Veri yükleniyor durumu için state
-  const [sortOrder, setSortOrder] = useState("asc"); // Sıralama düzeni için state
-  const [currentPage, setCurrentPage] = useState(1); // Mevcut sayfa numarası için state
-  const [filterType, setFilterType] = useState(""); // Filtre tipi için state
-  const itemsPerPage = 8; // Sayfa başına gösterilecek öğe sayısı
-  const isMounted = useRef(true); // Component'in unmount olup olmadığını takip etmek için useRef kullanılıyor
+  const { data: session } = useSession();
+  const [fatharData, setFatharData] = useState([]);
+  const [carharData, setCarharData] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [sortOrder, setSortOrder] = useState("asc");
+  const [currentPage, setCurrentPage] = useState(1);
+  const [filterType, setFilterType] = useState("");
+  const itemsPerPage = 8;
 
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchFatharData = async () => {
       try {
-        // CARHAR verilerini API'den çekme
-        const carharResponse = await fetch(
-          `${process.env.NEXT_PUBLIC_API_URL}/billings`
-        );
-        if (!carharResponse.ok) {
-          throw new Error("API hatası: " + carharResponse.status);
-        }
-        const { data: carharData } = await carharResponse.json();
-        setCarharData(carharData);
-
-        // FATHAR verilerini API'den çekme
-        const fatharResponse = await fetch(
+        const response = await fetch(
           `${process.env.NEXT_PUBLIC_API_URL}/detailed-billings`
         );
-        if (!fatharResponse.ok) {
-          throw new Error("API hatası: " + fatharResponse.status);
+        if (!response.ok) {
+          throw new Error("API hatası: " + response.status);
         }
-        const { data: fatharData } = await fatharResponse.json();
-        setFatharData(fatharData);
+        const { data } = await response.json();
+        setFatharData(data);
       } catch (error) {
-        console.error("Veri çekme hatası: ", error);
-      } finally {
-        setIsLoading(false); // Veri yükleme tamamlandı
+        console.error("FATHAR veri çekme hatası: ", error);
       }
     };
 
-    fetchData(); // Veri çekme işlemini başlat
-
-    return () => {
-      isMounted.current = false; // Component unmount olduğunda güncelleme yapma
-    };
-  }, [session]); // Oturum değiştiğinde yeniden veri çek
-
-  useEffect(() => {
-    // Tarihe göre sıralamayı güncelle
-    const sortedData = [...fatharData].sort((a, b) => {
-      const dateA = new Date(a.FATHARTAR);
-      const dateB = new Date(b.FATHARTAR);
-      if (sortOrder === "asc") {
-        return dateA - dateB;
-      } else {
-        return dateB - dateA;
+    const fetchCarharData = async () => {
+      try {
+        const response = await fetch(
+          `${process.env.NEXT_PUBLIC_API_URL}/billings`
+        );
+        if (!response.ok) {
+          throw new Error("API hatası: " + response.status);
+        }
+        const { data } = await response.json();
+        setCarharData(data);
+      } catch (error) {
+        console.error("CARHAR veri çekme hatası: ", error);
       }
-    });
+    };
 
-    if (isMounted.current) {
-      setFatharData(sortedData); // Sıralanmış veriyi güncelle
-    }
-  }, [fatharData, sortOrder]); // FATHAR verileri veya sıralama düzeni değiştiğinde güncelle
+    Promise.all([fetchFatharData(), fetchCarharData()]).then(() =>
+      setIsLoading(false)
+    );
+  }, []);
 
   const handleSort = () => {
-    setSortOrder(sortOrder === "asc" ? "desc" : "asc"); // Sıralama düzenini değiştir
+    setSortOrder(sortOrder === "asc" ? "desc" : "asc");
   };
 
   const handlePageChange = (pageNumber) => {
-    setCurrentPage(pageNumber); // Sayfa numarasını güncelle
+    setCurrentPage(pageNumber);
   };
 
-  // Filtrelenmiş veriyi al
   const filteredData = filterType
-    ? fatharData.filter((item) => item.CARHARISTIPKOD === filterType)
-    : fatharData.filter((item) => item.FATHARCARKOD === session?.user?.id); // Oturum açmış kullanıcının ID'sine göre filtrele
+    ? fatharData.filter((item) => item.FATHARCARKOD === filterType)
+    : fatharData.filter((item) => item.FATHARCARKOD === session?.user?.id);
 
-  // Sayfalama işlemi için veriyi dilimle
   const paginatedData = filteredData.slice(
     (currentPage - 1) * itemsPerPage,
     currentPage * itemsPerPage
   );
 
-  // Toplam sayfa sayısını hesapla
   const totalPages = Math.ceil(filteredData.length / itemsPerPage);
 
-  // Belirtilen anahtar için toplam miktarı hesapla
   const getTotal = (key) => {
     return fatharData.reduce((total, item) => {
       const value = parseFloat(
@@ -114,17 +92,14 @@ export default function DetailedDataTable() {
     }, 0);
   };
 
-  // Borç, alacak ve bakiye toplamlarını hesapla
   const borcTotal = getTotal("FATHARTUTAR") || 0;
   const alacakTotal = getTotal("FATHARMIKTAR") || 0;
   const bakiyeTotal = borcTotal - alacakTotal;
 
-  // Veri yükleniyor durumunda yükleme animasyonunu göster
   if (isLoading) {
     return <Loading />;
   }
 
-  // Component'in dönüşü
   return (
     <>
       <div className="max-w-[1880px] mx-auto mt-8 flex flex-col justify-between items-center px-8 gap-4 md:flex-row">
@@ -144,7 +119,6 @@ export default function DetailedDataTable() {
         </div>
 
         <div className="flex items-center">
-          {/* Pagination butonları */}
           <button
             className={`border-2 rounded-sm text-[18px] md:p-3 p-1 ${
               currentPage === 1
@@ -198,10 +172,8 @@ export default function DetailedDataTable() {
         </div>
       </div>
 
-      {/* Detaylı veri tablosu */}
       <div className="max-w-[1880px] mx-auto mt-6 border">
         <Table>
-          {/* Tablo başlığı */}
           <TableHeader>
             <TableRow>
               <TableHead className="cursor-pointer" onClick={handleSort}>
@@ -219,33 +191,37 @@ export default function DetailedDataTable() {
               <TableHead className="text-right">Bakiye</TableHead>
             </TableRow>
           </TableHeader>
-          {/* Tablo içeriği */}
           <TableBody>
             {paginatedData.map((fatharItem, index) => {
-              // İlgili CARHAR verisini bul
-              const carharItem = carharData.find(
-                (carhar) => carhar.CARHARCARKOD === fatharItem.FATHARCARKOD
+              const matchingCarhar = carharData.find(
+                (carharItem) =>
+                  carharItem.CARHARCARKOD === fatharItem.FATHARCARKOD &&
+                  new Date(carharItem.CARHARTAR).getTime() ===
+                    new Date(fatharItem.FATHARTAR).getTime()
               );
 
-              // Tablo satırı oluştur
               return (
                 <TableRow
                   key={index}
-                  className={index % 2 === 0 ? "bg-white" : "bg-gray-100"}
+                  className={index % 2 === 0 ? "" : "bg-gray-100"}
                 >
                   <TableCell>
                     {new Date(fatharItem.FATHARTAR).toLocaleDateString("tr-TR")}
                   </TableCell>
                   <TableCell>
-                    {carharItem ? carharItem.CARHARISTIPKOD : ""}
+                    {matchingCarhar ? matchingCarhar.CARHARISTIPKOD : ""}
                   </TableCell>
                   <TableCell>
-                    {carharItem ? carharItem.CARHARACIKLAMA1 : ""}
+                    {matchingCarhar ? matchingCarhar.CARHARACIKLAMA1 : ""}
                   </TableCell>
                   <TableCell>
-                    {carharItem ? carharItem.CARHARVADETAR : ""}
+                    {matchingCarhar
+                      ? new Date(
+                          matchingCarhar.CARHARVADETAR
+                        ).toLocaleDateString("tr-TR")
+                      : ""}
                   </TableCell>
-                  <TableCell>{fatharItem.FATHARCARKOD}</TableCell>
+                  <TableCell>{fatharItem.FATHARSTKKOD}</TableCell>
                   <TableCell>{fatharItem.FATHARSTKCINS}</TableCell>
                   <TableCell>{fatharItem.FATHARMIKTAR}</TableCell>
                   <TableCell>
@@ -256,18 +232,25 @@ export default function DetailedDataTable() {
                     })}
                   </TableCell>
                   <TableCell>
-                    {fatharItem.FATHARTUTAR.toLocaleString("tr-TR", {
+                    {(
+                      fatharItem.FATHARFIYAT * fatharItem.FATHARMIKTAR
+                    ).toLocaleString("tr-TR", {
                       style: "currency",
                       currency: "TRY",
                       minimumFractionDigits: 2,
                     })}
                   </TableCell>
-                  {/* Alttaki TableCell Alacak kismi icindir */}
-                  <TableCell></TableCell>
-                  <TableCell className="text-right">
+                  <TableCell>
                     {(
                       fatharItem.FATHARTUTAR - fatharItem.FATHARMIKTAR
                     ).toLocaleString("tr-TR", {
+                      style: "currency",
+                      currency: "TRY",
+                      minimumFractionDigits: 2,
+                    })}
+                  </TableCell>
+                  <TableCell className="text-right">
+                    {fatharItem.FATHARTUTAR.toLocaleString("tr-TR", {
                       style: "currency",
                       currency: "TRY",
                       minimumFractionDigits: 2,
@@ -277,7 +260,6 @@ export default function DetailedDataTable() {
               );
             })}
           </TableBody>
-          {/* Tablo altbilgi */}
           <TableFooter>
             <TableRow>
               <TableCell colSpan={8} className="text-right font-bold">
