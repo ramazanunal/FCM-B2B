@@ -230,7 +230,10 @@ export default function DetailedDataTable() {
 
               // Tablo satırı oluştur
               return (
-                <TableRow key={index}>
+                <TableRow
+                  key={index}
+                  className={index % 2 === 0 ? "bg-white" : "bg-gray-100"}
+                >
                   <TableCell>
                     {new Date(fatharItem.FATHARTAR).toLocaleDateString("tr-TR")}
                   </TableCell>
