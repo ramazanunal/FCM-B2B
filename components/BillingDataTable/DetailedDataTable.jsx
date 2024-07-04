@@ -16,6 +16,7 @@ import {
   TableHeader,
   TableRow,
 } from "./TableComponents";
+import Loading from "../Loading";
 
 export default function DetailedDataTable() {
   const { data: session } = useSession(); // Oturum bilgisini almak için kullanılan hook
@@ -120,15 +121,7 @@ export default function DetailedDataTable() {
 
   // Veri yükleniyor durumunda yükleme animasyonunu göster
   if (isLoading) {
-    return (
-      <div className="flex justify-center items-center min-h-screen">
-        <div className="flex flex-row gap-2">
-          <div className="w-4 h-4 rounded-full bg-NavyBlue animate-bounce [animation-delay:.7s]"></div>
-          <div className="w-4 h-4 rounded-full bg-NavyBlue animate-bounce [animation-delay:.3s]"></div>
-          <div className="w-4 h-4 rounded-full bg-NavyBlue animate-bounce [animation-delay:.7s]"></div>
-        </div>
-      </div>
-    );
+    return <Loading />;
   }
 
   // Component'in dönüşü
