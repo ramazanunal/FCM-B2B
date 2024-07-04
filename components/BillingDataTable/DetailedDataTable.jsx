@@ -215,7 +215,6 @@ export default function DetailedDataTable() {
               <TableHead>Miktar</TableHead>
               <TableHead>Fiyat</TableHead>
               <TableHead>Borç</TableHead>
-              <TableHead>Unvan</TableHead>
               <TableHead>Alacak</TableHead>
               <TableHead className="text-right">Bakiye</TableHead>
             </TableRow>
@@ -262,9 +261,6 @@ export default function DetailedDataTable() {
                       currency: "TRY",
                       minimumFractionDigits: 2,
                     })}
-                  </TableCell>
-                  <TableCell>
-                    {carharItem ? carharItem.CARHARCARUNVAN : ""}
                   </TableCell>
                   {/* Alttaki TableCell Alacak kismi icindir */}
                   <TableCell></TableCell>
