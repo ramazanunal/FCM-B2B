@@ -8,6 +8,7 @@ import Link from 'next/link';
 import { IoIosCloseCircle } from "react-icons/io";
 import { FaCheckCircle } from "react-icons/fa";
 import Loading from '../Loading';
+import Image from 'next/image';
 
 
 
