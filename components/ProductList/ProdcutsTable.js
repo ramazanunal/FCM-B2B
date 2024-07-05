@@ -13,7 +13,7 @@ import Loading from '../Loading';
 
 
 
-function ProdcutsTable({currentProducts,setSelectedProducts,selectedProducts, loading}) {
+function ProdcutsTable({currentProducts, loading}) {
   const [sortOrder, setSortOrder] = useState('asc');
   const [sortedColumn, setSortedColumn] = useState(null);
   const [isOpenModal, setIsOpenModal] = useState(false)
@@ -36,68 +36,33 @@ function ProdcutsTable({currentProducts,setSelectedProducts,selectedProducts, lo
   };
 
  
-  useEffect(() => {
-    // Tüm ürünler seçiliyse, seçili ürünleri güncelle
-    if (selectAll) {
-      setSelectedProducts(currentProducts.map((product) => product));
-    } else {
-      setSelectedProducts([]);
-    }
-  }, [selectAll]);
-    // checkbox işlmeleri BAşlangıç
+
 
    
 
+ 
   
-    const handleSelectAll = () => {
-      setSelectAll(!selectAll);
-    };
-    
-  
-    const handleProductSelect = (product) => {
-      if (selectedProducts.some((p) => p.STKKOD === product.STKKOD)) {
-        setSelectedProducts(selectedProducts.filter((p) => p.STKKOD !== product.STKKOD));
-      } else {
-        setSelectedProducts([...selectedProducts, product]);
-      }
-    };
-    // checkbox işlmeleri Bitiş
+
 
   let sortedProducts = [...currentProducts];
 
-  if (sortedColumn === 'name') {
+  if (sortedColumn === 'STKCINSI') {
     sortedProducts = [...currentProducts].sort((a, b) => {
-      const nameA = a.name.toUpperCase();
-      const nameB = b.name.toUpperCase();
+      const STKCINSIA = a.STKCINSI.toUpperCase();
+      const STKCINSIB = b.STKCINSI.toUpperCase();
       let comparison = 0;
-      if (nameA > nameB) comparison = 1;
-      else if (nameA < nameB) comparison = -1;
+      if (STKCINSIA > STKCINSIB) comparison = 1;
+      else if (STKCINSIA < STKCINSIB) comparison = -1;
       return sortOrder === 'desc' ? comparison * -1 : comparison;
     });
-  } else if (sortedColumn === 'price') {
+  } else if (sortedColumn === 'STKOZKOD5') {
     sortedProducts = [...currentProducts].sort((a, b) => {
-      const priceA = a.price;
-      const priceB = b.price;
+      const STKOZKOD5A = a.STKOZKOD5;
+      const STKOZKOD5B = b.STKOZKOD5;
       let comparison = 0;
-      if (priceA > priceB) comparison = 1;
-      else if (priceA < priceB) comparison = -1;
+      if (STKOZKOD5A > STKOZKOD5B) comparison = 1;
+      else if (STKOZKOD5A < STKOZKOD5B) comparison = -1;
       return sortOrder === 'desc' ? comparison * -1 : comparison;
-    });
-  } else if (sortedColumn === 'stokCount') {
-    sortedProducts = [...currentProducts].sort((a, b) => {
-      const stokCountA = a.stokCount;
-      const stokCountB = b.stokCount;
-      let comparison = 0;
-      if (stokCountA > stokCountB) comparison = 1;
-      else if (stokCountA < stokCountB) comparison = -1;
-      return sortOrder === 'desc' ? comparison * -1 : comparison;
-    });
-    
-  }else if (sortedColumn === 'lastUpdateDate') {
-    sortedProducts.sort((a, b) => {
-      const dateA = new Date(a.date.lastUpdateDate);
-      const dateB = new Date(b.date.lastUpdateDate);
-      return sortOrder === 'desc' ? dateB - dateA : dateA - dateB;
     });
   }
 
@@ -109,12 +74,6 @@ function ProdcutsTable({currentProducts,setSelectedProducts,selectedProducts, lo
         <tr>
           <th
             scope="col"
-            className="px-6 py-3 text-left text-xs font-medium "
-          >
-            <input type="checkbox"onChange={handleSelectAll} checked={selectAll}  className='w-4 h-4 '/>
-          </th>
-          <th
-            scope="col"
             className="px-10 py-3 text-left text-base font-medium "
           >
             <FaImage />
@@ -122,10 +81,10 @@ function ProdcutsTable({currentProducts,setSelectedProducts,selectedProducts, lo
           <th
             scope="col"
             className="px-6 flex items-center cursor-pointer  py-3 text-left text-base font-medium"
-            onClick={() => handleSort('name')}
+            onClick={() => handleSort('STKCINSI')}
           >
            İsim
-           {sortedColumn === 'name' ? (
+           {sortedColumn === 'STKCINSI' ? (
             <span>
               {sortOrder === 'asc' ? <FaCaretUp/> : <FaCaretDown/>}
             </span>
@@ -138,27 +97,13 @@ function ProdcutsTable({currentProducts,setSelectedProducts,selectedProducts, lo
           >
             Stok Kodu
           </th>
-           {/**   <th
-            scope="col"
-            className="px-6 py-3 text-left text-base font-medium cursor-pointer  "
-            onClick={() => handleSort('stokCount')}
-          >
-            <span className='flex items-center'>
-            <span>Stok Sayısı</span>
-            {sortedColumn === 'stokCount' ? (
-              <span>
-                {sortOrder === 'asc' ? <FaCaretUp /> : <FaCaretDown />}
-              </span>
-            ) : <PiCaretUpDownFill />}
-            </span>
-          </th> */}
           <th
             scope="col"
             className="px-6 flex items-center cursor-pointer py-3 text-left text-base font-medium  "
-            onClick={() => handleSort('price')}
+            onClick={() => handleSort('STKOZKOD5')}
           >
             Fiyat
-            {sortedColumn === 'price' ? (
+            {sortedColumn === 'STKOZKOD5' ? (
               <span>
                 {sortOrder === 'asc' ? <FaCaretUp/> : <FaCaretDown/>}
               </span>
@@ -176,19 +121,6 @@ function ProdcutsTable({currentProducts,setSelectedProducts,selectedProducts, lo
           >
             Sınıf
           </th>
-        
-          {/**<th
-            scope="col"
-            className="px-6 py-3 text-left text-base font-medium "
-            onClick={() => handleSort('lastUpdateDate')}
-          >
-          <span className='flex items-center'>
-          <span>Ürünü Son Güncelleme Tarihi</span>
-          {sortedColumn === 'lastUpdateDate' ? (
-            <span>{sortOrder === 'asc' ? <FaCaretUp /> : <FaCaretDown />}</span>
-          ) : <PiCaretUpDownFill />}
-        </span>
-          </th> */}
           <th
           scope="col"
           className="px-6 py-3 text-left text-base font-medium "
@@ -200,15 +132,7 @@ function ProdcutsTable({currentProducts,setSelectedProducts,selectedProducts, lo
       <tbody className="bg-white divide-y divide-gray-200">
         {sortedProducts.map((product, index) => (
           <tr key={product.id}  className={`${index % 2 === 1 ? "bg-white" : "bg-gray-50"} `}>
-          <td className="px-6 py-4 whitespace-nowrap">
-          <input 
-            type="checkbox" 
-            
-            className="w-4 h-4 text-LightBlue focus:bg-LightBlue border-LightBlue rounded-xl focus:ring-LightBlue "
-            checked={selectedProducts.includes(product)} 
-            onChange={() => handleProductSelect(product)} // Her bir ürünün onay kutusunu seçim işleyicisiyle bağla
-          />
-        </td>
+         
             <td className="px-6 py-4 whitespace-nowrap cursor-pointer" onClick={() => {handleOpenModal(product)}}>
             img
             </td>
@@ -221,14 +145,11 @@ function ProdcutsTable({currentProducts,setSelectedProducts,selectedProducts, lo
             
            
             <td className="px-6 py-4 whitespace-nowrap text-BaseDark ">{product.STKKOD}</td>
-        {/**<td className="px-6 py-4 whitespace-nowrap text-BaseDark">{product.STOK}</td> */}
-            <td className="px-6 py-4 whitespace-nowrap text-BaseDark">₺{product.FIYAT}</td>
+        
+            <td className="px-6 py-4 whitespace-nowrap text-BaseDark">₺{product.STKOZKOD5}</td>
             <td className="px-6 py-4 whitespace-nowrap text-BaseDark">{product.STKOZKOD2}</td>
             <td className="px-6 py-4 whitespace-nowrap text-BaseDark">{product.STKOZKOD3}</td>
-            {/**<td className="px-6  text-center py-4 whitespace-nowrap space-x-10 text-BaseDark">
-            <span>{product?.date?.lastUpdateDate}</span>
-           
-            </td> */}
+            
             <td className=' p-2'>
          
             {product?.STKOZKOD1 === 'A' ? <span className="p-2  flex items-center justify-center space-x-1   rounded-xl text-sm bg-green-400 text-white"> <FaCheckCircle className='text-xl'/><span>Satışa uygun </span> </span>:

@@ -9,6 +9,9 @@ import { mainCategory, subCategory, category } from "./data";
 
 function ProductsFilter({
   filteredProducts,
+  setProducts,
+  setCurrentPage,
+  setLoading,
   paginate,
   currentPage,
   productsPerPage,
@@ -21,7 +24,7 @@ function ProductsFilter({
   const [selectedProductType, setSelectedProductType] = useState(
     "Sınıfa göre filtreleme"
   );
-  const [selectedStock, setSelectedStock] = useState("Stoğa göre filtreleme");
+const [selectedStock, setSelectedStock] = useState("Stoğa göre filtreleme");
   const [selectedAll, setSelectedAll] = useState("Toplu Islemler");
   const [selectedStatus, setSelectedStatus] = useState("Durum İşlemi");
   const [anyFilterSelected, setAnyFilterSelected] = useState(false);
@@ -30,9 +33,9 @@ function ProductsFilter({
 
   useEffect(() => {
     handleFilters();
-  }, [selectedCategory, selectedProductType, selectedStock, selectedAll]);
+  }, [selectedCategory, selectedProductType]);
 
-  // STKOZKOD2'leri toplama fonksiyonu
+ // STKOZKOD2'leri toplama fonksiyonu
   useEffect(() => {
     const STKOZKOD2s = products
       .map((product) => product.STKOZKOD2)
@@ -58,18 +61,61 @@ function ProductsFilter({
     setAnyFilterSelected(false);
     setFilteredProducts(products);
   };
+=======
+// STKOZKOD2'leri toplama ve filtreleme fonksiyonu
+useEffect(() => {
+  const STKOZKOD2s = filteredProducts
+    .map((product) => product.STKOZKOD2)
+    .filter((item) => item && item.trim() !== ""); // Boşlukları filtrele
 
+  const uniqueSTKOZKOD2s = [...new Set(STKOZKOD2s)];
+  setSTKOZKOD2Array(uniqueSTKOZKOD2s);
+}, [filteredProducts]);
+
+
+  // STKOZKOD3'leri toplama ve filtreleme fonksiyonu
+useEffect(() => {
+  const STKOZKOD3s = filteredProducts
+    .map((product) => product.STKOZKOD3)
+    .filter(Boolean)
+    .filter((item) => item !== "ANASINIFI" && item !== "SÖZLÜK"); // İstenmeyen öğeleri filtrele
+
+  const uniqueSTKOZKOD3s = [...new Set(STKOZKOD3s)];
+  setSTKOZKOD3Array(uniqueSTKOZKOD3s);
+}, [filteredProducts]);
+
+const handleClearFilters = async () => {
+  setSelectedCategory("Kategori Seçin");
+  setSelectedProductType("Sınıfa göre filtreleme");
+  setAnyFilterSelected(false);
+
+  setLoading(true); // Loading state'ini true yaparak yükleniyor ekranı gösterebiliriz.
+
+  try {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/products`);
+    if (!response.ok) {
+      throw new Error("API hatası: " + response.status);
+    }
+    const data = await response.json();
+    const allProducts = data.data;
+    const filteredProducts = allProducts.filter(
+      (product) => product.STKOZKOD1 === "A"
+    );
+    setProducts(allProducts);
+    setFilteredProducts(filteredProducts); // Tüm ürünleri ve filtrelenecek ürünleri güncelle
+    setCurrentPage(1); // Sayfalamayı sıfırla
+    setLoading(false); // Loading state'ini false yaparak yükleniyor ekranını kapat
+  } catch (error) {
+    console.error("Veri çekme hatası: ", error);
+    setLoading(false); // Hata durumunda da loading state'ini kapat
+  }
+};
   useEffect(() => {
     handleFilters();
-  }, [selectedCategory, selectedProductType, selectedStock, selectedAll]);
+  }, [selectedCategory, selectedProductType]);
 
   const handleCategory = (e) => {
     setSelectedCategory(e.target.value);
-    setAnyFilterSelected(true);
-  };
-
-  const handleStock = (e) => {
-    setSelectedStock(e.target.value);
     setAnyFilterSelected(true);
   };
 
@@ -97,6 +143,7 @@ function ProductsFilter({
       filteredProducts = filteredProducts.filter(
         (item) => item.STKOZKOD3 === selectedProductType
       );
+
     }
 
     {
@@ -124,6 +171,7 @@ function ProductsFilter({
     setFilteredProducts(filteredProducts);
   };
 
+
   const handleStatusChange = (e) => {
     setSelectedStatus(e.target.value);
   };
@@ -142,10 +190,12 @@ function ProductsFilter({
     }
   };
 
+
   return (
     <>
       <div className="flex flex-wrap md:flex-nowrap justify-between items-center py-3">
         <div className="flex gap-2 flex-wrap md:flex-nowrap items-center">
+
           <div className="flex gap-2 md:mr-8">
             <select
               className={`p-2 cursor-pointer shadow-2xl border rounded-md text-CustomGray md:w-36 w-full ${
@@ -192,6 +242,10 @@ function ProductsFilter({
               {/**  <option  value="Aktif Olmayan Ürünler">Aktif Olmayan Ürünler</option> */}
             </select>
             <select
+
+          <div className="flex flex-wrap md:flex-nowrap gap-2 items-center text-sm">
+            <select
+
               className={`p-2 cursor-pointer shadow-2xl border rounded-md text-CustomGray md:w-30 w-full ${
                 selectedCategory !== "Kategori Seçin" &&
                 "bg-NavyBlue text-white font-semibold"
@@ -223,6 +277,7 @@ function ProductsFilter({
                 </option>
               ))}
             </select>
+
             {/**     <select
               className={`p-2 cursor-pointer shadow-2xl border rounded-md text-CustomGray md:w-48 w-full ${
                 selectedStock !== "Stoğa göre filtreleme" && "bg-NavyBlue text-white font-semibold"
@@ -235,6 +290,7 @@ function ProductsFilter({
               <option>Stokta Olanlar</option>
               <option>Stokta Olmayanlar</option>
             </select> */}
+
             <button
               className={`p-[6px] font-[500] border text-NavyBlue rounded-md text-sm whitespace-nowrap ${
                 anyFilterSelected
