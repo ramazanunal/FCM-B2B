@@ -29,7 +29,7 @@ function ProductList() {
         const filteredProducts = allProducts.filter(
           (product) => product.STKOZKOD1 === "A"
         );
-        setProducts(allProducts);
+        setProducts(filteredProducts);
         setFilteredProducts(filteredProducts); // Initialize filteredProducts
         setLoading(false);
       } catch (error) {
