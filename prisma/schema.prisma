@@ -33,3 +33,23 @@ model STKKART {
   STKOZKOD5        String? 
 }
 
+model CARHAR {
+  CARHARCARKOD   String     @id
+  CARHARTAR      DateTime?
+  CARHARCARUNVAN String?
+  CARHARISTIPKOD String?
+  CARHARACIKLAMA String?
+  CARHARTUTAR    Int?
+  CARHARVADETAR  DateTime?
+  CARHARACIKLAMA1 String?
+}
+
+model FATHAR {
+  FATHARCARKOD     String @id
+  FATHARTAR DateTime?
+  FATHARSTKKOD String?
+  FATHARSTKCINS String?
+  FATHARMIKTAR Int?
+  FATHARFIYAT Int?
+  FATHARTUTAR Int?
+}

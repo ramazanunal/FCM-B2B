@@ -5,6 +5,7 @@ import {
   MdKeyboardArrowRight,
   MdKeyboardDoubleArrowRight,
 } from "react-icons/md";
+import { mainCategory, subCategory, category } from "./data";
 
 function ProductsFilter({
   filteredProducts,
@@ -15,13 +16,17 @@ function ProductsFilter({
   currentPage,
   productsPerPage,
   setFilteredProducts,
+  selectedProducts,
+  setSelectedProducts,
   products,
 }) {
   const [selectedCategory, setSelectedCategory] = useState("Kategori Seçin");
   const [selectedProductType, setSelectedProductType] = useState(
     "Sınıfa göre filtreleme"
   );
-
+const [selectedStock, setSelectedStock] = useState("Stoğa göre filtreleme");
+  const [selectedAll, setSelectedAll] = useState("Toplu Islemler");
+  const [selectedStatus, setSelectedStatus] = useState("Durum İşlemi");
   const [anyFilterSelected, setAnyFilterSelected] = useState(false);
   const [STKOZKOD2Array, setSTKOZKOD2Array] = useState([]);
   const [STKOZKOD3Array, setSTKOZKOD3Array] = useState([]);
@@ -30,6 +35,33 @@ function ProductsFilter({
     handleFilters();
   }, [selectedCategory, selectedProductType]);
 
+ // STKOZKOD2'leri toplama fonksiyonu
+  useEffect(() => {
+    const STKOZKOD2s = products
+      .map((product) => product.STKOZKOD2)
+      .filter(Boolean);
+    const uniqueSTKOZKOD2s = [...new Set(STKOZKOD2s)];
+    setSTKOZKOD2Array(uniqueSTKOZKOD2s);
+  }, [products]);
+  // STKOZKOD3'leri toplama fonksiyonu
+
+  useEffect(() => {
+    const STKOZKOD3s = products
+      .map((product) => product.STKOZKOD3)
+      .filter(Boolean);
+    const uniqueSTKOZKOD3s = [...new Set(STKOZKOD3s)];
+    setSTKOZKOD3Array(uniqueSTKOZKOD3s);
+  }, [products]);
+
+  const handleClearFilters = () => {
+    setSelectedCategory("Kategori Seçin");
+    setSelectedProductType("Sınıfa göre filtreleme");
+    setSelectedStock("Stoğa göre filtreleme");
+    setSelectedAll("Toplu Islemler");
+    setAnyFilterSelected(false);
+    setFilteredProducts(products);
+  };
+=======
 // STKOZKOD2'leri toplama ve filtreleme fonksiyonu
 useEffect(() => {
   const STKOZKOD2s = filteredProducts
@@ -92,6 +124,11 @@ const handleClearFilters = async () => {
     setAnyFilterSelected(true);
   };
 
+  const handleAllFilter = (e) => {
+    setSelectedAll(e.target.value);
+    setAnyFilterSelected(true);
+  };
+
   const handleFilters = () => {
     let filteredProducts = [...products];
 
@@ -106,17 +143,109 @@ const handleClearFilters = async () => {
       filteredProducts = filteredProducts.filter(
         (item) => item.STKOZKOD3 === selectedProductType
       );
+
+    }
+
+    {
+      /**if (selectedStock !== "Stoğa göre filtreleme") {
+      if (selectedStock === "Stokta Olanlar") {
+        filteredProducts = filteredProducts.filter((item) => item.stokCount > 0);
+      } else if (selectedStock === "Stokta Olmayanlar") {
+        filteredProducts = filteredProducts.filter((item) => item.stokCount === 0);
+      }
+    } */
+    }
+
+    if (selectedAll !== "Toplu Islemler") {
+      if (selectedAll === "Aktif Olan Ürünler") {
+        filteredProducts = filteredProducts.filter(
+          (item) => item.STKOZKOD1 === "A"
+        );
+      } else if (selectedAll === "Aktif Olmayan Ürünler") {
+        filteredProducts = filteredProducts.filter(
+          (item) => item.STKOZKOD1 === " "
+        );
+      }
     }
 
     setFilteredProducts(filteredProducts);
   };
 
+
+  const handleStatusChange = (e) => {
+    setSelectedStatus(e.target.value);
+  };
+
+  const applyStatusChange = () => {
+    if (selectedStatus !== "Durum İşlemi") {
+      selectedProducts.forEach(
+        (product) => (product.STKOZKOD1 = selectedStatus)
+      );
+      const filteredActiveProduct = products.filter(
+        (item) => item.STKOZKOD1.toString() !== selectedStatus
+      );
+      setFilteredProducts(products);
+      setSelectedProducts([]);
+      setSelectedStatus("Durum İşlemi");
+    }
+  };
+
+
   return (
     <>
       <div className="flex flex-wrap md:flex-nowrap justify-between items-center py-3">
         <div className="flex gap-2 flex-wrap md:flex-nowrap items-center">
+
+          <div className="flex gap-2 md:mr-8">
+            <select
+              className={`p-2 cursor-pointer shadow-2xl border rounded-md text-CustomGray md:w-36 w-full ${
+                selectedProducts.length === 0
+                  ? "pointer-events-none opacity-50"
+                  : ""
+              } ${
+                selectedStatus !== "Durum İşlemi"
+                  ? "bg-NavyBlue text-white"
+                  : ""
+              }`}
+              onChange={handleStatusChange}
+              value={selectedStatus}
+            >
+              <option hidden>Durum İşlemi</option>
+              <option>Durum İşlemi</option>
+              <option value={"A"}>Ürünü Aktif Yap</option>
+              {/**<option value={false}>Ürünü Pasif Yap</option> */}
+            </select>
+            <button
+              className={`shadow-2xl border-NavyBlue border rounded-md text-CustomGray md:w-16 md:text-sm text-xs w-12 ${
+                selectedProducts.length === 0
+                  ? "cursor-not-allowed opacity-50"
+                  : "cursor-pointer hover:bg-NavyBlue hover:text-white"
+              }`}
+              onClick={applyStatusChange}
+            >
+              Uygula
+            </button>
+          </div>
+
           <div className="flex flex-wrap md:flex-nowrap gap-2 items-center text-sm">
             <select
+              className={`p-2 cursor-pointer shadow-2xl border rounded-md text-CustomGray md:w-48 w-full ${
+                selectedAll !== "Toplu Islemler" &&
+                "bg-NavyBlue text-white font-semibold"
+              }`}
+              onChange={handleAllFilter}
+              value={selectedAll}
+            >
+              <option hidden>Toplu Islemler</option>
+              <option>Toplu Islemler</option>
+              <option value="Aktif Olan Ürünler">Aktif Olan Ürünler</option>
+              {/**  <option  value="Aktif Olmayan Ürünler">Aktif Olmayan Ürünler</option> */}
+            </select>
+            <select
+
+          <div className="flex flex-wrap md:flex-nowrap gap-2 items-center text-sm">
+            <select
+
               className={`p-2 cursor-pointer shadow-2xl border rounded-md text-CustomGray md:w-30 w-full ${
                 selectedCategory !== "Kategori Seçin" &&
                 "bg-NavyBlue text-white font-semibold"
@@ -148,6 +277,19 @@ const handleClearFilters = async () => {
                 </option>
               ))}
             </select>
+
+            {/**     <select
+              className={`p-2 cursor-pointer shadow-2xl border rounded-md text-CustomGray md:w-48 w-full ${
+                selectedStock !== "Stoğa göre filtreleme" && "bg-NavyBlue text-white font-semibold"
+              }`}
+              onChange={handleStock}
+              value={selectedStock}
+            >
+              <option hidden>Stoğa göre filtreleme</option>
+              <option>Stoğa göre filtreleme</option>
+              <option>Stokta Olanlar</option>
+              <option>Stokta Olmayanlar</option>
+            </select> */}
 
             <button
               className={`p-[6px] font-[500] border text-NavyBlue rounded-md text-sm whitespace-nowrap ${
