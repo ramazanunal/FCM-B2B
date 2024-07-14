@@ -1,7 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
 import { useSession } from "next-auth/react";
-import { FaSortUp, FaSortDown } from "react-icons/fa";
+import { FaSortUp, FaSortDown, FaPrint } from "react-icons/fa";
 import {
   MdKeyboardDoubleArrowLeft,
   MdKeyboardArrowLeft,
@@ -17,28 +17,29 @@ import {
   TableRow,
 } from "./TableComponents";
 import Loading from "../Loading";
+import "./printdata.css";
 
 export default function DetailedDataTable() {
-  const { data: session } = useSession();
+  const { data: session } = useSession(); //Session icin state
   const [billingData, setBillingData] = useState([]);
   const [userCarBakiye, setUserCarBakiye] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [sortOrder, setSortOrder] = useState("asc");
+  const [currentPage, setCurrentPage] = useState(1); //Sayfalama islemleri icin state
+  const [sortOrder, setSortOrder] = useState("asc"); //Tarih icin state
+  const [isPrinting, setIsPrinting] = useState(false); //Print islemleri icin state
   const itemsPerPage = 8;
 
   useEffect(() => {
     async function fetchData() {
-      //Eger kullanici bilgisi yoksa data cekilmez
+      //Eger kullanici giris yapmamis ise fetch islemi yapmaz
       if (!session?.user?.id) return;
 
       try {
-        //Iki tablodan veri cektigimiz icin promise olarak birlestiriyoruz.
+        //2 tablodan veri cekildigi icin tek promise ile birlestirildi
         const [billingResponse, tableCartResponse] = await Promise.all([
           fetch(`${process.env.NEXT_PUBLIC_API_URL}/detailed-billings`),
           fetch(`${process.env.NEXT_PUBLIC_API_URL}/table-cart`),
         ]);
-        //Response ok degilse hata dön
         if (!billingResponse.ok || !tableCartResponse.ok)
           throw new Error("API error");
 
@@ -47,6 +48,7 @@ export default function DetailedDataTable() {
 
         setBillingData(billingData);
 
+        //CARKOD ile kullanicinin id arasindaki eslesme
         const userTableCartData = tableCartData.find(
           (item) => item.CARKOD === session?.user?.id
         );
@@ -61,11 +63,12 @@ export default function DetailedDataTable() {
     fetchData();
   }, [session?.user?.id]);
 
+  //FATHARCARKOD ile kullanicinin id arasindaki eslesme
   const filteredData = billingData.filter(
     (item) => item.FATHARCARKOD === session?.user?.id
   );
 
-  //Tarih için sorting logic
+  //Tarih siralamasi icin yazilmis logic
   const handleSort = () => {
     const sortedData = [...filteredData].sort((a, b) => {
       const dateA = new Date(a.FATHARTAR);
@@ -77,21 +80,23 @@ export default function DetailedDataTable() {
     setSortOrder(sortOrder === "asc" ? "desc" : "asc");
   };
 
-  //Kaç sayfa olduğunu hesaplamak için logic
-  const paginatedData = filteredData.slice(
-    (currentPage - 1) * itemsPerPage,
-    currentPage * itemsPerPage
-  );
+  //Sayfalama islemleri(1,2,3,4 vs..) icin yazilmis logic
+  const paginatedData = isPrinting
+    ? filteredData
+    : filteredData.slice(
+        (currentPage - 1) * itemsPerPage,
+        currentPage * itemsPerPage
+      );
 
   const totalPages = Math.ceil(filteredData.length / itemsPerPage);
 
-  //Eğer herhangi bir veri çekiliyor veya herhangi bir nedenden dolayı loading true oluyorsa Loading componentini dönecek.
+  //Eger herhangi bir sebepten oturu loading true olursa Ekranda Loading componenti gozukecek.
   if (isLoading) return <Loading />;
 
-  //Pagination için yazılmış logic.
+  //Pagination islemleri icin yazilmis logic
   function Pagination({ currentPage, totalPages, onPageChange }) {
     return (
-      <div className="flex items-center">
+      <div className="flex items-center no-print">
         <PaginationButton
           onClick={() => onPageChange(1)}
           disabled={currentPage === 1}
@@ -138,14 +143,14 @@ export default function DetailedDataTable() {
     );
   }
 
-  //Tarih format düzenleme
+  //Tarih formatlamak icin yazilmis logic
   function formatDate(dateString) {
     return dateString
       ? new Date(dateString).toLocaleDateString("tr-TR")
       : "N/A";
   }
 
-  //Para format düzenleme
+  //Para birimini formatlamak icin yazilmis logic.
   function formatCurrency(amount) {
     return (
       amount?.toLocaleString("tr-TR", {
@@ -156,12 +161,21 @@ export default function DetailedDataTable() {
     );
   }
 
+  //Print islemi icin
+  const handlePrint = () => {
+    setIsPrinting(true);
+    setTimeout(() => {
+      window.print();
+      setIsPrinting(false);
+    }, 100);
+  };
+
   return (
-    <>
+    <div className="print-section">
       <div className="max-w-[1880px] mx-auto mt-8 flex flex-col justify-between items-center px-8 gap-4 md:flex-row">
         <div className="flex flex-col text-center md:text-left">
           <h1 className="text-xl md:text-2xl text-blue-500">
-            Detaylı Faturalar
+            Stoklu Cari Bilgisi
           </h1>
           <h1>
             <span className="font-bold">Cari Kodu:</span> {session?.user?.id}
@@ -176,11 +190,19 @@ export default function DetailedDataTable() {
           </h1>
         </div>
 
-        <Pagination
-          currentPage={currentPage}
-          totalPages={totalPages}
-          onPageChange={setCurrentPage}
-        />
+        <div className="flex items-center gap-4">
+          <Pagination
+            currentPage={currentPage}
+            totalPages={totalPages}
+            onPageChange={setCurrentPage}
+          />
+          <button
+            onClick={handlePrint}
+            className="bg-NavyBlue text-white px-4 py-2 rounded-full hover:bg-blue-700 transition duration-300 flex items-center no-print"
+          >
+            <FaPrint className="mr-2" /> Yazdır
+          </button>
+        </div>
       </div>
 
       <div className="max-w-[1880px] mx-auto mt-6 border">
@@ -193,12 +215,12 @@ export default function DetailedDataTable() {
               >
                 Tarih
                 {sortOrder === "asc" ? (
-                  <FaSortUp className="ml-2" />
+                  <FaSortUp className="ml-2 no-print" />
                 ) : (
-                  <FaSortDown className="ml-2" />
+                  <FaSortDown className="ml-2 no-print" />
                 )}
               </TableHead>
-              <TableHead>Vade Tarihi</TableHead>
+              {/* <TableHead>Vade Tarihi</TableHead> */}
               <TableHead>Ürün Kodu</TableHead>
               <TableHead>Ürün Cinsi</TableHead>
               <TableHead>Miktar</TableHead>
@@ -213,11 +235,13 @@ export default function DetailedDataTable() {
                 className={index % 2 === 0 ? "" : "bg-gray-100"}
               >
                 <TableCell>{formatDate(item.FATHARTAR)}</TableCell>
-                <TableCell>{formatDate(item.null)}</TableCell>
+                {/* Vade Tarihi sonradan eklenecek. */}
+                {/* <TableCell>{formatDate(item.null)}</TableCell> */}
                 <TableCell>{item.FATHARSTKKOD}</TableCell>
                 <TableCell>{item.FATHARSTKCINS}</TableCell>
                 <TableCell>{item.FATHARMIKTAR}</TableCell>
                 <TableCell>{formatCurrency(item.FATHARFIYAT)}</TableCell>
+                {/* Borcu elde etmek icin urun fiyati ile miktar carpilir */}
                 <TableCell>
                   {formatCurrency(item.FATHARFIYAT * item.FATHARMIKTAR)}
                 </TableCell>
@@ -226,6 +250,6 @@ export default function DetailedDataTable() {
           </TableBody>
         </Table>
       </div>
-    </>
+    </div>
   );
 }
