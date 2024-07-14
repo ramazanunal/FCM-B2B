@@ -18,38 +18,36 @@ import {
 } from "./TableComponents";
 import Loading from "../Loading";
 import "./printdata.css";
+import { getAPI } from "../../services/fetchAPI/index";
 
 export default function DetailedDataTable() {
-  const { data: session } = useSession(); //Session icin state
+  const { data: session } = useSession(); //session bilgisi icin state
   const [billingData, setBillingData] = useState([]);
   const [userCarBakiye, setUserCarBakiye] = useState(null);
+  const [sortOrder, setSortOrder] = useState("asc"); //Tarih sıralaması için kullandığımız state
+  const [currentPage, setCurrentPage] = useState(1); //Sayfalama için kullandığımız state
   const [isLoading, setIsLoading] = useState(true);
-  const [currentPage, setCurrentPage] = useState(1); //Sayfalama islemleri icin state
-  const [sortOrder, setSortOrder] = useState("asc"); //Tarih icin state
-  const [isPrinting, setIsPrinting] = useState(false); //Print islemleri icin state
-  const itemsPerPage = 8;
+  const [isPrinting, setIsPrinting] = useState(false); //Yazdırma durumu için kullandığımız state
+  const itemsPerPage = 8; //Her sayfada kac satır oldugunu belirlemek için kullanılan state
 
   useEffect(() => {
     async function fetchData() {
-      //Eger kullanici giris yapmamis ise fetch islemi yapmaz
+      //Eğer kullanıcı giriş yapmamış ise istek atmaz.
       if (!session?.user?.id) return;
 
       try {
-        //2 tablodan veri cekildigi icin tek promise ile birlestirildi
+        // Verileri getirme işlemlerini tek promise ile birleştiriyoruz. Fetch için services kısmından getirdiğimiz getAPI fonksiyonunu kullanıyoruz.
         const [billingResponse, tableCartResponse] = await Promise.all([
-          fetch(`${process.env.NEXT_PUBLIC_API_URL}/detailed-billings`),
-          fetch(`${process.env.NEXT_PUBLIC_API_URL}/table-cart`),
+          getAPI("/detailed-billings"),
+          getAPI("/table-cart"),
         ]);
-        if (!billingResponse.ok || !tableCartResponse.ok)
+
+        if (!billingResponse || !tableCartResponse)
           throw new Error("API error");
 
-        const { data: billingData } = await billingResponse.json();
-        const { data: tableCartData } = await tableCartResponse.json();
+        setBillingData(billingResponse.data);
 
-        setBillingData(billingData);
-
-        //CARKOD ile kullanicinin id arasindaki eslesme
-        const userTableCartData = tableCartData.find(
+        const userTableCartData = tableCartResponse.data.find(
           (item) => item.CARKOD === session?.user?.id
         );
         if (userTableCartData) setUserCarBakiye(userTableCartData.CARBAKIYE);
@@ -63,12 +61,11 @@ export default function DetailedDataTable() {
     fetchData();
   }, [session?.user?.id]);
 
-  //FATHARCARKOD ile kullanicinin id arasindaki eslesme
   const filteredData = billingData.filter(
     (item) => item.FATHARCARKOD === session?.user?.id
   );
 
-  //Tarih siralamasi icin yazilmis logic
+  // Tarih sıralaması için kullandığımız fonksiyon
   const handleSort = () => {
     const sortedData = [...filteredData].sort((a, b) => {
       const dateA = new Date(a.FATHARTAR);
@@ -80,7 +77,7 @@ export default function DetailedDataTable() {
     setSortOrder(sortOrder === "asc" ? "desc" : "asc");
   };
 
-  //Sayfalama islemleri(1,2,3,4 vs..) icin yazilmis logic
+  //Sayfalama için kullandığımız fonksiyon
   const paginatedData = isPrinting
     ? filteredData
     : filteredData.slice(
@@ -90,10 +87,7 @@ export default function DetailedDataTable() {
 
   const totalPages = Math.ceil(filteredData.length / itemsPerPage);
 
-  //Eger herhangi bir sebepten oturu loading true olursa Ekranda Loading componenti gozukecek.
-  if (isLoading) return <Loading />;
-
-  //Pagination islemleri icin yazilmis logic
+  //Pagination butonlarını oluşturmak için kullandığımız fonksiyon
   function Pagination({ currentPage, totalPages, onPageChange }) {
     return (
       <div className="flex items-center no-print">
@@ -110,8 +104,9 @@ export default function DetailedDataTable() {
         <span className="border md:px-4 md:py-2 py-1 px-3 rounded-full bg-NavyBlue text-white ml-1">
           {currentPage}
         </span>
+        <span className="mx-1">/</span>
         <span className="md:px-2 md:py-2 py-1 px-3 rounded-full mr-1">
-          / {totalPages}
+          {totalPages}
         </span>
         <PaginationButton
           onClick={() => onPageChange(currentPage + 1)}
@@ -143,14 +138,14 @@ export default function DetailedDataTable() {
     );
   }
 
-  //Tarih formatlamak icin yazilmis logic
+  //Tarih formatlamak için kullandığımız fonksiyon
   function formatDate(dateString) {
     return dateString
       ? new Date(dateString).toLocaleDateString("tr-TR")
       : "N/A";
   }
 
-  //Para birimini formatlamak icin yazilmis logic.
+  //Para birimi formatlamak için kullandığımız fonksiyon
   function formatCurrency(amount) {
     return (
       amount?.toLocaleString("tr-TR", {
@@ -161,7 +156,7 @@ export default function DetailedDataTable() {
     );
   }
 
-  //Print islemi icin
+  //Yazdırma işlemleri için kullandığımız fonksiyon
   const handlePrint = () => {
     setIsPrinting(true);
     setTimeout(() => {
@@ -169,6 +164,9 @@ export default function DetailedDataTable() {
       setIsPrinting(false);
     }, 100);
   };
+
+  //Eğer herhangi bir nedenden dolayı loading true olursa, Loading componenti render edilir.
+  if (isLoading) return <Loading />;
 
   return (
     <div className="print-section">
@@ -220,7 +218,6 @@ export default function DetailedDataTable() {
                   <FaSortDown className="ml-2 no-print" />
                 )}
               </TableHead>
-              {/* <TableHead>Vade Tarihi</TableHead> */}
               <TableHead>Ürün Kodu</TableHead>
               <TableHead>Ürün Cinsi</TableHead>
               <TableHead>Miktar</TableHead>
@@ -235,13 +232,10 @@ export default function DetailedDataTable() {
                 className={index % 2 === 0 ? "" : "bg-gray-100"}
               >
                 <TableCell>{formatDate(item.FATHARTAR)}</TableCell>
-                {/* Vade Tarihi sonradan eklenecek. */}
-                {/* <TableCell>{formatDate(item.null)}</TableCell> */}
                 <TableCell>{item.FATHARSTKKOD}</TableCell>
                 <TableCell>{item.FATHARSTKCINS}</TableCell>
                 <TableCell>{item.FATHARMIKTAR}</TableCell>
                 <TableCell>{formatCurrency(item.FATHARFIYAT)}</TableCell>
-                {/* Borcu elde etmek icin urun fiyati ile miktar carpilir */}
                 <TableCell>
                   {formatCurrency(item.FATHARFIYAT * item.FATHARMIKTAR)}
                 </TableCell>

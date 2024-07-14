@@ -19,42 +19,41 @@ import {
 } from "./TableComponents";
 import "./printdata.css";
 import Loading from "../Loading";
+import { getAPI } from "../../services/fetchAPI/index";
 
 export default function DataTable() {
-  const { data: session } = useSession(); //Session icin state
+  const { data: session } = useSession(); //session bilgisi icin state
   const [data, setData] = useState([]);
   const [userCarBakiye, setUserCarBakiye] = useState(null);
-  const [sortOrder, setSortOrder] = useState("asc"); //Tarih icin state
-  const [currentPage, setCurrentPage] = useState(1); //Sayfalama islemleri icin state
-  const [isLoading, setIsLoading] = useState(true);
-  const [isPrinting, setIsPrinting] = useState(false); //Print islemleri icin state
-  const itemsPerPage = 8;
+  const [sortOrder, setSortOrder] = useState("asc"); //Tarih sıralaması için kullandığımız state
+  const [currentPage, setCurrentPage] = useState(1); //Sayfalama için kullandığımız state
+  const [isLoading, setIsLoading] = useState(true); //Yükleme durumu için kullandığımız state
+  const [isPrinting, setIsPrinting] = useState(false); //Yazdırma durumu için kullandığımız state
+  const itemsPerPage = 8; //Her sayfada kac satır oldugunu belirlemek için kullanılan state
 
   useEffect(() => {
     async function fetchData() {
-      //Eger kullanici giris yapmamis ise fetch islemi yapmaz
+      //Eğer kullanıcı giriş yapmamış ise istek atmaz.
       if (!session?.user?.id) return;
 
       try {
-        //2 tablodan veri cekildigi icin tek promise ile birlestirildi
-        const [billingResponse, tableCartResponse] = await Promise.all([
-          fetch(`${process.env.NEXT_PUBLIC_API_URL}/billings`),
-          fetch(`${process.env.NEXT_PUBLIC_API_URL}/table-cart`),
+        // Verileri getirme işlemlerini tek promise ile birleştiriyoruz. Fetch için services kısmından getirdiğimiz getAPI fonksiyonunu kullanıyoruz.
+        const [billingData, tableCartData] = await Promise.all([
+          getAPI("/billings"),
+          getAPI("/table-cart"),
         ]);
-        if (!billingResponse.ok || !tableCartResponse.ok)
-          throw new Error("API error");
 
-        const { data: billingData } = await billingResponse.json();
-        const { data: tableCartData } = await tableCartResponse.json();
+        // API hatalarını kontrol ediyoruz.
+        if (!billingData || !tableCartData) throw new Error("API error");
 
-        //CARHARCARKOD ile kullanicinin id arasindaki eslesme
-        const filteredData = billingData.filter(
+        //Verileri CARHARCARKOD ve kullanıcı idsi ile filtreliyoruz.
+        const filteredData = billingData.data.filter(
           (item) => item.CARHARCARKOD === session.user.id
         );
         setData(filteredData);
 
-        //CARKOD ile kullanicinin id arasindaki eslesme
-        const userTableCartData = tableCartData.find(
+        //Burada ise diğer model verilerindeki kullanıcının table cart bilgilerini buluyoruz.
+        const userTableCartData = tableCartData.data.find(
           (item) => item.CARKOD === session.user.id
         );
         if (userTableCartData) setUserCarBakiye(userTableCartData.CARBAKIYE);
@@ -68,7 +67,7 @@ export default function DataTable() {
     fetchData();
   }, [session?.user?.id]);
 
-  //Tarihe gore siralama icin logic
+  //Tarihe göre sıralaması için kullandığımız fonksiyon
   const handleSort = () => {
     const sortedData = [...data].sort((a, b) => {
       const dateA = new Date(a.CARHARTAR);
@@ -80,14 +79,14 @@ export default function DataTable() {
     setSortOrder(sortOrder === "asc" ? "desc" : "asc");
   };
 
-  //Sayfalama islemleri(1,2,3,4 vs..) icin yazilmis logic
+  //Sayfalama için kullandığımız fonksiyon
   const paginatedData = isPrinting
     ? data
     : data.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
 
   const totalPages = Math.ceil(data.length / itemsPerPage);
 
-  //Pagination islemleri icin yazilmis logic
+  //Pagination butonlarını oluşturmak için kullandığımız fonksiyon
   function Pagination({ currentPage, totalPages, onPageChange }) {
     return (
       <div className="flex items-center no-print">
@@ -104,8 +103,9 @@ export default function DataTable() {
         <span className="border md:px-4 md:py-2 py-1 px-3 rounded-full bg-NavyBlue text-white ml-1">
           {currentPage}
         </span>
+        <span className="mx-1">/</span>
         <span className="md:px-2 md:py-2 py-1 px-3 rounded-full mr-1">
-          / {totalPages}
+          {totalPages}
         </span>
         <PaginationButton
           onClick={() => onPageChange(currentPage + 1)}
@@ -137,14 +137,14 @@ export default function DataTable() {
     );
   }
 
-  //Tarihi formatlamak icin yazilmis logic
+  //Tarih formatlamak için kullandığımız fonksiyon
   function formatDate(dateString) {
     return dateString
       ? new Date(dateString).toLocaleDateString("tr-TR")
       : "N/A";
   }
 
-  //Para birimini formatlamak icin yazilmis logic.
+  //Para birimi formatlamak için kullandığımız fonksiyon
   function formatCurrency(amount) {
     return (
       amount?.toLocaleString("tr-TR", {
@@ -155,7 +155,7 @@ export default function DataTable() {
     );
   }
 
-  //print islemleri icin
+  //Yazdırma işlemi için kullandığımız fonksiyon
   const handlePrint = () => {
     setIsPrinting(true);
     setTimeout(() => {
@@ -163,9 +163,9 @@ export default function DataTable() {
       setIsPrinting(false);
     }, 100);
   };
-  //Eger herhangi bir sebepten oturu loading true olursa Ekranda Loading componenti gozukecek.
-  if (isLoading) return <Loading />;
 
+  //Eğer herhangi bir nedenden dolayı loading true olursa, Loading componenti render edilir.
+  if (isLoading) return <Loading />;
   return (
     <div className="print-section">
       <div className="max-w-[1880px] mx-auto mt-8 flex flex-col justify-between items-center px-8 gap-4 md:flex-row">
