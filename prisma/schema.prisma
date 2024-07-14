@@ -14,6 +14,7 @@ datasource db {
 
 model CARKART {
   CARKOD           String     @id
+  CARBAKIYE        Float
   CARYETKILI       String?
   CARUNVAN         String?
   CARUNVAN3        String?
