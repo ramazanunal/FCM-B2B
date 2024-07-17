@@ -2,12 +2,12 @@ import Link from "next/link";
 import React from "react";
 import {  FaPlus } from "react-icons/fa";
 import { IoArrowBackCircleSharp } from "react-icons/io5";
-
+import ProductToggleButton from "./ProductToggleButton";
 
 function ProdcutDetail({ product }) {
   return (
     <div className="flex flex-col justify-center items-center">
-      <div className="md:grid md:grid-cols-3   px-14 pt-14 bg-gray-50 w-full pb-3">
+      <div className="md:grid md:grid-cols-3  px-14 pt-14 bg-gray-50 w-full pb-3 mb-2">
         <div className="col-span-1 border flex justify-center items-center">
           <img src={product.imgPath} alt={product.name} />
         </div>
@@ -54,6 +54,9 @@ function ProdcutDetail({ product }) {
                 <FaPlus />
               </span>
             </button>
+          </div>
+          <div>
+            <ProductToggleButton />
           </div>
         </div>
       </div>
