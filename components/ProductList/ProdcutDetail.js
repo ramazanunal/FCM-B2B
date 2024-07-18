@@ -6,21 +6,21 @@ import { IoArrowBackCircleSharp } from "react-icons/io5";
 import ProductToggleButton from "./ProductToggleButton";
 
 function ProdcutDetail({ product }) {
-  const [purchaseAmount,setPurchaseAmount] = useState(0);
+  const [purchaseAmount,setPurchaseAmount] = useState(1);
   function incrementAmount(){
     if(purchaseAmount < product.stokCount){
       setPurchaseAmount(state => state + 1)
     }
   }
   function decreaseAmount(){
-    if(purchaseAmount > 0){
+    if(purchaseAmount > 1){
       setPurchaseAmount(state => state - 1)
     }
   }
   return (
     <div className="flex flex-col justify-center items-center">
       <div className="bg-gray-50 w-full">
-        <div className="md:grid md:grid-cols-4 md:grid-flow-col  px-14 pt-14 pb-3 mb-2 md:mx-auto md:w-[80%]">
+        <div className="md:grid md:grid-cols-4 md:grid-flow-col px-5  md:px-14 pt-14 pb-3 mb-2 md:mx-auto md:w-[80%]">
           <div className="col-span-2  flex justify-center items-center">
             <div className="max-w-xl">
               <img className="" src={product.imgPath} alt={product.name} />
