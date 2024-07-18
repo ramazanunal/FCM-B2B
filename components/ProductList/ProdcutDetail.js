@@ -20,17 +20,17 @@ function ProdcutDetail({ product }) {
   return (
     <div className="flex flex-col justify-center items-center">
       <div className="bg-gray-50 w-full">
-        <div className="md:grid md:grid-cols-4 md:grid-flow-col px-5  md:px-14 pt-14 pb-3 mb-2 md:mx-auto md:w-[80%]">
-          <div className="col-span-2  flex justify-center items-center">
-            <div className="max-w-xl">
+        <div className="md:grid md:grid-cols-4 md:grid-flow-col px-5  md:px-14 pt-14 pb-3 mb-2  lg:mx-auto">
+          <div className="col-span-2 flex md:justify-end border">
+            <div className=" max-w-xl">
               <img className="" src={product.imgPath} alt={product.name} />
             </div>
           </div>
-          <div className="col-span-2 ml-5">
-            <div className="font-bold text-3xl md:mt-0 mt-6 pb-3 ">
+          <div className="border flex flex-col justify-end col-span-2 md:ml-5  pt-5">
+            <div className="font-bold text-3xl md:mt-0 mt-6 pb-3 px-3">
               {product.name}
             </div>
-            <div className="flex space-x-2 mt-5">
+            <div className="flex space-x-2 mt-5 px-3">
               <div className="space-y-5 text-gray-500 ">
                 <div>Yazar:</div>
                 <div>Yayınevi:</div>
@@ -50,7 +50,7 @@ function ProdcutDetail({ product }) {
                 <div className="text-green-500 text-lg">{product.stokCount}</div>
               </div>
             </div>
-            <div className="flex flex-row items-center mt-5 mb-5 ">
+            <div className="flex flex-row items-center mt-5 mb-5 px-3">
               <div className="border bg-white rounded flex justify-around w-20">
                 <button onClick={decreaseAmount} className="w-full opacity-50  px-1 py-1">-</button>
                 <span className="w-full text-center self-center">{purchaseAmount}</span>
@@ -61,7 +61,7 @@ function ProdcutDetail({ product }) {
              
             </div>
             <div>
-              <ProductToggleButton />
+              <ProductToggleButton product={product} />
             </div>
           </div>
         </div>
