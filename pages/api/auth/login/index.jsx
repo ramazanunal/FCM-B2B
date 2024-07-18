@@ -4,7 +4,7 @@
 
 import {getDataByUnique, updateDataByAny} from '@/services/serviceOperations';
 import DecryptPassword from '@/functions/other/cryptology/decryptPassword';
-import PasswordGenerator from '@/functions/other/passwordGenerator';
+import PasswordGenerator from 'functions/other/PasswordGenerator';
 import EncryptPassword from "@/functions/other/cryptology/encryptPassword";
 
 
