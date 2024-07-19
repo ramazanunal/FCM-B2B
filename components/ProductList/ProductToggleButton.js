@@ -7,18 +7,19 @@ export default function ProductToggleButton({ product }) {
   const [items, setItems] = useState(["Ürün açıklaması", "Ürün özellikleri"]);
   const [currentValue, setCurrentValue] = useState(0);
 
-  function DisplayProductDetail (){
+  // ürün detayı
+  function DisplayProductDetail() {
     return (
-      <div className="text-gray-500 border w-full max-h-60 overflow-auto rounded-lg shadow-lg p-5">
+      <div className="text-gray-500 w-full max-h-[80%] overflow-auto rounded-lg shadow-lg md:p-5">
         <span>{product.desc}</span>
       </div>
     );
-  };
-
-  function DisplayProductProps (){
+  }
+  // ürün özellikleri
+  function DisplayProductProps() {
     return (
-      <div className="grid grid-cols-2 md:p-5 border rounded-lg text-xs md:text-base">
-        <div className=" space-y-2 font-[600]">
+      <div className="grid grid-cols-2 rounded-lg text-xs md:text-base">
+        <div className="space-y-2 font-[600]">
           {product?.bookDetail?.printingLang && (
             <div className="border border-l-4 border-l-LightBlue p-2 shadow-md">
               Basım Dili
@@ -35,7 +36,7 @@ export default function ProductToggleButton({ product }) {
             </div>
           )}
           {product?.bookDetail?.paperType && (
-            <div className="border border-l-4 border-l-LightBlue p-2 shadow-md ">
+            <div className="border border-l-4 border-l-LightBlue p-2 shadow-md">
               Kağıt Türü
             </div>
           )}
@@ -50,7 +51,7 @@ export default function ProductToggleButton({ product }) {
             </div>
           )}
         </div>
-        <div className=" space-y-2 text-gray-600 ">
+        <div className="space-y-2 text-gray-600">
           {product?.bookDetail?.printingLang && (
             <div className="border border-l-4 border-l-LightBlue p-2 shadow-md">
               {product.bookDetail.printingLang}
@@ -76,7 +77,6 @@ export default function ProductToggleButton({ product }) {
               {product.bookDetail.placeOfPublication}
             </div>
           )}
-
           {product?.bookDetail?.width && product?.bookDetail?.height && (
             <div className="border border-l-4 border-l-LightBlue p-2 shadow-md">
               {product.bookDetail.width} / {product.bookDetail.height} cm
@@ -85,29 +85,27 @@ export default function ProductToggleButton({ product }) {
         </div>
       </div>
     );
-  };
+  }
 
   return (
-    <div className="w-full mt-10">
-      <div
-        className={`relative after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-1/2 after:h-[2px] after:block after:transition-transform after:ease-in-out after:bg-gradient-to-r after:from-sky-600 after:to-cyan-700 ${
-          currentValue === 0 ? "after:translate-x-0" : "after:translate-x-full"
-        }`}
-      >
-        <div className="flex">
-          {items.map((e, i) => (
-            <button
-              className="w-full mb-1"
-              key={i}
-              onClick={() => setCurrentValue(i)}
-            >
-              {e}
-            </button>
-          ))}
-        </div>
+    <div className="w-full mt-10 overflow-hidden">
+      <div className="relative flex justify-center">
+        {items.map((e, i) => (
+          <button
+            className={`mb-1 w-1/2 max-w-32 ${
+              currentValue === i
+                ? "text-blue-600 border-b-2 border-blue-600"
+                : "text-gray-600"
+            }`}
+            key={i}
+            onClick={() => setCurrentValue(i)}
+          >
+            {e}
+          </button>
+        ))}
       </div>
 
-      <div className="mt-1 md:p-2 border shadow-LightBlue/15">
+      <div className="mt-1 md:p-2 shadow-LightBlue/15">
         {currentValue === 0 ? <DisplayProductDetail /> : <DisplayProductProps />}
       </div>
     </div>
