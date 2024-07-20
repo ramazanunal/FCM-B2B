@@ -22,7 +22,7 @@ function ProdcutDetail({ product }) {
       <div className="bg-gray-50 ">
         <div className="grid grid-rows-2 px-5 lg:w-[1188px]  md:px-14 pt-14 pb-3 mb-2  lg:mx-auto">
           <div className="row-span-1 md:grid md:grid-cols-4 md:grid-flow-col ">
-            <div className="col-span-2 flex md:justify-end ">
+            <div className="col-span-2 flex md:justify-center ">
               <div className=" max-w-xl">
                 <img
                   className="max-h-96"
