@@ -106,7 +106,13 @@ export default function ProductToggleButton({ product }) {
       </div>
 
       <div className="mt-1 md:p-2 shadow-LightBlue/15">
-        {currentValue === 0 ? <DisplayProductDetail /> : <DisplayProductProps />}
+        <div className="transition-all ">
+          {currentValue === 0 ? (
+            <DisplayProductDetail />
+          ) : (
+            <DisplayProductProps />
+          )}
+        </div>
       </div>
     </div>
   );

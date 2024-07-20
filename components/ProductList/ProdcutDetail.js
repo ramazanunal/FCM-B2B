@@ -18,8 +18,8 @@ function ProdcutDetail({ product }) {
     }
   }
   return (
-    <div className="flex flex-col justify-center items-center">
-      <div className="bg-gray-50 w-full">
+    <div className="flex flex-col justify-center items-center bg-[url('/backgroundImage.webp')] bg-no-repeat  bg-contain bg-[#6bcdec]">
+      <div className="bg-gray-50 ">
         <div className="grid grid-rows-2 px-5 lg:w-[1188px]  md:px-14 pt-14 pb-3 mb-2  lg:mx-auto">
           <div className="row-span-1 md:grid md:grid-cols-4 md:grid-flow-col ">
             <div className="col-span-2 flex md:justify-end ">
@@ -92,14 +92,13 @@ function ProdcutDetail({ product }) {
             <ProductToggleButton product={product} />
           </div>
         </div>
-      </div>
-
-      <div className=" flex flex-col justify-center     w-[95%] ">
-        <div className="w-full flex justify-end py-5 px-10">
-          <div className="p-2 bg-red-400 hover:bg-red-500 rounded-lg text-white ">
-            <Link href="/products">
-              <IoArrowBackCircleSharp className="text-2xl" />
-            </Link>
+        <div className=" flex flex-col justify-center     w-[95%] ">
+          <div className="w-full flex justify-end py-5 px-10">
+            <div className="p-2 bg-red-400 hover:bg-red-500 rounded-lg text-white ">
+              <Link href="/products">
+                <IoArrowBackCircleSharp className="text-2xl" />
+              </Link>
+            </div>
           </div>
         </div>
       </div>
