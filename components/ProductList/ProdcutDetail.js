@@ -20,7 +20,7 @@ function ProdcutDetail({ product }) {
   function PriceTag() {
     return (
       <div>
-        <div className="flex relative justify-between border bg-LightBlue/75 text-white w-32 my-4  h-10 p-1 px-2">
+        <div className="flex relative justify-between  bg-LightBlue/75 text-white w-32 my-4  h-10 p-1 px-2">
           <span className="font-medium text-lg">Fiyat: ₺{product.price}</span>
           <span className="h-7 w-7 absolute top-1 right-[-14px] rotate-45 bg-gray-50"></span>
         </div>
@@ -46,16 +46,16 @@ function ProdcutDetail({ product }) {
                 {product.name}
               </div>
               <div className="flex flex-col   mt-5 px-3">
-                <div className="flex space-x-2 ">
-                  <div className="space-y-5 text-gray-500 ">
-                    <div>Yayınevi:</div>
-                    <div>Kategori:</div>
+                <div className="flex space-x-2">
+                  <div className="flex flex-col space-y-4 justify-evenly   text-gray-500 ">
+                    <div className="pb-[1px]">Yayınevi:</div>
+                    <div className="pt-[1px]">Kategori:</div>
                   </div>
-                  <div className="space-y-4">
-                    <div className="text-LightBlue text-lg">
+                  <div className="flex flex-col space-y-4  justify-evenly ">
+                    <div className="text-LightBlue inline p-0 text-lg ">
                       {product.publisher}
                     </div>
-                    <div className="text-LightBlue text-lg">
+                    <div className="text-LightBlue inline p-0 text-lg ">
                       {product.category.subCategory}
                     </div>
                   </div>
