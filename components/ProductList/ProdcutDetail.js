@@ -17,12 +17,22 @@ function ProdcutDetail({ product }) {
       setPurchaseAmount((state) => state - 1);
     }
   }
+  function PriceTag() {
+    return (
+      <div>
+        <div className="flex relative justify-between border bg-LightBlue/75 text-white w-32 my-4  h-10 p-1 px-2">
+          <span className="font-medium text-lg">Fiyat: ₺{product.price}</span>
+          <span className="h-7 w-7 absolute top-1 right-[-14px] rotate-45 bg-gray-50"></span>
+        </div>
+      </div>
+    );
+  }
   return (
     <div className="flex flex-col justify-center items-center bg-[url('/backgroundImage.webp')] bg-no-repeat  bg-contain bg-[#6bcdec]">
       <div className="bg-gray-50 ">
         <div className="grid grid-rows-2 px-5 lg:w-[1188px]  md:px-14 pt-14 pb-3 mb-2  lg:mx-auto">
           <div className="row-span-1 md:grid md:grid-cols-4 md:grid-flow-col ">
-            <div className="col-span-2 flex md:justify-center ">
+            <div className="col-span-2 flex md:justify-center border border-dashed ">
               <div className=" max-w-xl">
                 <img
                   className="max-h-96"
@@ -35,26 +45,22 @@ function ProdcutDetail({ product }) {
               <div className="font-bold text-3xl md:mt-0 mt-6 pb-3 px-3">
                 {product.name}
               </div>
-              <div className="flex space-x-2 mt-5 px-3">
-                <div className="space-y-4 text-gray-500 ">
-                  <div>Yazar:</div>
-                  <div>Yayınevi:</div>
-                  <div>Kategori:</div>
-                  <div>Barkod:</div>
-                  <div>Stok:</div>
-                  <div>Fiyat:</div>
-                </div>
-                <div className="space-y-4">
-                  <div className="text-LightBlue">{product.writer}</div>
-                  <div className="text-LightBlue">{product.publisher}</div>
-                  <div className="text-LightBlue">
-                    {product.category.subCategory}
+              <div className="flex flex-col   mt-5 px-3">
+                <div className="flex space-x-2 ">
+                  <div className="space-y-5 text-gray-500 ">
+                    <div>Yayınevi:</div>
+                    <div>Kategori:</div>
                   </div>
-                  <div className="text-gray-600">{product.barkod}</div>
-
-                  <div className="text-green-500 ">{product.stokCount}</div>
-                  <div className="text-2xl">₺{product.price}</div>
+                  <div className="space-y-4">
+                    <div className="text-LightBlue text-lg">
+                      {product.publisher}
+                    </div>
+                    <div className="text-LightBlue text-lg">
+                      {product.category.subCategory}
+                    </div>
+                  </div>
                 </div>
+                <PriceTag />
               </div>
               <div className="flex flex-row items-center mt-5 mb-5 px-3">
                 <div className="border border-LightBlue hover:border-CustomGray bg-white rounded flex justify-around w-20 text-LightBlue    hover:text-CustomGray transition duration-300 ease-in-out transform">
