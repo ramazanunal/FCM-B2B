@@ -94,8 +94,8 @@ export default function ProductToggleButton({ product }) {
           <button
             className={`mb-1 w-1/2 max-w-32 ${
               currentValue === i
-                ? "text-blue-600 border-b-2 border-blue-600"
-                : "text-gray-600"
+                ? " text-cyan-700 border-b-2 border-cyan-600"
+                : "text-gray-400"
             }`}
             key={i}
             onClick={() => setCurrentValue(i)}
