@@ -1,14 +1,7 @@
 "use client";
-
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useSession } from "next-auth/react";
-import { FaSortUp, FaSortDown, FaPrint } from "react-icons/fa";
-import {
-  MdKeyboardArrowLeft,
-  MdKeyboardArrowRight,
-  MdKeyboardDoubleArrowLeft,
-  MdKeyboardDoubleArrowRight,
-} from "react-icons/md";
+import { FaPrint, FaChevronDown, FaChevronUp } from "react-icons/fa";
 import {
   Table,
   TableBody,
@@ -20,131 +13,134 @@ import {
 import "./printdata.css";
 import Loading from "../Loading";
 import { getAPI } from "../../services/fetchAPI/index";
+import ScrollButtons from "../ScrollButtons/ScrollButtons";
+import ExpandedTable from "./ExpandedTable";
 
+// DataTable bileşeni: Kullanıcının cari hesap bilgilerini ve işlem geçmişini gösteren ana bileşen
 export default function DataTable() {
-  const { data: session } = useSession(); //session bilgisi icin state
-  const [data, setData] = useState([]);
-  const [userCarBakiye, setUserCarBakiye] = useState(null);
-  const [sortOrder, setSortOrder] = useState("asc"); //Tarih sıralaması için kullandığımız state
-  const [currentPage, setCurrentPage] = useState(1); //Sayfalama için kullandığımız state
-  const [isLoading, setIsLoading] = useState(true); //Yükleme durumu için kullandığımız state
-  const [isPrinting, setIsPrinting] = useState(false); //Yazdırma durumu için kullandığımız state
-  const itemsPerPage = 8; //Her sayfada kac satır oldugunu belirlemek için kullanılan state
+  // NextAuth oturumu kullanarak kullanıcı bilgilerini alma
+  const { data: session } = useSession();
 
+  // State tanımlamaları
+  const [data, setData] = useState([]); // Ana tablo verisi
+  const [detailedData, setDetailedData] = useState([]); // Detaylı tablo verisi
+  const [userCarBakiye, setUserCarBakiye] = useState(null); // Kullanıcı cari bakiyesi
+  const [isLoading, setIsLoading] = useState(true); // Yükleme durumu
+  const [borcToplam, setBorcToplam] = useState(0); // Toplam borç
+  const [alacakToplam, setAlacakToplam] = useState(0); // Toplam alacak
+  const [carBorcToplam, setCarBorcToplam] = useState(0); // Cari borç toplamı
+  const [expandedRows, setExpandedRows] = useState([]); // Genişletilmiş satırlar
+  const [allExpanded, setAllExpanded] = useState(false); // Tüm satırların genişletilme durumu
+
+  // Kullanıcı oturumu başladığında verileri çekme
   useEffect(() => {
-    async function fetchData() {
-      //Eğer kullanıcı giriş yapmamış ise istek atmaz.
-      if (!session?.user?.id) return;
-
-      try {
-        // Verileri getirme işlemlerini tek promise ile birleştiriyoruz. Fetch için services kısmından getirdiğimiz getAPI fonksiyonunu kullanıyoruz.
-        const [billingData, tableCartData] = await Promise.all([
-          getAPI("/billings"),
-          getAPI("/table-cart"),
-        ]);
-
-        // API hatalarını kontrol ediyoruz.
-        if (!billingData || !tableCartData) throw new Error("API error");
-
-        //Verileri CARHARCARKOD ve kullanıcı idsi ile filtreliyoruz.
-        const filteredData = billingData.data.filter(
-          (item) => item.CARHARCARKOD === session.user.id
-        );
-        setData(filteredData);
-
-        //Burada ise diğer model verilerindeki kullanıcının table cart bilgilerini buluyoruz.
-        const userTableCartData = tableCartData.data.find(
-          (item) => item.CARKOD === session.user.id
-        );
-        if (userTableCartData) setUserCarBakiye(userTableCartData.CARBAKIYE);
-      } catch (error) {
-        console.error("Data fetching error:", error);
-      } finally {
-        setIsLoading(false);
-      }
+    if (session?.user?.id) {
+      fetchData();
     }
-
-    fetchData();
   }, [session?.user?.id]);
 
-  //Tarihe göre sıralaması için kullandığımız fonksiyon
-  const handleSort = () => {
-    const sortedData = [...data].sort((a, b) => {
-      const dateA = new Date(a.CARHARTAR);
-      const dateB = new Date(b.CARHARTAR);
-      return sortOrder === "asc" ? dateA - dateB : dateB - dateA;
-    });
+  // Verileri API'den çeken asenkron fonksiyon
+  async function fetchData() {
+    try {
+      // Birden fazla API çağrısını paralel olarak yapma
+      const [billingData, tableCartData, detailedBillings, fatfis] =
+        await Promise.all([
+          getAPI("/billings"),
+          getAPI("/table-cart"),
+          getAPI("/detailed-billings"),
+          getAPI("/fatfis"),
+        ]);
 
-    setData(sortedData);
-    setSortOrder(sortOrder === "asc" ? "desc" : "asc");
-  };
+      // API yanıtlarının geçerliliğini kontrol etme
+      if (!billingData || !tableCartData || !detailedBillings || !fatfis) {
+        throw new Error("API hatası: Bir veya daha fazla API yanıt vermedi");
+      }
 
-  //Sayfalama için kullandığımız fonksiyon
-  const paginatedData = isPrinting
-    ? data
-    : data.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
+      // Kullanıcıya ait verileri filtreleme
+      const filteredData = billingData.data.filter(
+        (item) => item.CARHARCARKOD === session.user.id
+      );
 
-  const totalPages = Math.ceil(data.length / itemsPerPage);
+      // Verileri tarih sırasına göre sıralama (eskiden yeniye)
+      const sortedData = filteredData.sort((a, b) => {
+        const dateA = new Date(a.CARHARTAR);
+        const dateB = new Date(b.CARHARTAR);
+        return dateA - dateB;
+      });
 
-  //Pagination butonlarını oluşturmak için kullandığımız fonksiyon
-  function Pagination({ currentPage, totalPages, onPageChange }) {
-    return (
-      <div className="flex items-center no-print">
-        <PaginationButton
-          onClick={() => onPageChange(1)}
-          disabled={currentPage === 1}
-          icon={<MdKeyboardDoubleArrowLeft />}
-        />
-        <PaginationButton
-          onClick={() => onPageChange(currentPage - 1)}
-          disabled={currentPage === 1}
-          icon={<MdKeyboardArrowLeft />}
-        />
-        <span className="border md:px-4 md:py-2 py-1 px-3 rounded-full bg-NavyBlue text-white ml-1">
-          {currentPage}
-        </span>
-        <span className="mx-1">/</span>
-        <span className="md:px-2 md:py-2 py-1 px-3 rounded-full mr-1">
-          {totalPages}
-        </span>
-        <PaginationButton
-          onClick={() => onPageChange(currentPage + 1)}
-          disabled={currentPage === totalPages}
-          icon={<MdKeyboardArrowRight />}
-        />
-        <PaginationButton
-          onClick={() => onPageChange(totalPages)}
-          disabled={currentPage === totalPages}
-          icon={<MdKeyboardDoubleArrowRight />}
-        />
-      </div>
-    );
+      // Sıralanmış verileri state'e atama
+      setData(sortedData);
+
+      // Detaylı fatura verilerini işleme
+      const enhancedDetailedData = enhanceBillingData(
+        detailedBillings.data,
+        fatfis.data,
+        billingData.data
+      );
+      // Kullanıcıya ait detaylı verileri filtreleme ve state'e atama
+      setDetailedData(
+        enhancedDetailedData.filter(
+          (item) => item.FATHARCARKOD === session.user.id
+        )
+      );
+
+      // Kullanıcının cari kart bilgilerini bulma
+      const userTableCartData = tableCartData.data.find(
+        (item) => item.CARKOD === session.user.id
+      );
+      if (userTableCartData) {
+        // Kullanıcı cari bilgilerini state'e atama
+        setUserCarBakiye(userTableCartData.CARBAKIYE);
+        setAlacakToplam(userTableCartData.CARALACAKTOP);
+        setCarBorcToplam(userTableCartData.CARBORCTOP);
+        setBorcToplam(
+          userTableCartData.CARBORCTOP - userTableCartData.CARALACAKTOP
+        );
+      }
+    } catch (error) {
+      console.error("Veri çekme hatası:", error);
+    } finally {
+      // Yükleme durumunu sonlandırma
+      setIsLoading(false);
+    }
   }
 
-  function PaginationButton({ onClick, disabled, icon }) {
-    return (
-      <button
-        className={`border-2 rounded-sm text-[18px] mx-1 md:p-3 p-1 ${
-          disabled
-            ? "cursor-not-allowed text-gray-300"
-            : "cursor-pointer hover:bg-gray-200 duration-300 hover:border-NavyBlue hover:rounded-xl"
-        }`}
-        onClick={onClick}
-        disabled={disabled}
-      >
-        {icon}
-      </button>
-    );
+  // Detaylı fatura verilerini işleyen yardımcı fonksiyon
+  // Bu fonksiyon, farklı API'lerden gelen verileri birleştirerek daha kapsamlı bir veri seti oluşturur
+  function enhanceBillingData(detailedBillings, fatfisData, billingsData) {
+    return detailedBillings.reduce((acc, billing) => {
+      // Eşleşen fatura fişini bulma
+      const matchingFatfis = fatfisData.find(
+        (ff) => ff.FATFISREFNO === billing.FATHARREFNO
+      );
+      if (matchingFatfis) {
+        // Eşleşen fatura kaydını bulma
+        const matchingBilling = billingsData.find(
+          (b) => b.CARHARREFNO === matchingFatfis.FATFISCARREFNO
+        );
+        if (matchingBilling) {
+          // Eşleşen verileri birleştirip yeni nesne oluşturma
+          acc.push({
+            ...billing,
+            CARHARREFNO: matchingBilling.CARHARREFNO,
+            CARHARACIKLAMA: matchingBilling.CARHARACIKLAMA,
+            CARHARACIKLAMA1: matchingBilling.CARHARACIKLAMA1,
+            CARHARISTIPKOD: matchingBilling.CARHARISTIPKOD,
+          });
+        }
+      }
+      return acc;
+    }, []);
   }
 
-  //Tarih formatlamak için kullandığımız fonksiyon
+  // Tarih formatını düzenleyen yardımcı fonksiyon
+  // Gelen tarih string'ini Türkiye tarih formatına çevirir
   function formatDate(dateString) {
-    return dateString
-      ? new Date(dateString).toLocaleDateString("tr-TR")
-      : "N/A";
+    return dateString ? new Date(dateString).toLocaleDateString("tr-TR") : "-";
   }
 
-  //Para birimi formatlamak için kullandığımız fonksiyon
+  // Para birimini formatlayan yardımcı fonksiyon
+  // Sayısal değeri Türk Lirası formatında bir string'e çevirir
   function formatCurrency(amount) {
     return (
       amount?.toLocaleString("tr-TR", {
@@ -155,87 +151,267 @@ export default function DataTable() {
     );
   }
 
-  //Yazdırma işlemi için kullandığımız fonksiyon
-  const handlePrint = () => {
-    setIsPrinting(true);
-    setTimeout(() => {
-      window.print();
-      setIsPrinting(false);
-    }, 100);
-  };
+  // Yazdırma işlemini başlatan fonksiyon
+  function handlePrint() {
+    window.print();
+  }
 
-  //Eğer herhangi bir nedenden dolayı loading true olursa, Loading componenti render edilir.
+  // Satır genişletme/daraltma işlemini yöneten fonksiyon
+  // Tıklanan satırın genişletilme durumunu tersine çevirir
+  function handleRowClick(carharRefNo) {
+    setExpandedRows((prevExpandedRows) => {
+      if (prevExpandedRows.includes(carharRefNo)) {
+        return prevExpandedRows.filter((refNo) => refNo !== carharRefNo);
+      } else {
+        return [...prevExpandedRows, carharRefNo];
+      }
+    });
+  }
+
+  // Tüm satırları açma/kapatma işlemini yöneten fonksiyon
+  // Tüm satırların genişletilme durumunu tersine çevirir
+  function handleToggleAllRows() {
+    if (allExpanded) {
+      setExpandedRows([]);
+      setAllExpanded(false);
+    } else {
+      const allRefNos = data
+        .filter((item) =>
+          detailedData.some(
+            (detailItem) => detailItem.CARHARREFNO === item.CARHARREFNO
+          )
+        )
+        .map((item) => item.CARHARREFNO);
+      setExpandedRows(allRefNos);
+      setAllExpanded(true);
+    }
+  }
+
+  // Yükleme durumunda Loading bileşenini gösterme
   if (isLoading) return <Loading />;
+
+  // Ana bileşen render'ı
   return (
-    <div className="print-section">
-      <div className="max-w-[1880px] mx-auto mt-8 flex flex-col justify-between items-center px-8 gap-4 md:flex-row">
-        <div className="flex flex-col text-center md:text-left">
-          <h1 className="text-xl md:text-2xl text-blue-500">Cari Bilgisi</h1>
-          <h1>
-            <span className="font-bold">Cari Kodu:</span> {session?.user?.id}
-          </h1>
-          <h1>
-            <span className="font-bold">Cari Unvanı:</span>{" "}
-            {session?.user?.name}
-          </h1>
-          <h1>
-            <span className="font-bold">Bakiye:</span>{" "}
-            {formatCurrency(userCarBakiye)}
-          </h1>
+    <div className="print-section pt-4 bg-[#dbdbdb]">
+      {/* Üst bilgi bölümü */}
+      <div className="max-w-[80%] mx-auto flex flex-col justify-between bg-white rounded-xl border-2 border-dashed border-[#1e3b606e] items-center px-8 gap-4 md:flex-row p-4">
+        <div className="flex flex-col w-full md:w-auto">
+          <div>
+            <h1 className="text-xl lg:text-2xl text-blue-500">Cari Bilgisi</h1>
+          </div>
+          <div className="flex justify-between gap-8 items-center max-w-[100%]">
+            <div className="flex lg:text-base text-sm flex-col text-center md:text-left">
+              <div>
+                <div className="font-normal">
+                  <span className="font-bold">Cari Kodu:</span>{" "}
+                  <span>{session?.user?.id}</span>
+                </div>
+              </div>
+              <div>
+                <div className="font-normal">
+                  <span className="font-bold">Cari Unvanı:</span>{" "}
+                  <span>{session?.user?.name}</span>
+                </div>
+              </div>
+              <div>
+                <div className="font-normal flex-col">
+                  <span className="font-bold">Bakiye:</span>{" "}
+                  <span>{formatCurrency(-userCarBakiye)} </span>
+                  <span
+                    className={`${
+                      borcToplam > 0 ? "text-red-500" : "text-green-500"
+                    }`}
+                  >
+                    {borcToplam < 0 ? "(ALACAK)" : "(BORÇ)"}
+                  </span>
+                </div>
+              </div>
+            </div>
+            <div className="flex flex-col text-sm text-center lg:text-base md:text-left">
+              <div className="font-normal">
+                <span className="font-bold">Borç Toplam:</span>
+                <span className="ml-2 text-red-500">
+                  {formatCurrency(carBorcToplam)}
+                </span>
+              </div>
+              <div className="font-normal">
+                <span className="font-bold">Alacak Toplam:</span>
+                <span className="ml-2 text-green-500">
+                  {formatCurrency(alacakToplam)}
+                </span>
+              </div>
+              <div className="font-normal">
+                <span className="font-bold">Genel Toplam:</span>
+                <span
+                  className={`ml-2 ${
+                    borcToplam > 0 ? "text-red-500" : "text-green-500"
+                  }`}
+                >
+                  {formatCurrency(Math.abs(borcToplam))}
+                  {borcToplam > 0 ? " (B)" : " (A)"}
+                </span>
+              </div>
+            </div>
+          </div>
         </div>
-        <div className="flex items-center gap-4">
-          <Pagination
-            currentPage={currentPage}
-            totalPages={totalPages}
-            onPageChange={setCurrentPage}
-          />
+
+        {/* İşlem butonları */}
+        <div className="flex gap-2 text-sm md:text-base">
+          <button
+            onClick={handleToggleAllRows}
+            className="bg-NavyBlue text-white text-sm w-[90px] lg:w-auto px-2 lg:px-4 py-1 lg:py-2 rounded-full hover:bg-LightBlue transition duration-300 flex items-center no-print"
+          >
+            {allExpanded ? "Hepsini Kapat" : "Hepsini Aç"}
+          </button>
           <button
             onClick={handlePrint}
-            className="bg-NavyBlue text-white px-4 py-2 rounded-full hover:bg-blue-700 transition duration-300 flex items-center no-print"
+            className="bg-NavyBlue text-white text-sm px-2 lg:px-4 py-1 lg:py-2 rounded-full hover:bg-LightBlue transition duration-300 flex items-center no-print"
           >
             <FaPrint className="mr-2" /> Yazdır
           </button>
         </div>
       </div>
 
-      <div className="max-w-[1880px] mx-auto mt-6 border">
+      {/* Ana tablo bölümü */}
+      <div className="max-w-[1880px] mx-auto mt-4 border">
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead
-                onClick={handleSort}
-                className="cursor-pointer flex items-center py-12 md:py-6"
-              >
-                Tarih
-                {sortOrder === "asc" ? (
-                  <FaSortUp className="ml-2 no-print" />
-                ) : (
-                  <FaSortDown className="ml-2 no-print" />
-                )}
-              </TableHead>
-              <TableHead>İşlem</TableHead>
-              <TableHead>Vade Tarihi</TableHead>
-              <TableHead>Açıklama 1</TableHead>
-              <TableHead>Açıklama</TableHead>
-              <TableHead>Borç</TableHead>
+              <TableHead className="py-10">Tarih</TableHead>
+              <TableHead className="py-4">İşlem</TableHead>
+              <TableHead className="py-4">Vade Tarihi</TableHead>
+              <TableHead className="py-4">Ek Açıklama</TableHead>
+              <TableHead className="py-4">Açıklama</TableHead>
+              <TableHead className="py-4">Borç</TableHead>
+              <TableHead className="py-4">Alacak</TableHead>
+              <TableHead className="py-4">Bakiye</TableHead>
+              <TableHead className="py-4">Detaylar</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
-            {paginatedData.map((item, index) => (
-              <TableRow
-                key={index}
-                className={index % 2 === 0 ? "bg-gray-100" : "bg-white"}
-              >
-                <TableCell>{formatDate(item.CARHARTAR)}</TableCell>
-                <TableCell>{item.CARHARISTIPKOD}</TableCell>
-                <TableCell>{formatDate(item.CARHARVADETAR)}</TableCell>
-                <TableCell>{item.CARHARACIKLAMA1}</TableCell>
-                <TableCell>{item.CARHARACIKLAMA}</TableCell>
-                <TableCell>{formatCurrency(item.CARHARTUTAR)}</TableCell>
-              </TableRow>
-            ))}
+            {data
+              .reduce((acc, item) => {
+                // Borç ve alacak hesaplamaları
+                const isBorc = item.CARHARGCFLAG === 1;
+                const isAlacak = item.CARHARGCFLAG === 2;
+                const borcAmount = isBorc ? item.CARHARTUTAR : 0;
+                const alacakAmount = isAlacak ? item.CARHARTUTAR : 0;
+                const previousBalance =
+                  acc.length > 0 ? acc[acc.length - 1].balance : 0;
+                const balance = previousBalance + borcAmount - alacakAmount;
+
+                // Hesaplanan değerlerle yeni nesne oluşturma
+                acc.push({
+                  ...item,
+                  borcAmount,
+                  alacakAmount,
+                  balance,
+                });
+
+                return acc;
+              }, [])
+              .map((item, index) => {
+                const hasDetailedData = detailedData.some(
+                  (detailItem) => detailItem.CARHARREFNO === item.CARHARREFNO
+                );
+                const isExpanded = expandedRows.includes(item.CARHARREFNO);
+                return (
+                  <React.Fragment key={item.CARHARREFNO}>
+                    <TableRow
+                      className={`${
+                        isExpanded
+                          ? "bg-blue-50 border-2 border-NavyBlue"
+                          : index % 2 === 0
+                          ? "bg-gray-100 hover:bg-gray-200"
+                          : "bg-white hover:bg-gray-200"
+                      } ${
+                        hasDetailedData
+                          ? "cursor-pointer"
+                          : "cursor-not-allowed"
+                      } transition-all duration-300`}
+                      onClick={() =>
+                        hasDetailedData && handleRowClick(item.CARHARREFNO)
+                      }
+                    >
+                      <TableCell className="py-4 pl-4">
+                        {formatDate(item.CARHARTAR)}
+                      </TableCell>
+                      <TableCell className="py-4 pl-4">
+                        {item.CARHARISTIPKOD}
+                      </TableCell>
+                      <TableCell className="py-4 pl-4">
+                        {formatDate(item.CARHARVADETAR) === "01.01.1900"
+                          ? "-"
+                          : formatDate(item.CARHARVADETAR)}
+                      </TableCell>
+                      <TableCell className="py-4 pl-4">
+                        {item.CARHARACIKLAMA1}
+                      </TableCell>
+                      <TableCell className="py-4 pl-4">
+                        {item.CARHARACIKLAMA}
+                      </TableCell>
+                      <TableCell
+                        className={`py-4 pl-4 ${
+                          item.borcAmount > 0 ? "text-red-500" : ""
+                        }`}
+                      >
+                        {formatCurrency(item.borcAmount)}
+                      </TableCell>
+                      <TableCell
+                        className={`py-4 pl-4 ${
+                          item.alacakAmount > 0 ? "text-green-500" : ""
+                        }`}
+                      >
+                        {formatCurrency(item.alacakAmount)}
+                      </TableCell>
+                      <TableCell className="py-4 pl-4">
+                        {formatCurrency(Math.abs(item.balance))}
+                        {item.balance > 0
+                          ? " (B)"
+                          : item.balance < 0
+                          ? " (A)"
+                          : ""}
+                      </TableCell>
+                      <TableCell className="py-4 pl-4">
+                        {hasDetailedData ? (
+                          <div className="flex items-center">
+                            {isExpanded ? (
+                              <FaChevronUp className="text-blue-500" />
+                            ) : (
+                              <FaChevronDown />
+                            )}
+                            <span className="ml-2">
+                              {isExpanded ? "Kapat" : "Stok Bilgisi"}
+                            </span>
+                          </div>
+                        ) : (
+                          <span className="text-gray-400">Detay Yok</span>
+                        )}
+                      </TableCell>
+                    </TableRow>
+                    {isExpanded && hasDetailedData && (
+                      <TableRow className="bg-white border-2 border-b-2 border-t-0 border-NavyBlue">
+                        <TableCell colSpan={9} className="p-0">
+                          <ExpandedTable
+                            detailedData={detailedData.filter(
+                              (fathar) =>
+                                fathar.CARHARREFNO === item.CARHARREFNO
+                            )}
+                            formatDate={formatDate}
+                            formatCurrency={formatCurrency}
+                          />
+                        </TableCell>
+                      </TableRow>
+                    )}
+                  </React.Fragment>
+                );
+              })}
           </TableBody>
         </Table>
+        <div className="text-right lg:max-w-[1880px] flex items-center justify-end py-8 px-4 gap-4 no-print"></div>
+        <div className="flex justify-end no-print">
+          <ScrollButtons />
+        </div>
       </div>
     </div>
   );

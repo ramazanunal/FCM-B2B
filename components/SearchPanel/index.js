@@ -3,6 +3,8 @@ import { Formik, Form, Field } from "formik";
 import * as Yup from "yup";
 import { FaSearch, FaTimes } from "react-icons/fa";
 import Image from "next/image";
+import { getAPI } from "@/services/fetchAPI";
+
 function SearchPanel({ toggleSearchPanel }) {
   const [searchResults, setSearchResults] = useState([]); // Arama sonuçları state'i
   const [searchNoResults, setSearchNoResults] = useState(null); // Arama sonuçları yoksa durumu
@@ -17,8 +19,7 @@ function SearchPanel({ toggleSearchPanel }) {
   // API'den ürünleri getiren fonksiyon
   const fetchProducts = async () => {
     try {
-      const response = await fetch("http://localhost:3000/api/products"); // API'den veri çekme
-      const responseData = await response.json(); // JSON formatına dönüştürme
+      const responseData = await getAPI("/products"); // getAPI fonksiyonunu kullanarak veri çekme
 
       // API'den gelen verinin dizi olup olmadığını kontrol etme
       if (Array.isArray(responseData.data)) {
@@ -47,35 +48,35 @@ function SearchPanel({ toggleSearchPanel }) {
       .replace(/ü/g, "u")
       .replace(/ş/g, "s")
       .replace(/ö/g, "o")
-      .replace(/ç/g, "c");
+      .replace(/ç/g, "c")
+      .replace(/\s+/g, ""); // boşlukları kaldırma
   };
 
   // Arama işlemi
- const handleSearch = useCallback(
-  (searchTerm) => {
-    const normalizedSearchTerm = normalizeTurkishChars(
-      searchTerm.toLowerCase().replace(/\s+/g, "")
-    ); // Arama terimini küçük harfe çevirip normalize etme ve boşlukları kaldırma
-    console.log("Search Term:", normalizedSearchTerm); // Konsola arama terimini yazdırma
+  const handleSearch = useCallback(
+    (searchTerm) => {
+      const normalizedSearchTerm = normalizeTurkishChars(
+        searchTerm.toLowerCase()
+      ); // Arama terimini küçük harfe çevirip normalize etme
+      console.log("Search Term:", normalizedSearchTerm); // Konsola arama terimini yazdırma
 
-    // Ürünler dizisi varsa
-    if (Array.isArray(products)) {
-      // Arama terimine göre ürünleri filtreleme
-      const results = products.filter((product) =>
-        normalizeTurkishChars(product.STKCINSI.toLowerCase().replace(/\s+/g, "")).includes(
-          normalizedSearchTerm
-        )
-      );
+      // Ürünler dizisi varsa
+      if (Array.isArray(products)) {
+        // Arama terimine göre ürünleri filtreleme
+        const results = products.filter((product) =>
+          normalizeTurkishChars(product.STKCINSI.toLowerCase()).includes(
+            normalizedSearchTerm
+          )
+        );
 
-      setSearchResults(results); // Filtrelenmiş ürünleri state'e set etme
-      setSearchNoResults(results.length === 0); // Sonuç yoksa durumunu güncelleme
-    } else {
-      console.error("Products is not an array:", products); // Ürünler dizi değilse hata mesajı yazdırma
-    }
-  },
-  [products]
-);
-
+        setSearchResults(results); // Filtrelenmiş ürünleri state'e set etme
+        setSearchNoResults(results.length === 0); // Sonuç yoksa durumunu güncelleme
+      } else {
+        console.error("Products is not an array:", products); // Ürünler dizi değilse hata mesajı yazdırma
+      }
+    },
+    [products]
+  );
 
   // Input değeri değiştiğinde çalışan fonksiyon
   const handleInputChange = (e) => {
@@ -84,6 +85,7 @@ function SearchPanel({ toggleSearchPanel }) {
     setSearchNoResults(null); // Arama sonucu yoksa durumu sıfırlama
     handleSearch(value); // Arama işlemini başlatma
   };
+
   return (
     <div className="w-full flex flex-col items-center justify-center transition-transform duration-500 ease-in-out shadow-[0_5px_20px_rgba(0,0,0,0.3)] py-[15px] z-[1000] rounded-xl">
       {/* Formik form bileşeni */}

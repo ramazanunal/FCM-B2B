@@ -8,6 +8,7 @@ import * as Yup from "yup";
 import { FaCheck, FaMinus, FaPlus, FaShoppingCart } from "react-icons/fa";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { getAPI } from "@/services/fetchAPI";
 
 function CategoryProducts() {
   const [urunler, setUrunler] = useState([]); // Ürünler için state
@@ -15,16 +16,13 @@ function CategoryProducts() {
   const [selectedCategory, setSelectedCategory] = useState(""); // Seçili kategori filtresi için state
   const [dropdownOpen, setDropdownOpen] = useState({}); // Dropdown açılış durumu için state
   const [cart, setCart] = useState([]); // Sepet ürünleri için state
+  const [imageMap, setImageMap] = useState({}); // Resim eşleştirmeleri için state
 
-  // Komponent yüklendiğinde API'den ürünleri getir
+  // Komponent yüklendiğinde API'den ürünleri getir ve resim eşleştirmelerini oluştur
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch("http://localhost:3000/api/products");
-        if (!response.ok) {
-          throw new Error("API hatası: " + response.status);
-        }
-        const data = await response.json();
+        const data = await getAPI("/products");
         const filteredData = data.data.filter((urun) => urun.STKOZKOD1 === "A"); // STKOZKOD1 === "A" olan ürünleri filtrele
         setUrunler(
           filteredData.map((urun) => ({
@@ -33,6 +31,17 @@ function CategoryProducts() {
             addingToCart: false,
           }))
         );
+
+        // Resim verilerini al
+        const imageResponse = await fetch("/data.json");
+        const imageData = await imageResponse.json();
+
+        // Resim eşleştirmelerini oluştur
+        const imgMap = {};
+        imageData.forEach((item) => {
+          imgMap[item.stkkod] = item.path;
+        });
+        setImageMap(imgMap);
       } catch (error) {
         console.error("Veri çekme hatası: ", error);
       }
@@ -49,7 +58,12 @@ function CategoryProducts() {
 
   // Sepet durumu değiştiğinde local storegadaki sepeti güncelle
   useEffect(() => {
-    localStorage.setItem("cart", JSON.stringify(cart));
+    const storedCart = JSON.parse(localStorage.getItem("cart")) || [];
+    if (storedCart.length > 0) {
+      localStorage.setItem("cart", JSON.stringify(storedCart));
+    } else {
+      localStorage.setItem("cart", JSON.stringify(cart));
+    }
   }, [cart]);
 
   // Sistemdeki sınıf kategorileri
@@ -85,16 +99,14 @@ function CategoryProducts() {
   // Sepete ürün ekleme işlemi
   const handleAddToCart = async (values, urun) => {
     try {
-      // Belirli ürün için yükleme durumu ayarla
       setUrunler((prevUrunler) =>
         prevUrunler.map((item) =>
           item.STKKOD === urun.STKKOD ? { ...item, addingToCart: true } : item
         )
       );
 
-      await new Promise((resolve) => setTimeout(resolve, 3000));
+      await new Promise((resolve) => setTimeout(resolve, 1000));
 
-      // Ürün miktarını güncelle ve yükleme durumunu sıfırla
       const updatedUrunler = urunler.map((item) =>
         item.STKKOD === urun.STKKOD
           ? {
@@ -106,7 +118,6 @@ function CategoryProducts() {
       );
       setUrunler(updatedUrunler);
 
-      // Yeni veya varolan ürünü sepete ekle
       const updatedCart = [...cart];
       const existingItemIndex = updatedCart.findIndex(
         (item) => item.STKKOD === urun.STKKOD
@@ -115,10 +126,17 @@ function CategoryProducts() {
       if (existingItemIndex !== -1) {
         updatedCart[existingItemIndex].quantity += values.quantity;
       } else {
-        updatedCart.push({ ...urun, quantity: values.quantity });
+        updatedCart.push({
+          ...urun,
+          quantity: values.quantity,
+          imagePath:
+            imageMap[urun.STKKOD] ||
+            "https://caliskanari.com/wp-content/uploads/2022/11/X7-420x420.png.webp",
+        });
       }
 
       setCart(updatedCart);
+
       localStorage.setItem("cart", JSON.stringify(updatedCart));
 
       toast.success("Ürün sepete eklendi.", {
@@ -167,7 +185,7 @@ function CategoryProducts() {
     }
 
     return (
-      <div className="bg-white w-screen md:w-[750px] lg:w-[970px] xl:w-[1188px] pt-[30px] lg:pt-[80px]">
+      <div className="bg-white w-screen md:w-[600px] lg:w-[960px] xl:w-[1188px] pt-[30px] lg:pt-[80px]">
         <div className="mb-4 flex flex-col md:flex-row items-center justify-center ">
           {classes.map((classType) => (
             <div
@@ -181,8 +199,8 @@ function CategoryProducts() {
                 }}
                 className={`flex flex-row gap-5 items-center justify-center text-[14px] md:text-[12px] lg:text-[14px] font-bold rounded-full py-[22px] pr-[28px] pl-[28px] tracking-[1px] h-[40px] mx-[8px] mb-[8px] hover:scale-105 transition-all duration-500 ease-in-out transform cursor-pointer  ${
                   selectedClass === classType
-                    ? " border border-[3px] border-LightBlue text-LightBlue"
-                    : "border border-[3px] border-CategoriesTitle text-CategoriesTitle"
+                    ? " border-[3px] border-LightBlue text-LightBlue"
+                    : "border-[3px] border-CategoriesTitle text-CategoriesTitle"
                 }`}
               >
                 {classType}
@@ -200,9 +218,9 @@ function CategoryProducts() {
               {dropdownOpen[classType] &&
                 classType !== "ANASINIFI" &&
                 classType !== "İNGİLİZCE" && (
-                  <div className="absolute top-10 mt-2 w-36 rounded-2xl bg-white shadow-lg rounded border border-gray-300 z-[1000]">
+                  <div className="absolute top-10 mt-2 w-36 rounded-2xl bg-white shadow-lg border border-gray-300 z-[1000]">
                     <div
-                      className="cursor-pointer p-2 hover:bg-LightBlue/25 hover:rounded-2xl hover:text-LightBlue duration-300 ease-in-out transform cursor-pointer"
+                      className="p-2 hover:bg-LightBlue/25 hover:rounded-2xl hover:text-LightBlue duration-300 ease-in-out transform cursor-pointer"
                       onClick={() => {
                         setSelectedCategory("hepsi");
                         toggleDropdown(classType);
@@ -213,7 +231,7 @@ function CategoryProducts() {
                     {getClassCategories(classType).map((category) => (
                       <div
                         key={category}
-                        className="cursor-pointer p-2 hover:bg-LightBlue/25 hover:rounded-2xl hover:text-LightBlue duration-300 ease-in-out transform cursor-pointer"
+                        className="p-2 hover:bg-LightBlue/25 hover:rounded-2xl hover:text-LightBlue duration-300 ease-in-out transform cursor-pointer"
                         onClick={() => {
                           setSelectedCategory(category);
                           toggleDropdown(classType);
@@ -247,17 +265,18 @@ function CategoryProducts() {
                 </p>
               )}
               <div className="w-2/5 sm:w-full mr-[10px] sm:mr-0">
-                <span                   className="flex items-center justify-center"
-                >
-                <Image
-                  src={
-                    "https://caliskanari.com/wp-content/uploads/2022/11/X7-420x420.png.webp"
-                  }
-                  alt={"image"}
-                  className="object-cover w-[140px] md:w-[210px] h-[140px] md:h-[210px]"
-                  width={210}
-                  height={210}
-                />
+                <span className="flex items-center justify-center">
+                  <Image
+                    src={
+                      imageMap[urun.STKKOD]
+                        ? imageMap[urun.STKKOD]
+                        : "https://caliskanari.com/wp-content/uploads/2022/11/X7-420x420.png.webp"
+                    }
+                    alt={urun.STKCINSI}
+                    className="object-cover w-[140px] md:w-[210px] h-[140px] md:h-[210px]"
+                    width={210}
+                    height={210}
+                  />
                 </span>
               </div>
               <div className="w-3/5 sm:w-full flex flex-col justify-between">
@@ -272,10 +291,7 @@ function CategoryProducts() {
                 <div className="flex-none">
                   <div>
                     {urun.STKOZKOD5 && (
-                      <p
-                        className="italic text-LightBlue text-[20px] md:text-[23px] sm:pt-[20
-px] font-semibold"
-                      >
+                      <p className="italic text-LightBlue text-[20px] md:text-[23px] sm:pt-[20px] font-semibold">
                         <span>₺</span>
                         {urun.STKOZKOD5}
                       </p>
