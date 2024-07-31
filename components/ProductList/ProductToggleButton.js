@@ -11,7 +11,7 @@ export default function ProductToggleButton({ product }) {
   function DisplayProductDetail() {
     return (
       <div className="text-gray-500 w-full max-h-[80%] overflow-auto rounded-lg shadow-lg md:p-5">
-        <span>{product.desc}</span>
+        <span>{'burası'}</span>
       </div>
     );
   }
